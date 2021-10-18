@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="ji_sale_order" model="ir.ui.view">
+        <field name="name">sale.order.jibarito</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']//tree/field[@name='name']" position="after">
+                <field name="ji_area" optional="show" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_street" optional="show" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_corner_with" optional="show" groups="jibarito.group_ji_apply_developments"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

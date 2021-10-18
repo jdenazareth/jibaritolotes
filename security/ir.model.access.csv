@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ji_notification_slow_payer,notification.slow.payer,jibarito.model_ji_notification_slow_payer,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_notification_slow_payer_line,notification.slow.payer.line,jibarito.model_ji_notification_slow_payer_line,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest,ji.moratorium.interest,jibarito.model_ji_moratorium_interest,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest_line,ji.moratorium.interest.line,jibarito.model_ji_moratorium_interest_line,jibarito.group_ji_apply_developments,1,1,1,1

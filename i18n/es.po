@@ -1,0 +1,1224 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* jibarito
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-09 22:35+0000\n"
+"PO-Revision-Date: 2021-09-09 22:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: jibarito
+#: model:mail.template,body_html:jibarito.mail_template_slow_payer
+msgid ""
+"\n"
+"                \n"
+"                <html lang=\"en\">\n"
+"                    <head>\n"
+"                        <meta charset=\"UTF-8\"/>\n"
+"                        <meta name=\"viewport\"\n"
+"                              content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\"/>\n"
+"                        <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\"/>\n"
+"                        <title>Notification</title>\n"
+"                        <style>\n"
+"                            .center {\n"
+"                            padding: 10px 10px 10px 10px;\n"
+"                            text-align: center;\n"
+"                            }\n"
+"                            .styled-table {\n"
+"                            border-collapse: collapse;\n"
+"                            margin: 25px 0;\n"
+"                            font-size: 0.9em;\n"
+"                            font-family: sans-serif;\n"
+"                            min-width: 400px;\n"
+"                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);\n"
+"                            }\n"
+"                            .styled-table thead tr {\n"
+"                            background-color: #009879;\n"
+"                            color: #ffffff;\n"
+"                            text-align: left;\n"
+"                            }\n"
+"                            .styled-table th,\n"
+"                            .styled-table td {\n"
+"                            padding: 12px 15px;\n"
+"                            }\n"
+"                            .styled-table tbody tr {\n"
+"                            border-bottom: 1px solid #dddddd;\n"
+"                            }\n"
+"                            .styled-table tbody tr:nth-of-type(even) {\n"
+"                            background-color: #f3f3f3;\n"
+"                            }\n"
+"                            .styled-table tbody tr:last-of-type {\n"
+"                            border-bottom: 2px solid #009879;\n"
+"                            }\n"
+"                            .styled-table tbody tr.active-row {\n"
+"                            font-weight: bold;\n"
+"                            color: #009879;\n"
+"                            }\n"
+"                            .table_center {\n"
+"                            margin-left: auto;\n"
+"                            margin-right: auto;\n"
+"                            }\n"
+"                            .button {\n"
+"                            background-color: #CD5C5C; /* Green */\n"
+"                            border: none;\n"
+"                            color: white;\n"
+"                            padding: 8px 8px;\n"
+"                            border-radius: 10px;\n"
+"                            text-align: center;\n"
+"                            text-decoration: none;\n"
+"                            font-weight: bold;\n"
+"                            display: inline-block;\n"
+"                            font-size: 14px;\n"
+"                            margin: 4px 2px;\n"
+"                            cursor: pointer;\n"
+"                            -webkit-transition-duration: 0.4s; /* Safari */\n"
+"                            transition-duration: 0.4s;\n"
+"                            }\n"
+"                            .button2:hover {\n"
+"                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);\n"
+"                            }\n"
+"                        </style>\n"
+"                    </head>\n"
+"                    <body>\n"
+"                        <div class=\"center\">\n"
+"                            <h2>Report</h2>\n"
+"                            <p>New delinquent clients.</p>\n"
+"                        </div>\n"
+"                        <div style=\"padding-left: 50px;padding-right: 50px\">\n"
+"                            <table class=\"styled-table table_center\">\n"
+"                                <thead>\n"
+"                                    <tr>\n"
+"                                        <th>Customer</th>\n"
+"                                        <th>Invoice - Fee payment</th>\n"
+"                                    </tr>\n"
+"                                </thead>\n"
+"                                <tbody>\n"
+"                                    % for line in object.notification_lines:\n"
+"                                    <tr>\n"
+"                                        <td style=\"min-width: 200px;font-weight: bold\">${line.partner_id.name}</td>\n"
+"                                        <td>\n"
+"                                            % for aml_due in line.unreconciled_aml_dues:\n"
+"                                            <a href=\"${line.get_link_detail()}\" target=\"_blank\" class=\"button button2\">${aml_due.ji_name}</a>\n"
+"                                            % endfor\n"
+"                                        </td>\n"
+"                                    </tr>\n"
+"                                    % endfor\n"
+"                                </tbody>\n"
+"                            </table>\n"
+"                        </div>\n"
+"                        <div class=\"center\" style=\"color: #000;font-weight: bold\">\n"
+"                            <p>This is an automated message, please do not reply.</p>\n"
+"                        </div>\n"
+"                    </body>\n"
+"                </html>\n"
+"                 \n"
+"            "
+msgstr ""
+"\n"
+"                \n"
+"                <html lang=\"en\">\n"
+"                    <head>\n"
+"                        <meta charset=\"UTF-8\"/>\n"
+"                        <meta name=\"viewport\"\n"
+"                              content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\"/>\n"
+"                        <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\"/>\n"
+"                        <title>Notificacion</title>\n"
+"                        <style>\n"
+"                            .center {\n"
+"                            padding: 10px 10px 10px 10px;\n"
+"                            text-align: center;\n"
+"                            }\n"
+"                            .styled-table {\n"
+"                            border-collapse: collapse;\n"
+"                            margin: 25px 0;\n"
+"                            font-size: 0.9em;\n"
+"                            font-family: sans-serif;\n"
+"                            min-width: 400px;\n"
+"                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);\n"
+"                            }\n"
+"                            .styled-table thead tr {\n"
+"                            background-color: #009879;\n"
+"                            color: #ffffff;\n"
+"                            text-align: left;\n"
+"                            }\n"
+"                            .styled-table th,\n"
+"                            .styled-table td {\n"
+"                            padding: 12px 15px;\n"
+"                            }\n"
+"                            .styled-table tbody tr {\n"
+"                            border-bottom: 1px solid #dddddd;\n"
+"                            }\n"
+"                            .styled-table tbody tr:nth-of-type(even) {\n"
+"                            background-color: #f3f3f3;\n"
+"                            }\n"
+"                            .styled-table tbody tr:last-of-type {\n"
+"                            border-bottom: 2px solid #009879;\n"
+"                            }\n"
+"                            .styled-table tbody tr.active-row {\n"
+"                            font-weight: bold;\n"
+"                            color: #009879;\n"
+"                            }\n"
+"                            .table_center {\n"
+"                            margin-left: auto;\n"
+"                            margin-right: auto;\n"
+"                            }\n"
+"                            .button {\n"
+"                            background-color: #CD5C5C; /* Green */\n"
+"                            border: none;\n"
+"                            color: white;\n"
+"                            padding: 8px 8px;\n"
+"                            border-radius: 10px;\n"
+"                            text-align: center;\n"
+"                            text-decoration: none;\n"
+"                            font-weight: bold;\n"
+"                            display: inline-block;\n"
+"                            font-size: 14px;\n"
+"                            margin: 4px 2px;\n"
+"                            cursor: pointer;\n"
+"                            -webkit-transition-duration: 0.4s; /* Safari */\n"
+"                            transition-duration: 0.4s;\n"
+"                            }\n"
+"                            .button2:hover {\n"
+"                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);\n"
+"                            }\n"
+"                        </style>\n"
+"                    </head>\n"
+"                    <body>\n"
+"                        <div class=\"center\">\n"
+"                            <h2>Reporte</h2>\n"
+"                            <p>Nuevos clientes morosos.</p>\n"
+"                        </div>\n"
+"                        <div style=\"padding-left: 50px;padding-right: 50px\">\n"
+"                            <table class=\"styled-table table_center\">\n"
+"                                <thead>\n"
+"                                    <tr>\n"
+"                                        <th>Cliente</th>\n"
+"                                        <th>Factura - Cuotas no pagadas</th>\n"
+"                                    </tr>\n"
+"                                </thead>\n"
+"                                <tbody>\n"
+"                                    % for line in object.notification_lines:\n"
+"                                    <tr>\n"
+"                                        <td style=\"min-width: 200px;font-weight: bold\">${line.partner_id.name}</td>\n"
+"                                        <td>\n"
+"                                            % for aml_due in line.unreconciled_aml_dues:\n"
+"                                            <a href=\"${line.get_link_detail()}\" target=\"_blank\" class=\"button button2\">${aml_due.ji_name}</a>\n"
+"                                            % endfor\n"
+"                                        </td>\n"
+"                                    </tr>\n"
+"                                    % endfor\n"
+"                                </tbody>\n"
+"                            </table>\n"
+"                        </div>\n"
+"                        <div class=\"center\" style=\"color: #000;font-weight: bold\">\n"
+"                            <p>Este es un mensaje automatico, por favor no responder.</p>\n"
+"                        </div>\n"
+"                    </body>\n"
+"                </html>\n"
+"                 \n"
+"            "
+
+#. module: jibarito
+#: model:ir.module.category,description:jibarito.ji_category
+msgid ""
+"\n"
+"            Category for apply developments on company\n"
+"        "
+msgstr "Categoría para aplicar desarrollos en empresa"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_payment_term__ji_advance_payment
+msgid "% Advance Payment"
+msgstr "% Anticipo"
+
+#. module: jibarito
+#: model:ir.actions.report,print_report_name:jibarito.action_report_sale_order_contract
+msgid "'Contract - %s' % (object.name)"
+msgstr "'Contrato - %s' % (object.name)"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "<span class=\"o_form_label\">Apply developments</span>"
+msgstr "<span class=\"o_form_label\">Aplicar Configuraciones Moratorias</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "<span class=\"o_form_label\">Number to Slow Payer</span>"
+msgstr "<span class=\"o_form_label\">Cuotas impagas para moratoria</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "<span class=\"o_form_label\">Partners To Notification</span>"
+msgstr "<span class=\"o_form_label\">Notificar a:</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "<span class=\"o_form_label\">Percent Moratorium</span>"
+msgstr "<span class=\"o_form_label\">Porcentaje de Moratoria</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "<span class=\"o_form_label\">Template for Notification</span>"
+msgstr "<span class=\"o_form_label\">Plantilla para notificar</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Amount Paid</span>"
+msgstr "<span>Monto Pagado</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Balance</span>"
+msgstr "<span>Balance</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Contract</span>"
+msgstr "<span>Contrato</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Invoice Date</span>"
+msgstr "<span>Fecha de Factura</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Invoice Number</span>"
+msgstr "<span>Numero de Factura</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Original Amount</span>"
+msgstr "<span>Monto Original</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Product</span>"
+msgstr "<span>Producto</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Subtotal</span>"
+msgstr "<span>Subtotal</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<span>Total</span>"
+msgstr "<span>Total</span>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Customer:</strong>"
+msgstr "<strong>Cliente:</strong>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Memo:</strong>"
+msgstr "<strong>Memo:</strong>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Payment Amount:</strong>"
+msgstr "<strong>Monto de Pago:</strong>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Payment Date:</strong>"
+msgstr "<strong>Dia de Pago:</strong>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Payment Method:</strong>"
+msgstr "<strong>Metodo de Pago:</strong>"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "<strong>Vendor:</strong>"
+msgstr "<strong>Vendedor:</strong>"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__moratorium_accumulated
+msgid "Accumulated Moratorium"
+msgstr "Moratoria Acumulada"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__active
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__active
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_search
+msgid "Active"
+msgstr "Activo"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__amount_residual
+msgid "Amount"
+msgstr "Monto"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__amount_total_moratorium
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__amount_total_moratorium
+msgid "Amount Total Moratorium"
+msgstr "Monto total de moratoria"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__amount_unit_moratorium
+msgid "Amount Unit Moratorium"
+msgstr "Monto Unitario de Moratoria"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex A"
+msgstr "Anexo A"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_a
+msgid "Annex A Template"
+msgstr "Anexo A Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex B"
+msgstr "Anexo B"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_b
+msgid "Annex B Template"
+msgstr "Anexo B Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex C"
+msgstr "Anexo C"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_c
+msgid "Annex C Template"
+msgstr "Anexo C Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex D"
+msgstr "Anexo D"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_d
+msgid "Annex D Template"
+msgstr "Anexo D Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex E"
+msgstr "Anexo E"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_e
+msgid "Annex E Template"
+msgstr "Anexo E Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex F"
+msgstr "Anexo F"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_f
+msgid "Annex F Template"
+msgstr "Anexo F Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex G"
+msgstr "Anexo G"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_g
+msgid "Annex G Template"
+msgstr "Anexo G Plantilla"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Annex H"
+msgstr "Anexo H"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_annex_h
+msgid "Annex H Template"
+msgstr "Anexo H Plantilla"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_apply_developments
+#: model:ir.model.fields,field_description:jibarito.field_res_config_settings__ji_apply_developments
+msgid "Apply developments"
+msgstr "Aplicar desarrollos"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Apply developments for this company"
+msgstr "Aplicar desarrollos para esta compañia"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "April"
+msgstr "Abril"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_search
+msgid "Archived"
+msgstr "Archivado"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_product_product__ji_area
+#: model:ir.model.fields,field_description:jibarito.field_sale_order_line__ji_area
+msgid "Area"
+msgstr "Area"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__at_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__at_date
+msgid "At Date"
+msgstr "Hasta Fecha"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "August"
+msgstr "Agosto"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__account_payment_term_line__ji_type__balance
+msgid "Balance"
+msgstr "Balance"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_civil_status
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_civil_status
+msgid "Civil Status"
+msgstr "Estado Civil"
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#, python-format
+msgid "Client not selected"
+msgstr "Cliente no seleccionado"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_code
+msgid "Code"
+msgstr "Codigo"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_commercial
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_commercial
+msgid "Comercial"
+msgstr "Comercial"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move__ji_partner_contract
+msgid "Commission Agent"
+msgstr "Comercial"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__company_id
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_hr_employee__ji_partner_id
+msgid "Contact Related"
+msgstr "Contacto Relacionado"
+
+#. module: jibarito
+#: model:ir.actions.report,name:jibarito.action_report_sale_order_contract
+msgid "Contract"
+msgstr "Contrato"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_contract_template
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Contract Template"
+msgstr "Plantilla de contrato"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_account_move_filter
+msgid "Contract of Comercial"
+msgstr "Por Contrato de Comercial"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_product_product__ji_corner_with
+#: model:ir.model.fields,field_description:jibarito.field_sale_order_line__ji_corner_with
+msgid "Corner With"
+msgstr "Esquina con"
+
+#. module: jibarito
+#: code:addons/jibarito/models/account_followup_report.py:0
+#: model:ir.model.fields,field_description:jibarito.field_account_move_line__ji_number
+#, python-format
+msgid "Correlative"
+msgstr "Correlativo"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_res_country
+msgid "Country"
+msgstr "País"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_form
+msgid "Create Invoice"
+msgstr "Crear Factura"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__create_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__create_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__create_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__create_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__create_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__create_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__currency_id
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__partner_id
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#, python-format
+msgid "Customer Invoice Moratorium"
+msgstr "Moratoria por impuntualidad"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__date
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__name
+msgid "Date"
+msgstr "Fecha"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_date_of_birth
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_date_of_birth
+msgid "Date Of Birth"
+msgstr "Fecha de nacimiento"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "December"
+msgstr "Diciembre"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_ji_moratorium_interest_line
+msgid "Details Interest for moratorium"
+msgstr "Detalles de la moratoria"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__display_name
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__display_name
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__display_name
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__date_maturity
+msgid "Due Date"
+msgstr "Fecha de vencimiento"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "February"
+msgstr "Febrero"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_account_followup_report
+msgid "Follow-up Report"
+msgstr "Reporte de Seguimiento"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Formula Moratorium"
+msgstr "Formula de Moratoria"
+
+#. module: jibarito
+#: model:res.groups,name:jibarito.group_ji_migration
+msgid "Group for Migration"
+msgstr "Grupo para Migracion"
+
+#. module: jibarito
+#: model:res.groups,name:jibarito.group_ji_apply_developments
+msgid "Group for apply developments"
+msgstr "Grupo para aplicar los desarrollos"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__id
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__id
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__id
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__id
+msgid "ID"
+msgstr ""
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__ji_moratorium_interest__state__in_progress
+msgid "In Progress"
+msgstr "En progreso"
+
+#. module: jibarito
+#: model:ir.ui.menu,name:jibarito.ji_moratorium_interest_menu
+msgid "Interest for Moratorium"
+msgstr "Intereses por Moratoria"
+
+#. module: jibarito
+#: model:ir.actions.act_window,name:jibarito.ji_moratorium_interest_action
+#: model:ir.model,name:jibarito.model_ji_moratorium_interest
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_form
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_tree
+msgid "Interest for moratorium"
+msgstr "Intereses por Moratoria"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__interest_line
+msgid "Interest line"
+msgstr "Linea de interes"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__invoice_id
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_form
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "Invoice Detail"
+msgstr "Detalle de Factura"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__ji_moratorium_interest__state__invoiced
+msgid "Invoiced"
+msgstr "Facturado"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_condition
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_condition
+msgid "Is Slow Payer"
+msgstr "Es Moroso"
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#, python-format
+msgid "It does not contain overdue payments."
+msgstr "No contiene pagos vencidos."
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "January"
+msgstr "Enero"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_account_move
+msgid "Journal Entries"
+msgstr "Asientos contables"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move__ji_json_numbers
+msgid "Json Number"
+msgstr "Json Numbers"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move__ji_json_sequences
+msgid "Json Sequences"
+msgstr "Json secuencias"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "July"
+msgstr "Julio"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "June"
+msgstr "Junio"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest____last_update
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line____last_update
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer____last_update
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__write_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__write_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__write_uid
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__write_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__write_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__write_date
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__write_date
+msgid "Last Updated on"
+msgstr "Ultima actualización en"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__line_count
+msgid "Line Count"
+msgstr "Numero de Linea"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_ji_notification_slow_payer_line
+msgid "Lines for Notification Slow Payer"
+msgstr "Lineas de Notificacion por morosidad"
+
+#. module: jibarito
+#: model:ir.ui.menu,name:jibarito.notification_slow_payer_menu
+msgid "Mail Notification Slow Payer"
+msgstr "Notificacion por Correo de Morosos"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "March"
+msgstr "Marzo"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "May"
+msgstr "Mayo"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_company
+msgid "Migrar Comerciales"
+msgstr "Migrar Comerciales"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__account_payment_term_line__ji_type__money_advance
+msgid "Money Advance"
+msgstr "Anticipo"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__account_payment_term_line__ji_type__monthly_payments
+msgid "Monthly Payments"
+msgstr "Mensualidad"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move__ji_is_moratorium
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__moratorium_id
+msgid "Moratorium"
+msgstr "Moratoria"
+
+#. module: jibarito
+#: model:ir.ui.menu,name:jibarito.ji_menu
+msgid "Moratorium Setting"
+msgstr "Configuraciones de Moratoria"
+
+#. module: jibarito
+#: model:ir.module.category,name:jibarito.ji_category
+msgid "Moratorium Setting Apply"
+msgstr "Aplicar Configuraciones de Moratoria"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Moratorium Settings"
+msgstr "Configuraciones de Moratoria"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_nationality
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_nationality
+msgid "Nacionalidad"
+msgstr "Nacionalidad"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move_line__ji_name
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__text_unreconciled_aml_dues
+msgid "Names Unreconciled Dues"
+msgstr "Nombres Cuotas no conciliadas"
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#: code:addons/jibarito/models/notification_slow_payer.py:0
+#, python-format
+msgid "No Apply for this companies"
+msgstr "No aplicar para estas compañias"
+
+#. module: jibarito
+#: code:addons/jibarito/models/res_partner.py:0
+#: model:ir.model.fields.selection,name:jibarito.selection__res_partner__ji_condition__no_apply
+#, python-format
+msgid "No Apply for this company"
+msgstr "No aplicar para esta compañia"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "No Date Selected"
+msgstr "Fecha no seleccionada"
+
+#. module: jibarito
+#: code:addons/jibarito/models/notification_slow_payer.py:0
+#, python-format
+msgid "No Template configurated"
+msgstr "Plantilla no configurada"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__notification_id
+msgid "Notification"
+msgstr "Notificacion"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__notification_lines
+msgid "Notification Lines"
+msgstr "Lineas de notificacion"
+
+#. module: jibarito
+#: model:ir.actions.act_window,name:jibarito.notification_slow_payer_action
+#: model:ir.model,name:jibarito.model_ji_notification_slow_payer
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_form
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_tree
+msgid "Notification Slow Payer"
+msgstr "Notificacion de Morosidad"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "November"
+msgstr "Noviembre"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_payment_term__ji_number_quotation
+msgid "Number Advance Payment"
+msgstr "Numero de Anticipos"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__month_number
+msgid "Number Month"
+msgstr "Meses"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_payment_term__ji_numbers_monthly
+msgid "Number Monthly Payments"
+msgstr "Numero de Mensualidades"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__name
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_number_slow_payer
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_number_slow_payer
+msgid "Number Slow Payer"
+msgstr "Numero de Morosidad"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_number_slow_payer
+#: model:ir.model.fields,field_description:jibarito.field_res_config_settings__ji_number_slow_payer
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Number to Slow Payer"
+msgstr "Numero para Morosidad"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_occupation
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_occupation
+msgid "Occupation"
+msgstr "Ocupacion"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "October"
+msgstr "Octubre"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move__ji_order_contract
+msgid "Order Contract"
+msgstr "Contrato"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move_line__ji_sequence_payments
+msgid "Order Payments"
+msgstr "Orden de Pago"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer__partner_ids
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_partner_ids
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Partners To Notification"
+msgstr "Notificar a"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_config_settings__ji_partner_ids
+msgid "Partners for Notification"
+msgstr "Notificar a"
+
+#. module: jibarito
+#: model:ir.actions.report,name:jibarito.ji_report_payment_receipt
+msgid "Payment Receipt Jibarito"
+msgstr "Comprobante de Pago - Jibarito"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_report_account_payment
+msgid "Payment Receipt:"
+msgstr "Comprobante de Pago"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_move_line__ji_term_line_id
+msgid "Payment Term Line Id"
+msgstr "Linea de termino de pago"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_account_payment_term
+msgid "Payment Terms"
+msgstr "Plazos de pago"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_account_payment_term_line
+msgid "Payment Terms Line"
+msgstr "Línea de plazo de pago"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_hr_employee__ji_percent_commission
+msgid "Percent Commission"
+msgstr "Porcentaje de Comision"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__percent_moratorium
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_percent_moratorium
+#: model:ir.model.fields,field_description:jibarito.field_res_config_settings__ji_percent_moratorium
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Percent Moratorium"
+msgstr "Porcentaje de Moratoria"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_place_of_birth
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_place_of_birth
+msgid "Place Of Birth"
+msgstr "Lugar de Nacimiento"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_account_move_filter
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_base_partner_view_filter
+msgid "Por Comercial"
+msgstr "Por Comercial"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__res_partner__ji_condition__punctual
+msgid "Punctual"
+msgstr "Puntual"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_form
+msgid "Regenerate Moratorium"
+msgstr "Regenerar Intereses de Morosidad"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_account_move
+msgid "Regenerate Secuences"
+msgstr "Regenerar Secuencias"
+
+#. module: jibarito
+#: model:mail.template,subject:jibarito.mail_template_slow_payer
+msgid "Report of ${object.name or '' } Slow Payers"
+msgstr "Reporte de ${object.name or '' } Morosos"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: jibarito
+#: model:ir.model,name:jibarito.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_form
+msgid "Send Notification"
+msgstr "Enviar Notificacion"
+
+#. module: jibarito
+#: code:addons/jibarito/models/sale_order.py:0
+#, python-format
+msgid "September"
+msgstr "Septiembre"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_search
+msgid "Show active"
+msgstr "Mostrar Activos"
+
+#. module: jibarito
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibarito.notification_slow_payer_search
+msgid "Show archived"
+msgstr "Mostrar Archivados"
+
+#. module: jibarito
+#: model:ir.model.fields.selection,name:jibarito.selection__res_partner__ji_condition__slow_payer
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_customer_statements_search_view
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_partner_filter
+msgid "Slow Payer"
+msgstr "Morosos"
+
+#. module: jibarito
+#: model:ir.actions.server,name:jibarito.cron_followup_slow_payer_ir_actions_server
+#: model:ir.cron,cron_name:jibarito.cron_followup_slow_payer
+#: model:ir.cron,name:jibarito.cron_followup_slow_payer
+msgid "Slow Payer Mail Notification"
+msgstr "Notificacion de Morosos"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_partner__ji_spouse
+#: model:ir.model.fields,field_description:jibarito.field_res_users__ji_spouse
+msgid "Spouse"
+msgstr "Esposo (a)"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__state
+msgid "State"
+msgstr "Estado"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest__state_invoice
+msgid "State of Invoice"
+msgstr "Estado de Factura"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_product_product__ji_street
+#: model:ir.model.fields,field_description:jibarito.field_sale_order_line__ji_street
+msgid "Street"
+msgstr "Calle"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__tz
+msgid "TZ"
+msgstr "ZH"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_res_company__ji_mail_template
+#: model:ir.model.fields,field_description:jibarito.field_res_config_settings__ji_mail_template
+#: model_terms:ir.ui.view,arch_db:jibarito.ji_res_config_settings
+msgid "Template for Notification"
+msgstr "Plantilla de Notificacion"
+
+#. module: jibarito
+#: code:addons/jibarito/models/account_followup_report.py:0
+#, python-format
+msgid "Total Due"
+msgstr "Adeudo Total"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_sale_order__text_amount
+msgid "Total In Words"
+msgstr "Total en Letras"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__real_amount_moratorium
+msgid "Total Moratorium"
+msgstr "Monto de Moratoria"
+
+#. module: jibarito
+#: code:addons/jibarito/models/account_followup_report.py:0
+#, python-format
+msgid "Total Overdue"
+msgstr "Total de Vencido"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_account_payment_term_line__ji_type
+msgid "Type Payment"
+msgstr "Tipo de Pago"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_moratorium_interest_line__unreconciled_aml
+msgid "Unreconciled Due"
+msgstr "Cuotas vencidas"
+
+#. module: jibarito
+#: model:ir.model.fields,field_description:jibarito.field_ji_notification_slow_payer_line__unreconciled_aml_dues
+msgid "Unreconciled Dues"
+msgstr "Cuotas vencidas"
+
+#. module: jibarito
+#: model:ir.model.fields,help:jibarito.field_res_company__tz
+msgid ""
+"When printing documents and exporting/importing data, time values are computed according to this timezone.\n"
+"If the timezone is not set, UTC (Coordinated Universal Time) is used.\n"
+"Anywhere else, time values are computed according to the time offset of your web client."
+msgstr ""
+"Al imprimir documentos y exportar / importar datos, los valores de tiempo se calculan de acuerdo con esta zona horaria..\n"
+"Si la zona horaria no está configurada, se usa UTC (hora universal coordinada).\n"
+"En cualquier otro lugar, los valores de tiempo se calculan de acuerdo con la compensación de tiempo de su cliente web."
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#, python-format
+msgid "You cannot delete a record in invoiced."
+msgstr "No se puede borrar un registro en facturado"
+
+#. module: jibarito
+#: code:addons/jibarito/models/moratorium_interest.py:0
+#, python-format
+msgid "You cannot duplicate this record, please create a new one."
+msgstr "No puede duplicar este registro, cree uno nuevo."

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_sale_order_contract">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <xpath expr="//div[@class='header']" position="replace">
+                    <div class="header">
+                    </div>
+                </xpath>
+                <xpath expr="//div[@class='footer']" position="replace">
+                    <div class="footer">
+                    </div>
+                </xpath>
+            </t>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-if="o.state == 'sale'">
+                            <t t-raw="o.ji_render_template(o.company_id.ji_contract_template)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_a)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_b)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_c)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_d)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_e)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_f)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_g)"/>
+                            <div style="page-break-after: always;"/>
+                            <t t-raw="o.ji_render_template(o.company_id.ji_annex_h)"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="report_sale_order_contract_paper_format" model="report.paperformat">
+        <field name="name">A4 For Jibarito</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+    </record>
+    <report
+            id="action_report_sale_order_contract"
+            string="Contract"
+            model="sale.order"
+            report_type="qweb-pdf"
+            file="jibarito.report_sale_order_contract"
+            name="jibarito.report_sale_order_contract"
+            groups="jibarito.group_ji_apply_developments"
+            paperformat="report_sale_order_contract_paper_format"
+            print_report_name="'Contract - %s' % (object.name)"/>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="ji_customer_statements_search_view" model="ir.ui.view">
+        <field name="name">customer.statements.search.ji</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account_followup.customer_statements_search_view"/>
+        <field name="arch" type="xml">
+            <filter name="filter_in_need_of_action" position="after">
+                <separator/>
+                <filter string="Slow Payer"
+                        groups="jibarito.group_ji_apply_developments"
+                        name="ji_condition"
+                        domain="[('ji_condition', '=', 'slow_payer')]"/>
+                <separator/>
+            </filter>
+        </field>
+    </record>
+    <record id="ji_base_partner_view_filter" model="ir.ui.view">
+        <field name="name">res.partner.filter.ji</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <filter string="Por Comercial" name="ji_commercial"
+                        context="{'group_by':'ji_commercial'}"
+                        groups="jibarito.group_ji_apply_developments"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="ji_customer_statements_search_tree" model="ir.ui.view">
+        <field name="name">customer.statements.tree.ji</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account_followup.customer_statements_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="total_due" position="after">
+                <field name="ji_number_slow_payer" groups="jibarito.group_ji_apply_developments" optional="show"/>
+                <field name="ji_commercial" groups="jibarito.group_ji_apply_developments" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

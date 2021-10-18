@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="ji_res_company" model="ir.ui.view">
+        <field name="name">res.company.template</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="tz"/>
+                <button name="migrate_commercial" invisible="1" string="Migrar Comerciales" type="object"/>
+            </field>
+            <xpath expr="//page[last()]" position="after">
+                <page string="Contract Template" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_contract_template" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex A" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_a" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex B" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_b" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex C" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_c" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex D" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_d" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex E" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_e" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex F" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_f" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex G" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_g" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Annex H" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_annex_h" nolabel="1"/>
+                    </group>
+                </page>
+                <page string="Formula Moratorium" groups="jibarito.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_code" nolabel="1" widget="ace" options="{'mode': 'python'}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
