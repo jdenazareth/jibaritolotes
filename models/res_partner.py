@@ -39,7 +39,7 @@ class ResPartner(models.Model):
 
     ji_condition = fields.Selection(
         selection=[("no_apply", "No Apply for this company"), ("punctual", "Punctual"), ("slow_payer", "Slow Payer")],
-        string="Is Slow Payer", compute="_compute_ji_condition", search="_search_ji_condition")
+        string="Is Slow Payer", search="_search_ji_condition")
 
     def _search_ji_condition(self, operator, value):
         if not self.env.company.ji_apply_developments:
@@ -47,33 +47,33 @@ class ResPartner(models.Model):
         partner_ids = self.search([('company_id', '=', self.env.company.id)]).get_partners_slow_payer()
         return [('id', 'in', [p.id for p in partner_ids])]
 
-    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial",
-                                    compute="_compute_ji_commercial")
+    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial"
+                                    )
 
-    @api.depends("unreconciled_aml_ids")
-    def _compute_ji_commercial(self):
-        for partner in self:
-            _comercial = False
-            if partner.unreconciled_aml_ids.filtered(lambda l: l.company_id.ji_apply_developments):
-                _comercial = partner.unreconciled_aml_ids[0].mapped('move_id').x_studio_vendedor
-            partner.ji_commercial = _comercial
+    # @api.depends("unreconciled_aml_ids")
+    # def _compute_ji_commercial(self):
+    #     for partner in self:
+    #         _comercial = False
+    #         if partner.unreconciled_aml_ids.filtered(lambda l: l.company_id.ji_apply_developments):
+    #             _comercial = partner.unreconciled_aml_ids[0].mapped('move_id').x_studio_vendedor
+    #         partner.ji_commercial = _comercial
 
-    @api.depends('unreconciled_aml_ids')
-    def _compute_ji_condition(self):
-        for record in self:
-            if record.company_id.ji_apply_developments:
-                number_slow_payer, aml = record.get_number_slow_payer()
-                if self.env.company.ji_number_slow_payer > 0:
-                    if number_slow_payer >= self.env.company.ji_number_slow_payer:
-                        record.ji_condition = 'slow_payer'
-                    else:
-                        record.ji_condition = 'punctual'
-                else:
-                    record.ji_condition = 'punctual'
-            else:
-                record.ji_condition = 'no_apply'
+    # @api.depends('unreconciled_aml_ids')
+    # def _compute_ji_condition(self):
+    #     for record in self:
+    #         if record.company_id.ji_apply_developments:
+    #             number_slow_payer, aml = record.get_number_slow_payer()
+    #             if self.env.company.ji_number_slow_payer > 0:
+    #                 if number_slow_payer >= self.env.company.ji_number_slow_payer:
+    #                     record.ji_condition = 'slow_payer'
+    #                 else:
+    #                     record.ji_condition = 'punctual'
+    #             else:
+    #                 record.ji_condition = 'punctual'
+    #         else:
+    #             record.ji_condition = 'no_apply'
 
-    ji_number_slow_payer = fields.Integer(string="Number Slow Payer", compute="_ji_compute_for_followup")
+    ji_number_slow_payer = fields.Integer(string="Number Slow Payer")
 
     def get_partners_slow_payer_cron(self, company):
         partner_ids = []
@@ -109,40 +109,40 @@ class ResPartner(models.Model):
         number_slow_payer = 0
         today = fields.Date.context_today(company.partner_id)
         aml_ids = []
-        for aml in self.unreconciled_aml_ids:
-            if aml.company_id == company:
-                is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium:
-                    number_slow_payer += 1
-                    aml_ids.append(aml)
+        # for aml in self.unreconciled_aml_ids:
+        #     if aml.company_id == company:
+        #         is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
+        #         if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium:
+        #             number_slow_payer += 1
+        #             aml_ids.append(aml)
         return number_slow_payer, aml_ids
 
     def get_number_slow_payer(self):
         number_slow_payer = 0
         today = fields.Date.context_today(self)
         aml_ids = []
-        for aml in self.unreconciled_aml_ids:
-            if aml.company_id == self.env.company:
-                is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                if is_overdue and not aml.blocked:
-                    number_slow_payer += 1
-                    aml_ids.append(aml)
+        # for aml in self.unreconciled_aml_ids:
+        #     if aml.company_id == self.env.company:
+        #         is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
+        #         if is_overdue and not aml.blocked:
+        #             number_slow_payer += 1
+        #             aml_ids.append(aml)
         return number_slow_payer, aml_ids
 
-    @api.depends('unreconciled_aml_ids')
-    def _ji_compute_for_followup(self):
-        for record in self:
-            if record.company_id.ji_apply_developments:
-                number_slow_payer, aml = record.get_number_slow_payer()
-                record.ji_number_slow_payer = number_slow_payer
-            else:
-                record.ji_number_slow_payer = 0
+    # @api.depends('unreconciled_aml_ids')
+    # def _ji_compute_for_followup(self):
+    #     for record in self:
+    #         if record.company_id.ji_apply_developments:
+    #             number_slow_payer, aml = record.get_number_slow_payer()
+    #             record.ji_number_slow_payer = number_slow_payer
+    #         else:
+    #             record.ji_number_slow_payer = 0
 
-    @api.model
-    def compute_total_define_slow_payer(self):
-        for partner in self.search([]):
-            partner._ji_compute_for_followup()
-            partner._compute_ji_condition()
+    # @api.model
+    # def compute_total_define_slow_payer(self):
+    #     for partner in self.search([]):
+          #  partner._ji_compute_for_followup()
+          #  partner._compute_ji_condition()
 
-    def cron_notification_slow_payer(self):
-        pass
+    # def cron_notification_slow_payer(self):
+    #     pass

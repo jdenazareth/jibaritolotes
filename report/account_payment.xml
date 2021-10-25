@@ -132,8 +132,8 @@
             model="account.payment"
             string="Payment Receipt Jibarito"
             report_type="qweb-pdf"
-            name="jibarito.ji_report_account_payment"
-            file="jibarito.ji_report_account_payment"
+            name="jibaritolotes.ji_report_account_payment"
+            file="jibaritolotes.ji_report_account_payment"
             menu="True"
     />
 </odoo>

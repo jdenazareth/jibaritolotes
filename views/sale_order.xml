@@ -6,9 +6,9 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']//tree/field[@name='name']" position="after">
-                <field name="ji_area" optional="show" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_street" optional="show" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_corner_with" optional="show" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_area" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_street" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_corner_with" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
             </xpath>
         </field>
     </record>

@@ -6,22 +6,22 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
-                <field name="ji_sequence_payments" widget="handle" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_number" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_term_line_id" groups="jibarito.group_ji_migration"/>
-                <field name="date_maturity" groups="jibarito.group_ji_migration"/>
+                <field name="ji_sequence_payments" widget="handle" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_number" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_term_line_id" groups="jibaritolotes.group_ji_migration"/>
+                <field name="date_maturity" groups="jibaritolotes.group_ji_migration"/>
             </xpath>
             <xpath expr="//field[@name='line_ids']//tree" position="attributes">
                 <attribute name="default_order">ji_sequence_payments</attribute>
             </xpath>
             <xpath expr="//field[@name='line_ids']" position="after">
-                <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibarito.group_ji_migration"
+                <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibaritolotes.group_ji_migration"
                         type="object" class="btn-primary"/>
             </xpath>
         </field>
     </record>
-    <record id="ji_account_move_tree" model="ir.ui.view">
-        <field name="name">account.move.jibarito.tree</field>
+    <!-- <record id="ji_account_move_tree" model="ir.ui.view">
+        <field name="name">account.move.jibaritolotes.tree</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
@@ -39,12 +39,12 @@
             <xpath expr="//group" position="inside">
                 <filter string="Por Comercial" name="ji_partner_contract"
                         context="{'group_by':'ji_partner_contract'}"
-                        groups="jibarito.group_ji_apply_developments"/>
+                        groups="jibaritolotes.group_ji_apply_developments"/>
                 <filter string="Contract of Comercial" name="ji_order_contract"
                         context="{'group_by':'ji_order_contract'}"
-                        groups="jibarito.group_ji_apply_developments"/>
+                        groups="jibaritolotes.group_ji_apply_developments"/>
                 <separator/>
             </xpath>
         </field>
-    </record>
+    </record> -->
 </odoo>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="notification_slow_payer_tree" model="ir.ui.view">
+    <!-- <record id="notification_slow_payer_tree" model="ir.ui.view">
         <field name="name">notification.slow.payer.tree</field>
         <field name="model">ji.notification.slow.payer</field>
         <field name="arch" type="xml">
@@ -11,7 +11,7 @@
                 <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
-    </record>
+    </record> -->
     <record id="notification_slow_payer_form" model="ir.ui.view">
         <field name="name">ji.notification.slow.payer</field>
         <field name="model">ji.notification.slow.payer</field>
@@ -67,14 +67,14 @@
     <record id="notification_slow_payer_action" model="ir.actions.act_window">
         <field name="name">Notification Slow Payer</field>
         <field name="res_model">ji.notification.slow.payer</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">form</field>
         <field name="search_view_id" ref="notification_slow_payer_search"/>
         <field name="domain"></field>
     </record>
     <menuitem id="notification_slow_payer_menu"
               sequence="4"
-              groups="jibarito.group_ji_apply_developments"
+              groups="jibaritolotes.group_ji_apply_developments"
               name="Mail Notification Slow Payer"
-              parent="jibarito.ji_menu"
-              action="jibarito.notification_slow_payer_action"/>
+              parent="jibaritolotes.ji_menu"
+              action="jibaritolotes.notification_slow_payer_action"/>
 </odoo>

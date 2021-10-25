@@ -56,9 +56,9 @@
             string="Contract"
             model="sale.order"
             report_type="qweb-pdf"
-            file="jibarito.report_sale_order_contract"
-            name="jibarito.report_sale_order_contract"
-            groups="jibarito.group_ji_apply_developments"
+            file="jibaritolotes.report_sale_order_contract"
+            name="jibaritolotes.report_sale_order_contract"
+            groups="jibaritolotes.group_ji_apply_developments"
             paperformat="report_sale_order_contract_paper_format"
             print_report_name="'Contract - %s' % (object.name)"/>
 </odoo>
