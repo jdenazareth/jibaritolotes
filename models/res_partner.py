@@ -23,6 +23,18 @@ class ResPartner(models.Model):
     def _default_ji_nationality(self):
         return self.env.ref('base.mx').id
 
+    curp = fields.Char(string="Curp", required=True,size=18)
+    def is_curp(self, cr, uid, ids, context=None):
+        record = self.browse(cr, uid, ids)
+        pattern ="^[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]$"
+        for data in record:
+            if re.match(pattern, data.curp):
+                return True
+            else:
+                return False
+        return {}
+    _constraints = [(is_curp, 'Error: Invalid curp', ['curp']), ]
+
     ji_civil_status = fields.Char(string="Civil Status")
     ji_occupation = fields.Char(string="Occupation")
     ji_spouse = fields.Char(string="Spouse")
