@@ -23,7 +23,7 @@ class ResPartner(models.Model):
     def _default_ji_nationality(self):
         return self.env.ref('base.mx').id
 
-    curp = fields.Char(string="Curp", required=True,size=18)
+    
     def is_curp(self, cr, uid, ids, context=None):
         record = self.browse(cr, uid, ids)
         pattern ="^[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]$"
@@ -41,6 +41,7 @@ class ResPartner(models.Model):
     ji_date_of_birth = fields.Date(string="Date Of Birth")
     ji_place_of_birth = fields.Char(string="Place Of Birth")
     ji_nationality = fields.Many2one(comodel_name="res.country", string="Nacionalidad", default=_default_ji_nationality)
+    curp = fields.Char(string="Curp",size = 18)
 
     def get_ji_date_of_birth(self):
         if self.ji_date_of_birth:
