@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_open_quants']" position="before">
               <span>Estado: </span>
-              <field style="padding-right: 30px !important; padding-left: 10px !important;" name="estado_producto" options="{'clickable': '1',}" />
+              <field style="padding-right: 35px !important; padding-left: 10px !important;" name="estado_producto" options="{'clickable': '1',}" />
             </xpath>
 
 
