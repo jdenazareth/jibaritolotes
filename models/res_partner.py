@@ -42,6 +42,7 @@ class ResPartner(models.Model):
     ji_place_of_birth = fields.Char(string="Place Of Birth")
     ji_nationality = fields.Many2one(comodel_name="res.country", string="Nacionalidad", default=_default_ji_nationality)
     curp = fields.Char(string="Curp",size = 18)
+    unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', string="Aml no reconciliado")
 
     def get_ji_date_of_birth(self):
         if self.ji_date_of_birth:
