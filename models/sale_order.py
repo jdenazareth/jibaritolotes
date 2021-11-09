@@ -91,6 +91,8 @@ def month_name(number):
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
+
     @api.model
     def get_name_month(self, month):
         return month_name(month)
