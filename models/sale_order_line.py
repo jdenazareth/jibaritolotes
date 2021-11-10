@@ -17,5 +17,5 @@ class SaleOrderLine(models.Model):
             line.ji_area = line.product_id.ji_area
             line.ji_street = line.product_id.ji_street
             line.ji_corner_with = line.product_id.ji_corner_with
-            line.ji_manzana = line.product_id.ji_manzana
-            line.ji_lote = line.product_id.ji_lote
+            line.ji_manzana = line.product_id.x_studio_manzana.name
+            line.ji_lote = line.product_id.x_studio_lote.name
