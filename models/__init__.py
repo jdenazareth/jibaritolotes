@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-#from . import notification_slow_payer
+from . import notification_slow_payer
+from . import estados
 from . import moratorium_interest
 from . import res_company
 from . import res_config_settings

@@ -8,7 +8,7 @@
             <xpath expr="//field[@name='categ_id']" position="after">
                 <field name="ji_area" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_manzana" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_lote" groups="jibaritolotes.group_ji_apply_developments"/> 
+                <field name="ji_lote" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_street" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_corner_with" groups="jibaritolotes.group_ji_apply_developments"/>
             </xpath>

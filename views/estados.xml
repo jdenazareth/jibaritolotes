@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 <data>
-        <record id="producto_estados" model="ir.ui.view">
-        <field name="name">producto_estados</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_only_form_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_open_quants']" position="before">
-              <span>Estado: </span>
-              <field style="padding-right: 35px !important; padding-left: 10px !important;" name="estado_producto" options="{'clickable': '1',}" />
-            </xpath>
 
-
-
-
-
-        </field>
-        </record>
 
 
         <!-- Vista Formulario Nueva -->
@@ -48,6 +33,22 @@
 
 
         <!-- Vista Tree (Lista) Nueva -->
+         <record id="producto_estados" model="ir.ui.view">
+        <field name="name">producto_estados</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_quants']" position="before">
+              <span>Estado: </span>
+              <field style="padding-right: 35px !important; padding-left: 10px !important;" name="estado_producto" options="{'clickable': '1',}" />
+            </xpath>
+
+
+
+
+
+        </field>
+        </record>
 
         <record id="view_tree_Estados" model="ir.ui.view">
         <field name="name">Estados.tree</field>

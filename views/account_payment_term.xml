@@ -9,11 +9,11 @@
                 <field name="ji_advance_payment" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_number_quotation" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_numbers_monthly" groups="jibaritolotes.group_ji_apply_developments"/>
-<!--                <button name="regenerate_lines" type="object" string="Regenerar Lineas"/>-->
+                <button name="regenerate_lines" type="object" string="Regenerar Lineas"/>
             </field>
         </field>
     </record>
-        <!-- <record id="ji_payment_term_line_tree" model="ir.ui.view">
+         <record id="ji_payment_term_line_tree" model="ir.ui.view">
             <field name="name">account.payment.term.line.payer</field>
             <field name="model">account.payment.term.line</field>
             <field name="inherit_id" ref="account.view_payment_term_line_tree"/>
@@ -32,5 +32,5 @@
                     <field name="ji_type" groups="jibaritolotes.group_ji_apply_developments"/>
                 </field>
             </field>
-        </record> -->
+        </record>
 </odoo>

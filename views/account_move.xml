@@ -20,8 +20,8 @@
             </xpath>
         </field>
     </record>
-    <!-- <record id="ji_account_move_tree" model="ir.ui.view">
-        <field name="name">account.move.jibaritolotes.tree</field>
+    <record id="ji_account_move_tree" model="ir.ui.view">
+        <field name="name">account.move.tree</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
@@ -46,5 +46,5 @@
                 <separator/>
             </xpath>
         </field>
-    </record> -->
+    </record>
 </odoo>

@@ -10,11 +10,5 @@ class ProductTemplate(models.Model):
     ji_corner_with = fields.Char(string="Corner With")
     ji_manzana = fields.Char(string="Manzana")
     ji_lote = fields.Char(string="Lote")
-    estado_producto = fields.Many2one('estados.g', string='Estado')
-
-
-class Estadosg(models.Model):
-    _name = "estados.g"
-    _inherit = ['mail.thread']
-
-    name = fields.Char(String="Estado", track_visibility='onchange')
+    x_studio_no_es_jibarito = fields.Boolean(string="No es Jibarito")
+    x_studio_metros_cuadrados = fields.Integer(string="Metros cuadrados")

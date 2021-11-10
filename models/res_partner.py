@@ -64,28 +64,28 @@ class ResPartner(models.Model):
     ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial"
                                     )
 
-    # @api.depends("unreconciled_aml_ids")
-    # def _compute_ji_commercial(self):
-    #     for partner in self:
-    #         _comercial = False
-    #         if partner.unreconciled_aml_ids.filtered(lambda l: l.company_id.ji_apply_developments):
-    #             _comercial = partner.unreconciled_aml_ids[0].mapped('move_id').x_studio_vendedor
-    #         partner.ji_commercial = _comercial
+    @api.depends("sale_order_ids")
+    def _compute_ji_commercial(self):
+        for partner in self:
+            _comercial = False
+            if partner.sale_order_ids.filtered(lambda l: l.company_id.ji_apply_developments):
+                _comercial = partner.sale_order_ids[0].x_studio_vendedor
+            partner.ji_commercial = _comercial
 
-    # @api.depends('unreconciled_aml_ids')
-    # def _compute_ji_condition(self):
-    #     for record in self:
-    #         if record.company_id.ji_apply_developments:
-    #             number_slow_payer, aml = record.get_number_slow_payer()
-    #             if self.env.company.ji_number_slow_payer > 0:
-    #                 if number_slow_payer >= self.env.company.ji_number_slow_payer:
-    #                     record.ji_condition = 'slow_payer'
-    #                 else:
-    #                     record.ji_condition = 'punctual'
-    #             else:
-    #                 record.ji_condition = 'punctual'
-    #         else:
-    #             record.ji_condition = 'no_apply'
+    @api.depends('unreconciled_aml_ids')
+    def _compute_ji_condition(self):
+        for record in self:
+            if record.company_id.ji_apply_developments:
+                number_slow_payer, aml = record.get_number_slow_payer()
+                if self.env.company.ji_number_slow_payer > 0:
+                    if number_slow_payer >= self.env.company.ji_number_slow_payer:
+                        record.ji_condition = 'slow_payer'
+                    else:
+                        record.ji_condition = 'punctual'
+                else:
+                    record.ji_condition = 'punctual'
+            else:
+                record.ji_condition = 'no_apply'
 
     ji_number_slow_payer = fields.Integer(string="Number Slow Payer")
 

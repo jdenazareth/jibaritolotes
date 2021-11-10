@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="933d1560-9c7e-49e2-b258-753a1a5bb89a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/models/estados.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jibaritolotes.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ir_cron.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data/ir_cron.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/mail_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data/mail_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/product_template.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/product_template.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/res_partner.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/res_partner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sale_order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/account_payment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report/account_payment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/sale_order_contract.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report/sale_order_contract.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/account_followup_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/account_followup_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/account_move.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/account_move.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/account_payment_term.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/account_payment_term.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/estados.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/estados.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/hr_employee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/hr_employee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/moratorium_interest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/moratorium_interest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/notification_slow_payer.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/notification_slow_payer.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/product_product.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/product_product.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/product_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/product_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/res_company.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/res_company.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/res_config_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/res_config_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/res_partner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/res_partner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/sale_order.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/sale_order.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="20eW09Q06umpiAx9EVI6PEupOFr" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="933d1560-9c7e-49e2-b258-753a1a5bb89a" name="Changes" comment="" />
+      <created>1636405309438</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1636405309438</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+</project>

@@ -92,11 +92,11 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
-    x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
-    x_studio_manzana = fields.Selection([('Manzana 1', 'Manzana 1')]) #manza hasta al 20
-    x_studio_lote = fields.Selection()
-    x_studio_contrato = fields.Char()
-    x_studio_calle = fields.Selection()
+    # x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
+    # x_studio_manzana = fields.Selection([('Manzana 1', 'Manzana 1')]) #manza hasta al 20
+    # x_studio_lote = fields.Selection()
+    # x_studio_contrato = fields.Char()
+    # x_studio_calle = fields.Selection()
 
     @api.model
     def get_name_month(self, month):

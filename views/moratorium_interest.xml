@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- <record id="ji_moratorium_interest_tree" model="ir.ui.view">
+    <record id="ji_moratorium_interest_tree" model="ir.ui.view">
         <field name="name">notification.slow.payer.tree</field>
         <field name="model">ji.moratorium.interest</field>
         <field name="arch" type="xml">
@@ -12,7 +12,7 @@
                 <field name="state"/>
             </tree>
         </field>
-    </record> -->
+    </record>
     <record id="ji_moratorium_interest_form" model="ir.ui.view">
         <field name="name">ji.moratorium.interest.form</field>
         <field name="model">ji.moratorium.interest</field>
@@ -85,7 +85,7 @@
             </form>
         </field>
     </record>
-    <!-- <record id="ji_moratorium_interest_search" model="ir.ui.view">
+     <record id="ji_moratorium_interest_search" model="ir.ui.view">
         <field name="name">ji.moratorium.interest.search</field>
         <field name="model">ji.moratorium.interest</field>
         <field name="type">search</field>
@@ -109,6 +109,6 @@
               sequence="4"
               groups="jibaritolotes.group_ji_apply_developments"
               name="Interest for Moratorium"
-              parent="jibaritolotes.ji_menu"
-              action="jibaritolotes.ji_moratorium_interest_action"/>-->
+              parent="ji_menu"
+              action="ji_moratorium_interest_action"/>
 </odoo>

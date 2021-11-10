@@ -1,4 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_Estados,access.estados.g,model_estados_g,,1,1,1,1
-access_ji_moratorium_interest,ji.moratorium.interest,jibaritolotes.model_ji_moratorium_interest,jibaritolotes.group_ji_apply_developments,1,1,1,1
-access_ji_moratorium_interest_line,ji.moratorium.interest.line,jibaritolotes.model_ji_moratorium_interest_line,jibaritolotes.group_ji_apply_developments,1,1,1,1
+
+access_ji_notification_slow_payer,notification.slow.payer,model_ji_notification_slow_payer,group_ji_apply_developments,1,1,1,1
+access_ji_notification_slow_payer_line,notification.slow.payer.line,model_ji_notification_slow_payer_line,group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest,ji.moratorium.interest,model_ji_moratorium_interest,group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest_line,ji.moratorium.interest.line,model_ji_moratorium_interest_line,jibaritolotes.group_ji_apply_developments,1,1,1,1
