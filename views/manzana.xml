@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+      
+        <!-- Vista Formulario Nueva --> 
+
+        <record id="view_manzana_form" model="ir.ui.view"> 
+        <field name="name">Manzana.form</field> 
+        <field name="model">manzana.ji</field> 
+        <field name="arch" type="xml"> 
+            <form string="Listado de Manzana">
+                <sheet>
+                <group name="contenedor"> 
+                    <group name="lef">
+                        <field name="name" track_visibility='onchange' string='Manzana'/>  
+                    </group>
+
+                    <group name="right">
+                    </group>
+                </group>
+                </sheet> 
+
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
+          </form> 
+        </field> 
+        </record>
+
+
+        <!-- Vista Tree (Lista) Nueva --> 
+
+        <record id="view_tree_Manzana" model="ir.ui.view">
+        <field name="name">Manzana.tree</field> 
+        <field name="model">manzana.ji</field> 
+        <field name="arch" type="xml"> 
+
+           <tree> 
+                <field name="name"/>
+           </tree> 
+
+        </field> 
+        </record>
+
+        <!-- Agregar la acción (Cando no se hered de ninguna vista) -->
+
+        <record model="ir.actions.act_window" id="act_manzana"> 
+        <field name="name">Manzana</field> 
+        <field name="res_model">manzana.ji</field> 
+        <field name="view_mode">tree,form</field> 
+        <field name="view_id"  ref="view_tree_Manzana"/>
+
+        </record>
+
+        <menuitem id="submenu_manzana" name="Manzana" sequence="62" parent="stock.menu_product_in_config_stock" action="act_manzana"/>
+          
+
+</data>
+</odoo>

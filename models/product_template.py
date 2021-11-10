@@ -8,8 +8,8 @@ class ProductTemplate(models.Model):
     ji_area = fields.Float(string="Area")
     ji_street = fields.Char(string="Street")
     ji_corner_with = fields.Char(string="Corner With")
-    ji_manzana = fields.Char(string="Manzana")
-    ji_lote = fields.Char(string="Lote")
+    x_studio_manzana = fields.Many2one('manzana.ji', string="Manzana")
+    x_studio_lote = fields.Many2one('lotes.ji', string="Lote")
     estado_producto = fields.Many2one('estados.g', string='Estado')
 
 

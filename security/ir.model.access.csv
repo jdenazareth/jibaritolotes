@@ -2,3 +2,5 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_Estados,access.estados.g,model_estados_g,,1,1,1,1
 access_ji_moratorium_interest,ji.moratorium.interest,jibaritolotes.model_ji_moratorium_interest,jibaritolotes.group_ji_apply_developments,1,1,1,1
 access_ji_moratorium_interest_line,ji.moratorium.interest.line,jibaritolotes.model_ji_moratorium_interest_line,jibaritolotes.group_ji_apply_developments,1,1,1,1
+access_Lotes,access.lotes.ji,model_lotes_ji,,1,1,1,1
+access_Manzana,access.manzana.ji,model_manzana_ji,,1,1,1,1

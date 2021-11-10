@@ -11,3 +11,4 @@ from . import product_template
 from . import account_payment_term
 from . import account_move
 from . import hr_employee
+from . import campos_dinamicos

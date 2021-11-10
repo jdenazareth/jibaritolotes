@@ -38,6 +38,8 @@
         "views/account_move.xml",
         "report/account_payment.xml",
         "views/hr_employee.xml",
+        "views/lotes.xml",
+        "views/manzana.xml",
 
     ],
     "images": [
