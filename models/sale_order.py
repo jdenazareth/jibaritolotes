@@ -94,8 +94,9 @@ class SaleOrder(models.Model):
     ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
 
     x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
-    # x_studio_manzana = fields.Selection([('Manzana 1', 'Manzana 1')]) #manza hasta al 20
-    # x_studio_lote = fields.Many2one('lotes.ji', string="Lote")
+
+    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji")
+    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji")
 
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()

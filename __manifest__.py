@@ -37,14 +37,14 @@
         "views/sale_order.xml",
         "views/product_product.xml",
         "views/product_template.xml",
-
+        "views/lotes.xml",
+        "views/manzana.xml",
         "views/account_payment_term.xml",
         "views/moratorium_interest.xml",
         "views/account_move.xml",
         "report/account_payment.xml",
         "views/hr_employee.xml",
-        "views/lotes.xml",
-        "views/manzana.xml",
+
 
 
     ],

@@ -9,6 +9,7 @@
                 <field name="ji_area" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_street" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_corner_with" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+
             </xpath>
         </field>
     </record>
