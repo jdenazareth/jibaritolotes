@@ -95,11 +95,20 @@ class SaleOrder(models.Model):
 
     x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
 
-    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji")
-    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji")
+    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", compute="_compute_ji_product_information_form")
+    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
 
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
+
+    @api.depends("order_line")
+    def _compute_ji_product_information_form(self):
+        try:
+            for line in self:
+                line.x_studio_manzana = line.order_line.product_id.x_studio_manzana
+                line.x_studio_lote = line.order_line.product_id.x_studio_lote
+        except Exception as e:
+            raise UserError("No es posible agregar otro producto a la línea de pedido.")
 
     @api.model
     def get_name_month(self, month):
