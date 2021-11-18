@@ -16,3 +16,9 @@ class Manzanaji(models.Model):
     _inherit = ['mail.thread']
     
     name = fields.Char(String = "Manzana", track_visibility='onchange')
+
+class Calleji(models.Model):
+    _name = "calle.ji"
+    _inherit = ['mail.thread']
+
+    name = fields.Char(string = "Tipo Calle", track_visibility='onchange')

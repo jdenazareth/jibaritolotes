@@ -7,4 +7,4 @@ access_ji_moratorium_interest,ji.moratorium.interest,model_ji_moratorium_interes
 access_ji_moratorium_interest_line,ji.moratorium.interest.line,model_ji_moratorium_interest_line,jibaritolotes.group_ji_apply_developments,1,1,1,1
 access_Lotes,access.lotes.ji,model_lotes_ji,,1,1,1,1
 access_Manzana,access.manzana.ji,model_manzana_ji,,1,1,1,1
-
+access_Calle,access.calle.ji,model_calle_ji,,1,1,1,1

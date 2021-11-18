@@ -10,6 +10,7 @@
 
                 <field name="x_studio_manzana" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="x_studio_lote" groups="jibaritolotes.group_ji_apply_developments"/> 
+                <field name="x_studio_calle" groups="jibaritolotes.group_ji_apply_developments"/> 
 
                 <field name="ji_street" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_corner_with" groups="jibaritolotes.group_ji_apply_developments"/>

@@ -11,6 +11,7 @@ class ProductTemplate(models.Model):
 
     x_studio_manzana = fields.Many2one('manzana.ji', string="Manzana")
     x_studio_lote = fields.Many2one('lotes.ji', string="Lote")
+    x_studio_calle = fields.Many2one('calle.ji', string="Calle")
     estado_producto = fields.Many2one('estados.g', string='Estado')
 
 
