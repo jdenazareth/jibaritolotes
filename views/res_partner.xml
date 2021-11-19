@@ -19,7 +19,7 @@
                        options="{'always_reload': True,'no_create': True, 'no_create_edit':True,'no_open': True}"/>
             </field>
             <field name="vat" position="after" >
-                
+
             </field>
             <xpath expr="//field[@name='email']" position="attributes">
                 <attribute name="required">True</attribute>

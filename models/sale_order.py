@@ -98,7 +98,7 @@ class SaleOrder(models.Model):
     x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", compute="_compute_ji_product_information_form")
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", compute="_compute_ji_product_information_form")
-
+    estado_producto = fields.Many2one('estados.g', string='Estado de Producto')
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
 
@@ -109,8 +109,17 @@ class SaleOrder(models.Model):
                 line.x_studio_manzana = line.order_line.product_id.x_studio_manzana
                 line.x_studio_lote = line.order_line.product_id.x_studio_lote
                 line.x_studio_calle = line.order_line.product_id.x_studio_calle
+                line.order_line.product_id.estado_producto = line.estado_producto
+
         except Exception as e:
             raise UserError("No es posible agregar otro producto a la línea de pedido.")
+
+    @api.depends("order_line")
+    def _compute_ji_estado(self):
+        for order in self:
+            order.order_line.product_id.estado_producto = order.estado_producto
+
+
 
     @api.model
     def get_name_month(self, month):
@@ -283,3 +292,23 @@ class SaleOrderLine(models.Model):
         if self.order_id.company_id.ji_apply_developments:
             if self.product_id.id:
                 self.product_uom_qty = self.product_id.ji_area
+
+
+    @api.model
+    @api.onchange("product_id")
+    def _produ_nuevo_renew(self):
+        for rec in self:
+            res = {}
+            if (rec.product_id):
+                productos = self.env['product.template'].search(
+                    [('estado_producto.name', '=', 'Nuevo')])
+
+                # rec.was_credit = True
+                if productos:
+                    res['domain'] = {'product_id': [('id', 'in', productos.ids)]}
+                # domain = [('id', 'in', pedido.ids)]
+                else:
+                    #    domain = [('id','=',0)]
+                    res['domain'] = {'product_id': [('id', '=', 0)]}
+
+            return res
