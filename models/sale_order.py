@@ -109,7 +109,8 @@ class SaleOrder(models.Model):
                 line.x_studio_manzana = line.order_line.product_id.x_studio_manzana
                 line.x_studio_lote = line.order_line.product_id.x_studio_lote
                 line.x_studio_calle = line.order_line.product_id.x_studio_calle
-                line.order_line.product_id.estado_producto = line.estado_producto
+                if line.state == "sale":
+                    line.order_line.product_id.estado_producto = line.estado_producto
 
         except Exception as e:
             raise UserError("No es posible agregar otro producto a la línea de pedido.")

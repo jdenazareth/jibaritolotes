@@ -5,7 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sale_order.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/sale_order_line.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sale_order_line.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/res_partner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/res_partner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report/sale_order_contract.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report/sale_order_contract.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

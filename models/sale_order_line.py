@@ -20,6 +20,8 @@ class SaleOrderLine(models.Model):
                     line.ji_area = line.product_id.ji_area
                     line.ji_street = line.product_id.ji_street
                     line.ji_corner_with = line.product_id.ji_corner_with
+                    line.product_uom_qty = line.product_id.ji_area
+                    line.price_subtotal = line.product_uom_qty * line.price_unit
                 else:
                     if(line.product_id.id > 0):
                         raise UserError("No es posible agregar producto este no es nuevo o recuperado")
