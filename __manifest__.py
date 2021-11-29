@@ -4,7 +4,7 @@
     "name": "Moratorias Jibarito - MX",
     "category": "Tools",
     "summary": "Desarrollos para la compañia Jibarito.",
-    "version": "13.0.1",
+    "version": "13.0.2",
     "license": "OPL-1",
     "website": "https://www.pragmatic.com.pe/",
     "contributors": [
@@ -16,7 +16,10 @@
         "base_setup",
        # "account_followup",
         "sale",
-        "hr"
+        "hr",
+        "stock",
+        "account",
+        "contacts"
     ],
     "data": [
         "security/security.xml",

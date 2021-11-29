@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="933d1560-9c7e-49e2-b258-753a1a5bb89a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/sale_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sale_order.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/sale_order_line.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/sale_order_line.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report/sale_order_contract.xml" beforeDir="false" afterPath="$PROJECT_DIR$/report/sale_order_contract.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/account_payment_term.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/account_payment_term.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

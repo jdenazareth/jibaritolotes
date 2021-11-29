@@ -16,4 +16,6 @@ class Estadosg(models.Model):
     _name = "estados.g"
     _inherit = ['mail.thread']
 
-    name = fields.Char(String="Estado", track_visibility='onchange')
+    name = fields.Char(String="Sub Estado", track_visibility='onchange')
+    estado = fields.Selection(
+        selection=[("Disponible", "Disponible"), ("No Disponible", "No Disponible")])

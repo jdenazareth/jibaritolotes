@@ -11,11 +11,11 @@ class AccountPaymentTerm(models.Model):
         anticipo = anticipos.sorted(lambda a: a.days, True)[0]
         mensualidades = self.line_ids.filtered(
             lambda l: l.ji_type == 'monthly_payments' and l.option != "day_following_month")
-        primer_dia = \
-        self.line_ids.filtered(lambda l: l.ji_type == 'monthly_payments' and l.option == "day_following_month").sorted(
-            lambda a: a.days)[0]
-        sum_dias = anticipo.days + primer_dia.days + 30
-        print("sum_dias", sum_dias)
+       # primer_dia = self.line_ids.filtered(lambda l: l.ji_type == 'monthly_payments' and l.option == "day_following_month").sorted(lambda a: a.days)[0]
+       # print("anticipo", anticipo.days)
+       # print("primer", primer_dia.days)
+        sum_dias = anticipo.days + 0 + 30
+       # print("sum_dias", sum_dias)
         sum_dias = 34
         for line in mensualidades:
             # day_after_invoice_date
