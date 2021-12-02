@@ -16,7 +16,7 @@
                 <group name="contenedor">
                     <group name="lef">
                         <field name="name" track_visibility='onchange' string='Sub Estado'/>
-                        <field name="estado" string='Estado'/>
+                        <field name="estado"/>
                     </group>
 
                     <group name="right">
@@ -59,6 +59,7 @@
            <tree>
                 <field name="name"/>
                 <field name="estado"/>
+
            </tree>
 
         </field>
