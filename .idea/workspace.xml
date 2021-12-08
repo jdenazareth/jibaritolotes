@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="933d1560-9c7e-49e2-b258-753a1a5bb89a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/i18n/es.po" beforeDir="false" afterPath="$PROJECT_DIR$/i18n/es.po" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/estados.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/estados.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/moratorium_interest.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/moratorium_interest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/res_partner.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/res_partner.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

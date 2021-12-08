@@ -117,6 +117,8 @@ class JiMoratoriumInterest(models.Model):
     def action_regenerate_unreconciled_aml_dues(self):
         self.validate_regenerate_aml()
         companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+
+        
         if len(companies.ids) == 0:
             raise UserError(_('No Apply for this companies'))
         partners = []
