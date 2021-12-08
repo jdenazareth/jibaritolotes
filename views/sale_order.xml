@@ -24,6 +24,7 @@
             </xpath>
 
             <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="x_studio_calle" string="x_studio_contrato"/>
                 <field name="ji_fecha_apartado" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="estado_producto" string="Estado del producto"/>
                 <field name="x_studio_manzana" string="Manzana"/>

@@ -12,6 +12,12 @@ class AccountMove(models.Model):
     ji_is_moratorium = fields.Boolean(string="Moratorium", default=False)
     ji_json_numbers = fields.Text(string="Json Number", store=True, compute="_compute_ji_json_numbers")
     ji_json_sequences = fields.Text(string="Json Sequences", store=True, compute="_compute_ji_json_numbers")
+    x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
+
+    @api.depends("partner_id")
+    def _compute_ji_contrato(self):
+      for res in self:
+        res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato
 
     def regenerate_correlative(self):
         self.company_id.migrate_old_sequences(self)

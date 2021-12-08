@@ -99,3 +99,8 @@ class AccountPaymentTermLine(models.Model):
 
     ji_type = fields.Selection([('money_advance', 'Money Advance'), ('monthly_payments', 'Monthly Payments'),
                                 ('balance', 'Balance')], string="Type Payment", default="monthly_payments")
+
+
+
+# class AccountPayment(models.AbstractModel):
+#     _inherit = "account.payment"

@@ -99,6 +99,7 @@ class SaleOrder(models.Model):
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", compute="_compute_ji_product_information_form")
     estado_producto = fields.Many2one('estados.g', string='Estado de Producto')
+    x_studio_contrato = fields.Char(string="Contrato")
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
 
