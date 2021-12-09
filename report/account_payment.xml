@@ -9,8 +9,9 @@
                     <div class="page">
                         <h3 align="center"><strong>VISTA BELLA</strong></h3>
                         <p align="right">Tijuana, Baja California;<span t-field="o.payment_date"/> </p>
-                        <p align="right">BUENO POR USD: <span t-field="o.amount"/></p>
+                        <p align="right"><strong>BUENO POR USD: </strong><span t-field="o.amount"/></p>
                         <t t-foreach="o.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="p">
+                            <br/>
 
                             <p> Recibí del Señor (a) <span t-field="o.partner_id.name" />, 
                                 la cantidad de USD <span t-field="o.amount"/>, 
@@ -27,14 +28,20 @@
                             <p>
                                 Se señala como lugar de pago de las obligaciones el ubicado en Paseo de la Sierra número 231 Colonia Reforma de la ciudad de Villahermosa Tabasco y/o Avenida Paseo de los Héroes número 10289, Primer Piso Interior, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
                             </p>
+                            <br/>
                             
                             <p align="center"><strong>R E C I B Í</strong></p>
+                            <br/>
                             <p align="center">_________________________________</p>
                             <p align="center"><strong>ING. FERNANDO LOAIZA GARCIA</strong></p>
                             <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
+                            <p align="right"><strong>Interés $</strong></p>
+                            <p align="right"><strong></strong>Total $</strong></p>
+                            <br/>
+                            <br/>
+                            <br/>
                             <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
-                            <p align="right">Interés $</p>
-                            <p align="right">Total $</p>
+                          
                         </t>
 
                         
