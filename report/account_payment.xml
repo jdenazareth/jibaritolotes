@@ -7,121 +7,29 @@
                 <t t-call="web.external_layout">
                     <t t-set="o" t-value="o.with_context(lang=lang)"/>
                     <div class="page">
-                        <h3>
-                            <strong>Payment Receipt:
-                                <span t-field="o.name"/>
-                            </strong>
-                        </h3>
-                        <div class="row mt64">
-                            <div class="col-6" t-if="o.payment_date">
-                                <strong>Payment Date:</strong>
-                                <span t-field="o.payment_date"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6" t-if="o.partner_type">
-                                <t t-if="o.partner_type == 'customer'">
-                                    <strong>Customer:</strong>
-                                </t>
-                                <t t-if="o.partner_type == 'supplier'">
-                                    <strong>Vendor:</strong>
-                                </t>
-                                <span t-field="o.partner_id"/>
-                            </div>
-                            <div class="col-6" t-if="o.payment_method_id">
-                                <strong>Payment Method:</strong>
-                                <span t-field="o.payment_method_id.name"/>
-                            </div>
-                        </div>
-                        <div class="row mb64">
-                            <div class="col-6" t-if="o.amount">
-                                <strong>Payment Amount:</strong>
-                                <span t-field="o.amount"
-                                      t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-                            </div>
-                            <div class="col-6" t-if="o.communication">
-                                <strong>Memo:</strong>
-                                <span t-field="o.communication"/>
-                            </div>
-                        </div>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <span>Invoice Date</span>
-                                    </th>
-                                    <th>
-                                        <span>Invoice Number</span>
-                                    </th>
-                                    <th>
-                                        <span>Contract</span>
-                                    </th>
-                                    <th class="text-right">
-                                        <span>Original Amount</span>
-                                    </th>
-                                    <th class="text-right">
-                                        <span>Amount Paid</span>
-                                    </th>
-                                    <th class="text-right">
-                                        <span>Balance</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="o.reconciled_invoice_ids" t-as="inv">
-                                    <td>
-                                        <span t-field="inv.invoice_date"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="inv.name"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="o.x_studio_contrato"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="inv.amount_total"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="o._get_invoice_payment_amount(inv)"
-                                              t-options="{'widget': 'monetary', 'display_currency': inv.currency_id}"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="inv.amount_residual"/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <h6>Invoice Detail</h6>
-                        </div>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <span>Product</span>
-                                    </th>
-                                    <th>
-                                        <span>Subtotal</span>
-                                    </th>
-                                    <th>
-                                        <span>Total</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="o.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="line">
-                                    <td>
-                                        <span t-field="line.name"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="line.price_subtotal"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="line.price_total"/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h3><strong>VISTA BELLA</strong></h3>
+                        <p aling="right">Tijuana, Baja California;<span t-field="o.payment_date"/> </p>
+                        <p aling="right">BUENO POR USD: <span t-field="o.amount"/></p>
+
+                        <p> Recibí del Señor (a) ______________________________________________________________________, 
+                            la cantidad de USD $ ____________________________________________________________________________, 
+                            por concepto de pago de la mensualidad del lote de terreno identificado como lote número _____________ de la manzana ___________ de la calle ________________________________, que se localiza dentro del Fraccionamiento Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
+                        </p>
+
+                        <p>Este recibo se expide a cuenta de una cantidad mayor, que asciende a la cantidad detallada en el ANEXO E del Contrato de Transacción firmado por LAS PARTES de mutuo acuerdo, dicho monto asciende a la cantidad de USD $ ______________________, y se acordó que dicho monto sería pagado en 96 exhibiciones mensuales, pagaderas el día (_____) de cada mes, por un monto de USD $ ________________ cada una, quedando pendientes _______________. 
+                        </p>
+
+                        <p>
+                            En caso de incumplimiento en el pago puntual de los pagos a que se refiere este recibo o el contrato de transacción y renuncia, se causará un 3% (tres por ciento) mensual. Será Juez competente por sumisión de las partes, el del partido judicial de la ciudad de Tijuana, Baja California o el del partido judicial de la ciudad de Villahermosa, Tabasco, a elección de la parte actora.
+                        </p>
+                        
+                        <p>
+                            Se señala como lugar de pago de las obligaciones el ubicado en Paseo de la Sierra número 231 Colonia Reforma de la ciudad de Villahermosa Tabasco y/o Avenida Paseo de los Héroes número 10289, Primer Piso Interior, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
+                        </p>
+                            
+                        
+                        
+                    
                     </div>
                 </t>
             </t>
