@@ -238,3 +238,14 @@ class AccountMoveLine(models.Model):
         for line in self:
             json_numbers = json.loads(line.move_id.ji_json_numbers)
             line.ji_number = json_numbers.get(str(line.id), "")
+
+    class AccountFollowupReport(models.AbstractModel):
+        _inherit = "account.payment"
+        x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
+        x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
+            selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
+
+        @api.depends("partner_id")
+        def _compute_ji_contrato(self):
+            for res in self:
+                res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato

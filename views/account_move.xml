@@ -18,6 +18,11 @@
                 <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibaritolotes.group_ji_migration"
                         type="object" class="btn-primary"/>
             </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="ji_mora" string="Moratorios">
+
+                </page>
+            </xpath>
         </field>
     </record>
     <record id="ji_account_move_tree" model="ir.ui.view">
@@ -45,6 +50,19 @@
                         groups="jibaritolotes.group_ji_apply_developments"/>
                 <separator/>
             </xpath>
+        </field>
+    </record>
+
+
+    <record id="ji_account_payment" model="ir.ui.view">
+        <field name="name">account.payment.jibarito</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="journal_id" position="before" >
+                <field name="x_studio_tipo_de_pago" />
+            </field>
+
         </field>
     </record>
 </odoo>
