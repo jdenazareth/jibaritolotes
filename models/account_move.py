@@ -210,6 +210,54 @@ class AccountMove(models.Model):
             self.invoice_payment_ref = new_terms_lines[-1].name or ''
             self.invoice_date_due = new_terms_lines[-1].date_maturity
 
+    at_date = fields.Date(string="At Date", default=fields.Date.context_today)
+    interest_line = fields.One2many(comodel_name="ji.moratorium.interest.line", string="Interest line",
+                                    inverse_name="account_move_id")
+    percent_moratorium = fields.Float(related="company_id.ji_percent_moratorium", string="Percent Moratorium")
+    ji_condition = fields.Selection(related="partner_id.ji_condition", string="Condicion")
+    ji_number_slow_payer = fields.Integer(related="partner_id.ji_number_slow_payer", string="Number Slow Payer")
+    amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium",
+                                              compute="_compute_amount_total_moratorium")
+
+    @api.depends("interest_line")
+    def _compute_amount_total_moratorium(self):
+        #self.action_regenerate_unreconciled_aml_dues()
+        for moratorium in self:
+            moratorium.amount_total_moratorium = sum(line.amount_total_moratorium for line in self.interest_line)
+
+    def validate_regenerate_aml(self):
+        if not self.partner_id.id:
+            raise UserError(_("Client not selected"))
+
+    def get_exist_payments(self):
+        moratoriums = self.env['account.move'].search(
+            [('partner_id', '=', self.partner_id.id), ('state', 'not in', ['draft', 'cancel'])])
+        return moratoriums.interest_line.mapped('unreconciled_aml').ids
+
+    def action_regenerate_unreconciled_aml_dues(self):
+        self.validate_regenerate_aml()
+        companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+
+        if len(companies.ids) == 0:
+            raise UserError(_('No Apply for this companies'))
+        partners = []
+        for company in companies:
+            partners_slow_payer = self.partner_id.get_partners_slow_payer_moratorium(company)
+            for p in partners_slow_payer:
+                number_slow_payer, amls = p.get_number_slow_payer_cron(company)
+                partners.append({"partner": p, "amls": amls})
+            if len(partners) > 0:
+                self.interest_line.unlink()
+                for partner in partners:
+                    notification_lines = []
+                    for aml in partner["amls"]:
+                        if aml.id not in self.get_exist_payments():
+                            notification_lines.append([0, 0, {
+                                "name": len(partner["amls"]),
+                                "unreconciled_aml": aml.id
+                            }])
+                raise UserError(_(notification_lines))
+                # self.write({"interest_line": notification_lines})
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
@@ -239,13 +287,13 @@ class AccountMoveLine(models.Model):
             json_numbers = json.loads(line.move_id.ji_json_numbers)
             line.ji_number = json_numbers.get(str(line.id), "")
 
-    class AccountFollowupReport(models.AbstractModel):
-        _inherit = "account.payment"
-        x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
-        x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
-            selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
+class AccountFollowupReport(models.AbstractModel):
+    _inherit = "account.payment"
+    x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
+    x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
+        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
 
-        @api.depends("partner_id")
-        def _compute_ji_contrato(self):
-            for res in self:
-                res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato
+    @api.depends("partner_id")
+    def _compute_ji_contrato(self):
+        for res in self:
+            res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato

@@ -101,7 +101,7 @@ class JiMoratoriumInterest(models.Model):
                                     inverse_name="moratorium_id")
     state = fields.Selection(selection=[('in_progress', 'In Progress'), ('invoiced', 'Invoiced')], string="State",
                              default="in_progress")
-    at_date = fields.Date(string="At Date", default=fields.Date.context_today, required=True)
+    at_date = fields.Date(string="At Date", default=fields.Date.context_today)
 
     percent_moratorium = fields.Float(related="company_id.ji_percent_moratorium", string="Percent Moratorium")
 
@@ -117,8 +117,6 @@ class JiMoratoriumInterest(models.Model):
     def action_regenerate_unreconciled_aml_dues(self):
         self.validate_regenerate_aml()
         companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
-
-        
         if len(companies.ids) == 0:
             raise UserError(_('No Apply for this companies'))
         partners = []
@@ -137,7 +135,8 @@ class JiMoratoriumInterest(models.Model):
                                 "name": len(partner["amls"]),
                                 "unreconciled_aml": aml.id
                             }])
-                self.write({"interest_line": notification_lines})
+                raise UserError(_(notification_lines))
+                #self.write({"interest_line": notification_lines})
 
 
 class JiMoratoriumInterestLine(models.Model):
@@ -159,8 +158,10 @@ class JiMoratoriumInterestLine(models.Model):
         for line in self:
             line.name = line.unreconciled_aml.ji_name
 
-    moratorium_id = fields.Many2one(comodel_name="ji.moratorium.interest", string="Moratorium", ondelete="cascade",
+    moratorium_id = fields.Many2one(comodel_name="account.move", string="Moratorium", ondelete="cascade",
                                     index=True)
+    account_move_id = fields.Many2one(comodel_name="ji.moratorium.interest", string="Moratorium")
+
     unreconciled_aml = fields.Many2one(comodel_name="account.move.line", string="Unreconciled Due")
     date = fields.Date(string="Date", compute="_compute_unreconciled_values", store=True)
     date_maturity = fields.Date(string="Due Date", compute="_compute_unreconciled_values", store=True)
