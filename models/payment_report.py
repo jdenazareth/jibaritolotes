@@ -9,7 +9,7 @@ class ReportePayment(models.Model):
 
     _inherit = 'account.payment'  
     cantidad_letra = fields.Char(string="Cantidad letra", compute="get_text_amount_total")
-    dia_dato_pago = fields.Float(string="Pago dia de cada mes", compute="get_origin")
+    dia_dato_pago = fields.Integer(string="Pago dia de cada mes", compute="get_origin")
     pagos_mensualidad = fields.Float(string="Pagos de: ", compute="get_origin")
     pago_mensualidad_letra = fields.Char(string="pagos en letra", compute="get_text_amount_mensaulidad")
     residual = fields.Float(string="Residual ", compute="get_origin")
