@@ -40,7 +40,7 @@
                                 <field name="id" invisible="1"/>
                                 <field name="name"/>
                                 <field name="amount_residual" optional="show"/>
-                                <field name="moratorium_id" invisible="1"/>
+                                <field name="moratorium_id" />
                                 <field name="unreconciled_aml" invisible="1"/>
                                 <field name="currency_id" invisible="1"/>
                                 <field name="date" optional="hide"/>

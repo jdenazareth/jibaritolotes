@@ -76,7 +76,7 @@
                                         <span t-field="inv.name"/>
                                     </td>
                                     <td>
-                                        <span t-field="o.x_studio_contrato"/>
+<!--                                        <span t-field="o.x_studio_contrato"/>-->
                                     </td>
                                     <td class="text-right">
                                         <span t-field="inv.amount_total"/>

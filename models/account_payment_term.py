@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, models, fields, _
 from dateutil.relativedelta import relativedelta
-
+from odoo.exceptions import UserError
 
 class AccountPaymentTerm(models.Model):
     _inherit = "account.payment.term"
@@ -11,26 +11,44 @@ class AccountPaymentTerm(models.Model):
         anticipo = anticipos.sorted(lambda a: a.days, True)[0]
         mensualidades = self.line_ids.filtered(
             lambda l: l.ji_type == 'monthly_payments' and l.option != "day_following_month")
-       # primer_dia = self.line_ids.filtered(lambda l: l.ji_type == 'monthly_payments' and l.option == "day_following_month").sorted(lambda a: a.days)[0]
-       # print("anticipo", anticipo.days)
-       # print("primer", primer_dia.days)
-        sum_dias = anticipo.days + 0 + 30
-       # print("sum_dias", sum_dias)
+        primer_dia = 0
+        for a in self.line_ids.filtered(lambda l:l.ji_type == 'monthly_payments' and l.option == "day_following_month"):
+            primer_dia = primer_dia + a.days
+
+        sum_dias = anticipo.days + primer_dia + 30
+        meses = self.ji_numbers_monthly
+        anipor = self.ji_advance_payment
+        val_mount= (100 - anipor) / meses
+
+        print("sum_dias", sum_dias)
         sum_dias = 34
-        for line in mensualidades:
+        montp_lines = []
+        montp_lines.append([0, 0, {
+            "days": 0,
+            "option": "after_invoice_month",
+            "ji_type": "balance",
+            "value": "balance",
+            "day_of_the_month": 0
+        }])
+        for f in range(1,meses):
+            montp_lines.append([0, 0, {
+                "days": sum_dias,
+                "option": "after_invoice_month",
+                "ji_type": "monthly_payments",
+                "value": "percent",
+                "value_amount": val_mount,
+                "day_of_the_month": 4
+            }])
             # day_after_invoice_date
             # day_following_month
             # after_invoice_month
             # day_current_month
             #  "day_of_the_month": sum_dias,
-            line.write({
-                "days": sum_dias,
-                "option": "after_invoice_month",
-                "day_of_the_month": 0,
-                "payment_days": 4
-            })
+
             sum_dias += 30
 
+        # raise UserError(_(montp_lines))
+        self.write({"line_ids": montp_lines})
     ji_advance_payment = fields.Float(string="% Advance Payment")
     ji_number_quotation = fields.Integer(string="Number Advance Payment", store=False,
                                          compute="_compute_ji_number_quotation")
@@ -41,6 +59,7 @@ class AccountPaymentTerm(models.Model):
     def _compute_ji_number_quotation(self):
         for term in self:
             term.ji_number_quotation = len(term.line_ids.filtered(lambda l: l.ji_type == 'money_advance').ids)
+            # term.ji_numbers_monthly = len(term.line_ids.filtered(lambda l: l.ji_type == 'monthly_payments').ids)
 
     def get_number_payments_advance_now(self):
         line_ids = self.line_ids.filtered(lambda l: l.ji_type == 'money_advance' and l.days == 0).ids

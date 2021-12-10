@@ -13,5 +13,6 @@ from . import sale_order_line
 from . import product_template
 from . import account_payment_term
 from . import account_move
+from . import moratorio_move
 from . import hr_employee
 

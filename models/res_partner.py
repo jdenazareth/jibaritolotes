@@ -62,16 +62,16 @@ class ResPartner(models.Model):
         partner_ids = self.search([('company_id', '=', self.env.company.id)]).get_partners_slow_payer()
         return [('id', 'in', [p.id for p in partner_ids])]
 
-    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial"
+    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial", compute="_compute_ji_commercial"
                                     )
 
-    # @api.depends("unreconciled_aml_ids")
-    # def _compute_ji_commercial(self):
-    #     for partner in self:
-    #         _comercial = False
-    #         if partner.unreconciled_aml_ids.filtered(lambda l: l.company_id.ji_apply_developments):
-    #             _comercial = partner.unreconciled_aml_ids[0].mapped('move_id').x_studio_vendedor
-    #         partner.ji_commercial = _comercial
+    @api.depends("unreconciled_aml_ids")
+    def _compute_ji_commercial(self):
+        for partner in self:
+            _comercial = False
+            if partner.unreconciled_aml_ids.filtered(lambda l: l.company_id.ji_apply_developments):
+                _comercial = partner.unreconciled_aml_ids[0].mapped('move_id').x_studio_vendedor
+            partner.ji_commercial = _comercial
 
     @api.depends('unreconciled_aml_ids')
     def _compute_ji_condition(self):
@@ -128,7 +128,7 @@ class ResPartner(models.Model):
         for aml in self.unreconciled_aml_ids:
             if aml.company_id == company:
                 is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium:
+                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
                     number_slow_payer += 1
                     aml_ids.append(aml)
         return number_slow_payer, aml_ids
