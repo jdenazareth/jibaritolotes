@@ -19,8 +19,43 @@
                         type="object" class="btn-primary"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
-                <page name="ji_mora" string="Moratorios">
+                <page name="ji_mora" string="Moratorios" groups="jibaritolotes.group_ji_apply_developments">
+                     <group>
+                         <group name="derecha">
+                             <field name="percent_moratorium" />
+                             <field name="ji_number_slow_payer" />
+                         </group>
+                        <group name="izquierd">
+                             <field name="ji_condition" />
+                            <button name="action_regenerate_unreconciled_aml_dues" class="oe_highlight"
+                            string="Regenerate Moratorium"
 
+
+                            type="object"/>
+                         </group>
+                     </group>
+
+                    <field name="interest_line">
+                            <tree decoration-danger="moratorium_id" edit="0" create="0" delete="0">
+                                <field name="id" invisible="1"/>
+                                <field name="name"/>
+                                <field name="amount_residual" optional="show"/>
+                                <field name="moratorium_id" />
+                                <field name="unreconciled_aml" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="date" optional="hide"/>
+                                <field name="date_maturity" optional="show"/>
+                                <field name="at_date" optional="hide"/>
+                                <field name="month_number" optional="show"/>
+<!--                                <field name="amount_unit_moratorium" optional="show"/>-->
+                                <!--                                <field name="amount_total_moratorium" optional="show"/>-->
+                                <field name="real_amount_moratorium" optional="show"/>
+                                <field name="moratorium_accumulated" optional="hide"/>
+                            </tree>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_total_moratorium"/>
+                    </group>
                 </page>
             </xpath>
         </field>

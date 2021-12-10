@@ -13,6 +13,7 @@ class AccountMove(models.Model):
     ji_json_numbers = fields.Text(string="Json Number", store=True, compute="_compute_ji_json_numbers")
     ji_json_sequences = fields.Text(string="Json Sequences", store=True, compute="_compute_ji_json_numbers")
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
+    x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", related="partner_id.sale_order_ids.x_studio_vendedor", string="Vendedor")
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
@@ -210,7 +211,6 @@ class AccountMove(models.Model):
             self.invoice_payment_ref = new_terms_lines[-1].name or ''
             self.invoice_date_due = new_terms_lines[-1].date_maturity
 
-
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
@@ -239,13 +239,13 @@ class AccountMoveLine(models.Model):
             json_numbers = json.loads(line.move_id.ji_json_numbers)
             line.ji_number = json_numbers.get(str(line.id), "")
 
-    class AccountFollowupReport(models.AbstractModel):
-        _inherit = "account.payment"
-        x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
-        x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
-            selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
+class AccountFollowupReport(models.AbstractModel):
+    _inherit = "account.payment"
+    x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
+    x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
+        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
 
-        @api.depends("partner_id")
-        def _compute_ji_contrato(self):
-            for res in self:
-                res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato
+    @api.depends("partner_id")
+    def _compute_ji_contrato(self):
+        for res in self:
+            res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato

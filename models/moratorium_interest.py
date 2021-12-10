@@ -101,7 +101,7 @@ class JiMoratoriumInterest(models.Model):
                                     inverse_name="moratorium_id")
     state = fields.Selection(selection=[('in_progress', 'In Progress'), ('invoiced', 'Invoiced')], string="State",
                              default="in_progress")
-    at_date = fields.Date(string="At Date", default=fields.Date.context_today, required=True)
+    at_date = fields.Date(string="At Date", default=fields.Date.context_today)
 
     percent_moratorium = fields.Float(related="company_id.ji_percent_moratorium", string="Percent Moratorium")
 
@@ -117,8 +117,6 @@ class JiMoratoriumInterest(models.Model):
     def action_regenerate_unreconciled_aml_dues(self):
         self.validate_regenerate_aml()
         companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
-
-        
         if len(companies.ids) == 0:
             raise UserError(_('No Apply for this companies'))
         partners = []
@@ -135,10 +133,11 @@ class JiMoratoriumInterest(models.Model):
                         if aml.id not in self.get_exist_payments():
                             notification_lines.append([0, 0, {
                                 "name": len(partner["amls"]),
-                                "unreconciled_aml": aml.id
+                                "unreconciled_aml": aml.id,
+                                "moratorium_id": aml.move_id.id
                             }])
+                # raise UserError(_(notification_lines))
                 self.write({"interest_line": notification_lines})
-
 
 class JiMoratoriumInterestLine(models.Model):
     _name = "ji.moratorium.interest.line"
@@ -157,10 +156,13 @@ class JiMoratoriumInterestLine(models.Model):
     @api.depends("unreconciled_aml")
     def _compute_name(self):
         for line in self:
-            line.name = line.unreconciled_aml.ji_name
+            raise UserError(_(line.unreconciled_aml.ji_name))
+            # line.name = line.unreconciled_aml.ji_name
 
-    moratorium_id = fields.Many2one(comodel_name="ji.moratorium.interest", string="Moratorium", ondelete="cascade",
+    moratorium_id = fields.Many2one(comodel_name="account.move", string="Moratorium", ondelete="cascade",
                                     index=True)
+    account_move_id = fields.Many2one(comodel_name="ji.moratorium.interest", string="Moratorium")
+
     unreconciled_aml = fields.Many2one(comodel_name="account.move.line", string="Unreconciled Due")
     date = fields.Date(string="Date", compute="_compute_unreconciled_values", store=True)
     date_maturity = fields.Date(string="Due Date", compute="_compute_unreconciled_values", store=True)
@@ -191,11 +193,13 @@ class JiMoratoriumInterestLine(models.Model):
     @api.depends("moratorium_id", "month_number", "amount_residual")
     def _compute_real_amount_moratorium(self):
         for mora in self:
+            # raise UserError(_(self.moratorium_id.company_id.name))
             mora.real_amount_moratorium = mora.exec_formula_python()
 
     def exec_formula_python(self):
         objects = {'o': self}
         python_code = self.get_formula_python()
+
         if python_code:
             safe_eval(self.get_formula_python(), objects, mode="exec", nocopy=True)
             return objects['result']
@@ -230,3 +234,4 @@ class JiMoratoriumInterestLine(models.Model):
             line.date = line.unreconciled_aml.date
             line.date_maturity = line.unreconciled_aml.date_maturity
             line.currency_id = currency.id
+            line.name = line.unreconciled_aml.ji_name
