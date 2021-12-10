@@ -9,6 +9,7 @@
                 <field name="ji_advance_payment" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_number_quotation" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_numbers_monthly" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="dia_dato"  groups="jibaritolotes.group_ji_apply_developments"/>
                 <button name="regenerate_lines" type="object" string="Regenerar Lineas"/>
             </field>
         </field>
