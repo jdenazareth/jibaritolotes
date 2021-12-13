@@ -156,8 +156,8 @@ class JiMoratoriumInterestLine(models.Model):
     @api.depends("unreconciled_aml")
     def _compute_name(self):
         for line in self:
-            raise UserError(_(line.unreconciled_aml.ji_name))
-            # line.name = line.unreconciled_aml.ji_name
+            # raise UserError(_(line.unreconciled_aml.ji_name))
+            line.name = line.unreconciled_aml.ji_name
 
     moratorium_id = fields.Many2one(comodel_name="account.move", string="Moratorium", ondelete="cascade",
                                     index=True)
