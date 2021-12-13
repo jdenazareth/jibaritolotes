@@ -31,12 +31,11 @@
                             </p>
                             <br/>
                             <p align="center"><strong>R E C I B Í</strong></p>
-                            <br/>
-                            <p align="center">_________________________________</p>
+                            <img style="width: 30%; margin-left: 300px;" src="jibaritolotes/static/img/Firma_Jibarito.png"/> 
                             <p align="center"><strong>María Fernanda Loaiza Alvarez</strong></p>
                             <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
                             <p align="right"><strong>Interés $</strong></p>
-                            <p align="right"><strong>Total $</strong></p>
+                            <p align="right"><strong>Total $<span t-field="o.total_factura"/></strong></p>
                             <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
                         </t>
                     </div>
