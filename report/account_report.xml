@@ -1,0 +1,21 @@
+<odoo>
+  <data>
+    <report
+      id="report_factura_apartado"
+      model="account.move"
+      string="Recibo de pago apartado"
+      report_type="qweb-pdf"
+      name="jibaritolotes.report_facturas_apartado_card"
+      file="jibaritolotes.report_facturas_apartado_card"
+      print_report_name="'Factura - %s' % (object.name).replace('/','')"/>
+
+      <template id="report_facturas_apartado_card">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+            <t t-call="jibaritolotes.fac_report_facturas_apartado_card" t-lang="lang"/>
+          </t>
+        </t>
+      </template>
+
+    </data>
+</odoo>
