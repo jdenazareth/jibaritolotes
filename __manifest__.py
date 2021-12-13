@@ -47,6 +47,7 @@
         "views/moratorium_interest.xml",
         "views/account_move.xml",
         "views/template_apartado.xml",
+        "views/templatesdevo.xml",
         "report/account_report.xml",
         "report/account_payment.xml",
         "views/hr_employee.xml",
