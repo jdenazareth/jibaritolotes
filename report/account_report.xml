@@ -35,5 +35,23 @@
         </t>
       </template>
 
+      <!-- Inicio de Reporte Finiquito -->
+      <report
+      id="report_factura_finiquito"
+      model="account.move"
+      string="Carta finiquito"
+      report_type="qweb-pdf"
+      name="jibaritolotes.report_facturas_finiquito_card"
+      file="jibaritolotes.report_facturas_finiquito_card"
+      print_report_name="'Factura - %s' % (object.name).replace('/','')"/>
+
+      <template id="report_facturas_finiquito_card">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="doc">
+            <t t-call="jibaritolotes.fac_report_facturas_finiquito_card" t-lang="lang"/>
+          </t>
+        </t>
+      </template>
+
     </data>
 </odoo>
