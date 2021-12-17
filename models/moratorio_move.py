@@ -74,8 +74,7 @@ class moratorio_move(models.Model):
     def _compute_amount_total_moratorium(self):
         # self.action_regenerate_unreconciled_aml_dues()
          for moratorium in self:
-             moratorium.amount_total_moratorium = 0
-             #sum(line.amount_total_moratorium for line in self.moratorio_line)
+             moratorium.amount_total_moratorium = sum(line.amount_total_moratorium for line in self.moratorio_line)
 
     def validate_regenerate_aml(self):
         if not self.partner_id.id:
@@ -86,13 +85,53 @@ class moratorio_move(models.Model):
             [('partner_id', '=', self.partner_id.id), ('state', 'not in', ['draft', 'cancel'])])
         return moratoriums.moratorio_line.mapped('unreconciled_aml').ids
 
+    @api.depends("company_id","partner_id", "total_moratorium")
     def action_regenerate_unreconciled_aml_dues(self):
-        self.validate_regenerate_aml()
+        # self.validate_regenerate_aml()
         for record in self:
-            companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+            if record.total_moratorium > 0:
+                companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
 
+                if len(companies.ids) == 0:
+                    raise UserError(_('No Apply for this companies'))
+                partners = []
+                for company in companies:
+                    partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
+
+                    for p in partners_slow_payer:
+                        number_slow_payer, amls = p.get_number_slow_payer_cron(company)
+                        partners.append({"partner": p, "amls": amls})
+                        # raise UserError(_(amls))
+                    if len(partners) > 0:
+                        # record.moratorio_line.unlink()
+                        for partner in partners:
+                            notification_lines = []
+                            # raise UserError(_(partner["amls"]))
+                            for aml in partner["amls"]:
+                                if aml.move_id.id == record.id:
+                                    if aml.id not in record.get_exist_payments():
+                                        notification_lines.append([0, 0, {
+                                            "name": len(partner["amls"]),
+                                            # "moratorium_id": aml.move_id.id,
+                                            "unreconciled_aml": aml.id
+
+                                        }])
+
+                    # raise UserError(_(notification_lines))
+                    self.write({"moratorio_line": notification_lines})
+
+    ji_accoun_line = fields.One2many('account.move.line', 'move_id', string="Moratorium S")
+    total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
+    total_mes = fields.Integer(string="Meses a Pagar")
+    @api.depends("company_id", "partner_id", "percent_moratorium", "at_date")
+    def action_moratorio_dues(self):
+        for record in self:
+            record.validate_regenerate_aml()
+            companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+            mora=0.0
+            mesp = 0
             if len(companies.ids) == 0:
-                raise UserError(_('No Apply for this companies'))
+                mora = 0.0
             partners = []
             for company in companies:
                 partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
@@ -100,24 +139,69 @@ class moratorio_move(models.Model):
                 for p in partners_slow_payer:
                     number_slow_payer, amls = p.get_number_slow_payer_cron(company)
                     partners.append({"partner": p, "amls": amls})
+
                     # raise UserError(_(amls))
                 if len(partners) > 0:
-                    record.moratorio_line.unlink()
+                    # record.moratorio_line.unlink()
                     for partner in partners:
-                        notification_lines = []
+                        # notification_lines = []
                         # raise UserError(_(partner["amls"]))
+
                         for aml in partner["amls"]:
+
                             if aml.move_id.id == record.id:
-                                if aml.id not in record.get_exist_payments():
-                                    notification_lines.append([0, 0, {
-                                        "name": len(partner["amls"]),
-                                        # "moratorium_id": aml.move_id.id,
-                                        "unreconciled_aml": aml.id
-
-                                    }])
-
+                                # if aml.id not in record.get_exist_payments():
+                                # record.ji_accoun_line.append(aml)
+                                mesp = mesp + 1
+                                r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
+                                month_number = r.months + 1
+                                amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
+                                unit_moratorium = ((record.percent_moratorium / 100) * amount)
+                                amount_total_moratorium = month_number * unit_moratorium
+                                mora = mora + amount_total_moratorium
+                                # objects = {'o': record, 'amount_residual': amount, 'month_number': month_number}
+                                # python_code = record.company_id.ji_codev
+                                #
+                                # if python_code:
+                                #     safe_eval(record.company_id.ji_codev, objects, mode="exec", nocopy=True)
+                                #     real_amount_moratorium = objects['result']
+                                # else:
+                                #     real_amount_moratorium = 0.00
+            record.total_mes = mesp
+            record.total_moratorium = mora
                 # raise UserError(_(notification_lines))
-                self.write({"moratorio_line": notification_lines})
+                # self.write({"moratorio_line": notification_lines})
+
+    def action_generate_asiento_mora(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Generar Asiento a moratorio'),
+            'res_model': 'ji.mora.asiento',
+            'view_mode': 'form',
+            'domain': [('factura_id.id', '=', self.ids[0])],
+            'target': 'new',
+            'context': {
+                'default_type': 'factura',
+                'default_factura_id': self.id,
+                'default_total_moratorium':self.total_moratorium,
+
+            },
+        }
+
+
+    def exec_formula_python(self,a,m):
+        objects = {'o': self,'amount_residual':a,'month_number':m}
+
+        python_code = self.get_formula_python()
+
+        if python_code:
+            safe_eval(self.get_formula_python(), objects, mode="exec", nocopy=True)
+            return objects['result']
+        else:
+            return 0.00
+
+    def get_formula_python(self):
+        return self.company_id.ji_codev
 
 class JiMoratoriumaccountLine(models.Model):
     _name = "ji.moratorium.account.line"

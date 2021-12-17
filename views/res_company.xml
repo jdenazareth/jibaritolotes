@@ -60,6 +60,11 @@
                         <field name="ji_code" nolabel="1" widget="ace" options="{'mode': 'python'}"/>
                     </group>
                 </page>
+                <page string="Formula Moratorium factura" groups="jibaritolotes.group_ji_apply_developments">
+                    <group>
+                        <field name="ji_codev" nolabel="1" widget="ace" options="{'mode': 'python'}"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

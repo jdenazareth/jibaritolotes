@@ -5,7 +5,6 @@
     "category": "Tools",
     "summary": "Desarrollos para la compañia Jibarito.",
     "version": "13.0.2",
-    "license": "OPL-1",
     "website": "https://www.pragmatic.com.pe/",
     "contributors": [
         "Catalica",
@@ -52,7 +51,7 @@
         "report/account_report.xml",
         "report/account_payment.xml",
         "views/hr_employee.xml",
-
+        "wizard/asiento_mora.xml",
 
 
     ],

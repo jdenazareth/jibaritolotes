@@ -5,6 +5,15 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"
+                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_regenerate_unreconciled_aml_dues" class="oe_stat_button" icon="fa-list" type="object" groups="jibaritolotes.group_ji_migration" >
+                    Generar Moratorio
+                </button>
+        </xpath>
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
                 <field name="ji_sequence_payments" widget="handle" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_number" groups="jibaritolotes.group_ji_apply_developments"/>
@@ -27,11 +36,7 @@
                          </group>
                         <group name="izquierd">
                              <field name="ji_condition" />
-                            <button name="action_regenerate_unreconciled_aml_dues" class="oe_highlight"
-                            string="Regenerate Moratorium"
 
-
-                            type="object"/>
                          </group>
                      </group>
 
@@ -55,6 +60,7 @@
                     </field>
                     <group class="oe_subtotal_footer">
                         <field name="amount_total_moratorium"/>
+                        <field name="total_moratorium" />
                     </group>
                 </page>
             </xpath>
