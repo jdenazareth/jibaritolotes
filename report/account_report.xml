@@ -53,5 +53,42 @@
         </t>
       </template>
 
+       <!-- Inicio de ACTA DE ENTREGA-RECEPCIÓN DE INMUEBLE-->
+       <report
+       id="report_factura_entrega"
+       model="account.move"
+       string="Acta de Entrega-Recepción de inmueble"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_entrega"
+       file="jibaritolotes.report_facturas_entrega"
+       print_report_name="'Factura - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_entrega">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_entrega" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
+
+       <!-- Inicio de Acuse de Entrega -->
+       <report
+       id="report_factura_acuse_entrega"
+       model="account.move"
+       string="Acuse de Entrega"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_acuse_entrega"
+       file="jibaritolotes.report_facturas_acuse_entrega"
+       print_report_name="'Factura - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_acuse_entrega">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_acuse_entrega" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
     </data>
 </odoo>

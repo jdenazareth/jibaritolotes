@@ -49,6 +49,8 @@
         "views/template_apartado.xml",
         "views/templatesdevo.xml",
         "views/template_finiquito.xml",
+        "views/template_entrega.xml",
+        "views/template_acuse_entrega.xml",
         "report/account_report.xml",
         "report/account_payment.xml",
         "views/hr_employee.xml",
