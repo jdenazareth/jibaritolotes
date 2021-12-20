@@ -243,7 +243,7 @@ class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.payment"
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
     x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
-        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios","Intererses Moratorios")])
+        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios + Mensualidades","Intererses Moratorios + Mensualidades")])
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
