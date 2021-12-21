@@ -56,6 +56,7 @@
         "views/template_contrato_transaccion.xml",
         "report/account_report.xml",
         "report/account_payment.xml",
+        "report/report_amortizacion.xml",
         "views/hr_employee.xml",
         "wizard/asiento_mora.xml",
 
