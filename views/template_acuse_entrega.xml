@@ -6,6 +6,8 @@
 
             <div class="page" style="padding: 60px !important;">
 
+               <p align="center"><img style="width: 40%; margin-top: -70px !important;" src="jibaritolotes/static/img/logotipo.png"/></p>
+
                 <!-- Título -->
                <h4 align="center" style="font-size: 12;">Acuse entrega</h4>
 
@@ -65,8 +67,6 @@
                <br/>
                <p>Atentamente</p>
                <p><strong>Administración Col. Vista Bella El Jibarito</strong></p>
-               <br/>
-               <br/>
                <br/>
 
                <!-- Pie de página -->
