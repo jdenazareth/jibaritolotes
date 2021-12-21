@@ -90,5 +90,77 @@
          </t>
        </template>
 
+              <!-- Inicio de CARTA DE COBRO PREJURIDICO Cartera -->
+       <report
+       id="report_factura_cartera_cartera"
+       model="account.move"
+       string="Carta de cobro Prejuridico cartera"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_cartera_cartera"
+       file="jibaritolotes.report_facturas_cartera_cartera"
+       print_report_name="'Carta de cobro Prejuridico cartera - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_cartera_cartera">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_cartera_cartera" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
+      <!-- Inicio de CARTA DE COBRO PREJURIDICO Invacion -->
+       <report
+       id="report_factura_carta_invacion"
+       model="account.move"
+       string="Carta de cobro Prejuridico invacion"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_carta_invacion"
+       file="jibaritolotes.report_facturas_carta_invacion"
+       print_report_name="'Carta de cobro Prejuridico Invacion - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_carta_invacion">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_carta_invacion" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
+             <!-- Inicio de Cesión de derechos -->
+       <report
+       id="report_factura_cesion_derechos"
+       model="account.move"
+       string="Cesión de derechos"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_cesion_derechos"
+       file="jibaritolotes.report_facturas_cesion_derechos"
+       print_report_name="'Cesión de derechos - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_cesion_derechos">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_cesion_derechos" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
+               <!-- Inicio de TERMINACIÓN DEL CONTRATO DE TRANSACCIÓN -->
+       <report
+       id="report_factura_contrato_transaccion"
+       model="account.move"
+       string="Terminacion del contrato de Transaccion"
+       report_type="qweb-pdf"
+       name="jibaritolotes.report_facturas_contrato_transaccion"
+       file="jibaritolotes.report_facturas_contrato_transaccion"
+       print_report_name="'Terminacion del contrato de Transaccion - %s' % (object.name).replace('/','')"/>
+ 
+       <template id="report_facturas_contrato_transaccion">
+         <t t-call="web.html_container">
+           <t t-foreach="docs" t-as="doc">
+             <t t-call="jibaritolotes.fac_report_facturas_contrato_transaccion" t-lang="lang"/>
+           </t>
+         </t>
+       </template>
+
     </data>
 </odoo>

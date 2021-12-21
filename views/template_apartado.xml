@@ -35,7 +35,7 @@
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
                 <p style="font:arial; font-size:14px;" >
                     Recibí del Señor (a) <span t-field="doc.partner_id.name"/> la cantidad de USD $<span t-field="doc.porcentaje"/> (<span t-field="doc.porcentaje_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
-                    por concepto de apartado del lote de terreno identificado como lote numero <span t-field="p.product_id.x_studio_lote"/> de la manza <span t-field="p.product_id.x_studio_manzana" /> de la calle <span t-field="p.product_id.x_studio_calle"/>., que se localiza dentro del Vista bella,
+                    por concepto de apartado del lote de terreno identificado como lote numero <span t-field="p.product_id.x_studio_lote"/> de la manza <span t-field="p.product_id.x_studio_manzana" /> de la calle <span t-field="p.product_id.x_studio_calle"/>., que se localiza dentro del la Colonia Vista Bella,
                     localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
                 </p>
 
@@ -46,7 +46,7 @@
                     por un monto de USD $<span t-field="doc.cantidad"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.) cada una, quedando pendientes $<span t-field="doc.resta"/> (<span t-field="doc.resta_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA).
                 </p>
                 <p style="font:arial; font-size:14px;">
-                    El importe total del lote de la cesión de derechos será pagado a razón de USD $ <span t-field="doc.amount_total"/> <span t-field="doc.total_letra"/>,Moneda de los Estados Unidos de América, 
+                    El importe total del lote de la cesión de derechos será pagado a razón de USD <span t-field="doc.amount_total"/> <span t-field="doc.total_letra"/>,Moneda de los Estados Unidos de América, 
                     por metro cuadrado, del lote objeto de la cesión de derechos, en un pazo no mayor a 96, meses, consecutivos e iguales, 
                     prorrateado el saldo restante una vez descontado el monto de apartado a que se refiere el párrafo anterior.
                 </p>
