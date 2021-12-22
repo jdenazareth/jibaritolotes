@@ -106,4 +106,18 @@
 
         </field>
     </record>
+
+    <record id="ji_other_information" model="ir.ui.view">
+        <field name="name">other.information.jibarito</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='invoice_origin']" position="after">
+                <field name="cliente_anterior" />
+            </xpath>
+
+        </field>
+    </record>
+
 </odoo>

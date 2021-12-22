@@ -2,6 +2,7 @@
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
 import json
+import datetime
 
 
 class AccountMove(models.Model):
@@ -14,6 +15,11 @@ class AccountMove(models.Model):
     ji_json_sequences = fields.Text(string="Json Sequences", store=True, compute="_compute_ji_json_numbers")
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
     x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", related="partner_id.sale_order_ids.x_studio_vendedor", string="Vendedor")
+    cliente_anterior = fields.Many2one(comodel_name="res.partner", string="Cliente anterior")
+    fecha_entrega = fields.Datetime(string="Fecha de entrega")
+    mes_entrega = fields.Char(string="Mes")
+
+
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):

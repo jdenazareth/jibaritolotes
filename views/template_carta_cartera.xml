@@ -5,13 +5,14 @@
         <t t-call="web.external_layout">
 
             <div class="page">
+                <t t-foreach="doc.invoice_line_ids" t-as="p">
                 <p align="center"><img style="width: 40%; margin-top: -10px !important;" src="jibaritolotes/static/img/logotipo.png"/></p>
                 <h3 align="center">CARTA DE COBRO PREJURÍDICO</h3>
                 <br/>
-                <p align="right">Tijuana, B.C a ________</p>
+                <p align="right">Tijuana, B.C a <span t-field="doc.invoice_date"/></p>
                 <br/>
 
-                <p>Sr(a).- <strong>_______</strong></p>
+                <p>Sr(a).- <strong><span t-field="doc.partner_id.name"/></strong></p>
                 <p style="font-size: 14px !important;">P r e s e n t e .</p>
                 <br/>
 
@@ -35,9 +36,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Dato</td>
-                            <td>Dato</td>
-                            <td>Dato</td>
+                            <td><span t-field="p.product_id.x_studio_manzana" /></td>
+                            <td><span t-field="p.product_id.x_studio_lote" /></td>
+                            <td><span t-field="p.product_id.x_studio_calle" /></td>
                             <td>Dato</td>
                             <td>Dato</td>
                             <td>Dato</td>
@@ -57,6 +58,7 @@
                 <br/>
                 <br/>
                 <h4 align="center">Col. Vista Bella, Deleg. San Francisco de los Buenos, Tijuana, B.C.</h4>
+            </t>
             </div>
         </t>
         </t>
