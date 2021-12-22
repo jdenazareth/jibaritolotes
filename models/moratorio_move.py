@@ -299,3 +299,12 @@ class JiMoratoriumaccountLine(models.Model):
             line.date_maturity = line.unreconciled_aml.date_maturity
             line.currency_id = currency.id
             line.name = line.unreconciled_aml.ji_name
+
+# class JiMoratoriumaccountLine(models.Model):
+#     _name = "ji.moratorium.pay"
+#     _description = "Pagos a moratorios"
+#
+#     name = fields.Char(string="Name")
+#     account_id = fields.Many2one(comodel_name="account.move", string="Moratorium")
+#     amount_residual = fields.Monetary(string="Pago" )
+#     mes_apagar = fields.Integer(string="Meses")

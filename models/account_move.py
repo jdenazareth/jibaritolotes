@@ -16,8 +16,27 @@ class AccountMove(models.Model):
     cliente_anterior = fields.Many2one(comodel_name="res.partner", string="Cliente anterior")
     fecha_entrega = fields.Datetime(string="Fecha de entrega")
     mes_entrega = fields.Char(string="Mes")
+    last_payment_date = fields.Date(string="Ultima fecha de pago", compute="_compute_paymentlast")
+    last_payment_name = fields.Char(string="Recivo", compute="_compute_paymentlast")
+    last_payment = fields.Float(string="Ultimo Pago", compute="_compute_paymentlast")
 
 
+    def _compute_paymentlast(self):
+        for res in self:
+            pagos = self.env["account.payment"].search([('invoice_ids', '=', res.id)])
+            date = fields.Date.today()
+            name = ""
+            pay = 0.0
+            i=0
+            for lp in pagos:
+                if i == 0:
+                    date = lp["payment_date"]
+                    name = lp["name"]
+                    pay = lp["amount"]
+                    i = i + 1
+            res.last_payment_date = date
+            res.last_payment_name = name
+            res.last_payment = pay
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
@@ -302,8 +321,18 @@ class AccountFollowupReport(models.AbstractModel):
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
     x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
         selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios + Mensualidades","Intererses Moratorios + Mensualidades")])
+    ji_moratorio = fields.Float(string="Total Moratorios a pagar")
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
         for res in self:
             res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato
+
+    @api.onchange("x_studio_tipo_de_pago")
+    def calculo_mora(self):
+        for res in self:
+            mora=0
+            if(res.x_studio_tipo_de_pago == "Intererses Moratorios + Mensualidades"):
+                for fac in res.invoice_ids:
+                    mora = fac.total_moratorium
+            res.ji_moratorio = mora
