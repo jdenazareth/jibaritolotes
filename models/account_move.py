@@ -2,8 +2,6 @@
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
 import json
-import datetime
-
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -37,6 +35,55 @@ class AccountMove(models.Model):
             return sale.x_studio_contrato
         return False
 
+    @api.depends("line_ids")
+    def get_reporte_amoritizacion(self):
+        for res in self:
+            move = []
+            account = []
+
+            compaRecords=[]
+            compani = res.company_id
+            tov = res.amount_untaxed
+            for lin in res.line_ids:
+                if lin.debit > 0:
+                    tov = tov - lin.debit
+                    if lin.ji_number.find('A') != 0:
+                        account.append({
+                            "number": lin.ji_number.replace('/', ' de '),
+                            "date_f": lin.date_maturity.strftime('%Y-%m-%d'),
+                            "debit": lin.debit,
+                            "credit": lin.credit,
+                            "total" : tov
+                        })
+
+            move.append({
+                "name": res.name,
+                "cliente": res.partner_id.name,
+                "date": res.invoice_date,
+                "company": res.invoice_date
+            })
+
+            compaRecords.append({
+                'name': compani.name,
+                'zip': compani.zip,
+                'street': compani.street,
+                'street2': compani.street2,
+                'city': compani.city,
+                'state_id': compani.state_id.name,
+                'country_id': compani.country_id.name,
+                'phone': compani.phone,
+                'id': compani.id,
+                'website': compani.website,
+            })
+
+            data = {
+                'move_id': move,
+                'acco': account,
+                'comapany': compaRecords,
+            }
+            return self.env.ref('jibaritolotes.report_amortizacion').report_action(self, data=data)
+            # raise UserError(_(data))
+
     @api.model
     def update_computes(self):
         for move in self.search([('id', '=', 19154)]):
@@ -46,6 +93,7 @@ class AccountMove(models.Model):
             # move.line_ids._compute_ji_number()
             # move.line_ids._compute_ji_name()
         pass
+
 
     @api.depends("line_ids", "invoice_payment_term_id")
     def _compute_ji_json_numbers(self):
@@ -217,6 +265,8 @@ class AccountMove(models.Model):
             self.invoice_payment_ref = new_terms_lines[-1].name or ''
             self.invoice_date_due = new_terms_lines[-1].date_maturity
 
+
+
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
@@ -244,6 +294,8 @@ class AccountMoveLine(models.Model):
         for line in self:
             json_numbers = json.loads(line.move_id.ji_json_numbers)
             line.ji_number = json_numbers.get(str(line.id), "")
+
+
 
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.payment"

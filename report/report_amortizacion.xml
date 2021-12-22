@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="report_amortizacion"
+                model="account.move"
+                string="Tabla de Pagos"
+                name="jibaritolotes.report_tabpay"
+                file="jibaritolotes.report_tabpay"
+                report_type="qweb-html"
+				menu = "False"
+				print_report_name = "'Tabla de Pagos' % (object.move_id.cliente)"
+
+		/>
+
+        <template id="jibaritolotes.report_tabpay">
+            <t t-call="web.html_container">
+                    <t t-call="jibaritolotes.internal_layaut_ji">
+						<t t-call-assets="web.report_assets_common" t-js="false" />
+						<t t-call-assets="web.assets_common" t-css="false" />
+						<t t-call-assets="web.report_assets_common" t-css="false" />
+                        <div class="page">
+							<div class="row">
+
+							</div>
+							<div class="row">
+								<div class="col-xs-12" aling="center">
+									<h3>Tabla de amortizacion</h3>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<table class="table mt16">
+										<thead class="thead-dark">
+											<tr>
+												<th>Mensualidad</th>
+												<th>Vencimiento</th>
+												<th>Interes</th>
+												<th>Total a pagar</th>
+												<th>Saldo Insoluto</th>
+											</tr>
+										</thead>
+										<tbody>
+											<t t-foreach="acco" t-as="ac">
+												<tr>
+													<td> <t t-esc="ac['number']" /></td>
+													<td> <t t-esc="ac['date_f']" /></td>
+													<td> 0</td>
+													<td> <t t-esc="ac['debit']" /></td>
+													<td> <t t-esc="ac['total']" /></td>
+
+												</tr>
+											</t>
+										</tbody>
+									</table>
+								</div>
+							</div>
+                        </div>
+                    </t>
+            </t>
+        </template>
+
+		<template id="internal_layaut_ji">
+			<t t-foreach="doc_company" t-as="company">
+				<div class="header o_boxed_header">
+					<div class="row">
+						<div class="col-3 mb4">
+							<img t-if="company['logo']" t-att-src="'data:image/png;base64,%s' %company['logo']" style="max-height: 120px;"/>
+						</div>
+						<div class="col-6 mb4">
+							<h2></h2>
+						</div>
+					</div>
+				</div>
+
+			</t>
+			<div class="article o_report_layout_background">
+				<t t-raw="0" />
+			</div>
+			<div class="flooter">
+<!--				<p>Este recibo cancela y sustituye a cualquier recibo provisional de dinero de misma fecha y monto"</p>-->
+			</div>
+		</template>
+
+    </data>
+</odoo>
