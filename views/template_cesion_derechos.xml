@@ -12,7 +12,7 @@
                 
 
                 <p>
-                    Yo <span t-field="doc.partner_id.name"/>, manifiesto sin presión alguna que por medio del presente hago <strong>CESION DE DERECHOS GRATUITA</strong> respecto del inmueble identificado como <strong>LOTE <span t-field="p.product_id.x_studio_lote"/> DE LA MANZANA  <span t-field="p.product_id.x_studio_manzana"/> CON SUPERFICIE DE <span t-field="p.product_id.ji_area"/> METROS CUADRADOS, DE LA CALLE <span t-field="p.product_id.x_studio_calle"/>, DE LA COLONIA VISTA BELLA, DE ESTA CIUDAD DE TIJUANA BAJA CALIFORNIA</strong>, a favor de la señor (a) _____(nuevo contacto)</p>
+                    Yo <span t-field="doc.cliente_anterior"/>, manifiesto sin presión alguna que por medio del presente hago <strong>CESION DE DERECHOS GRATUITA</strong> respecto del inmueble identificado como <strong>LOTE <span t-field="p.product_id.x_studio_lote"/> DE LA MANZANA  <span t-field="p.product_id.x_studio_manzana"/> CON SUPERFICIE DE <span t-field="p.product_id.ji_area"/> METROS CUADRADOS, DE LA CALLE <span t-field="p.product_id.x_studio_calle"/>, DE LA COLONIA VISTA BELLA, DE ESTA CIUDAD DE TIJUANA BAJA CALIFORNIA</strong>, a favor de la señor (a)<span t-field="doc.partner_id.name"/></p>
                 
                 <p>
                     Así mismo manifiesta renunciar expresamente a cualquier reclamación en contra de los copropietarios del predio denominado El Jibarito, predio en el cual se localiza la colonia Vista Bella, colonia en la cual se encuentra inmerso el predio antes señalado.  
@@ -20,7 +20,7 @@
                 </p>
 
                 <p>
-                    Por lo que desde este momento el(a) responsable de realizar cualquier trámite y pagos correspondientes sobre el inmueble antes descrito, será el señor (a)  AUTOMÁTICO (EL NUEVO CONTACTO),<strong>manifestando en este acto por su propio derecho y libre de toda presión, acepta la cesión de derechos del inmueble en comento, quedando bajo su responsabilidad el realizar los pagos correspondientes por la cesión de dicho predio; así como tramitar cualquier documentación referente al citado inmueble, adquiriendo todos los derechos y obligaciones que contenga el inmueble en comento.</strong> 
+                    Por lo que desde este momento el(a) responsable de realizar cualquier trámite y pagos correspondientes sobre el inmueble antes descrito, será el señor (a)<span t-field="doc.partner_id.name"/>,<strong>manifestando en este acto por su propio derecho y libre de toda presión, acepta la cesión de derechos del inmueble en comento, quedando bajo su responsabilidad el realizar los pagos correspondientes por la cesión de dicho predio; así como tramitar cualquier documentación referente al citado inmueble, adquiriendo todos los derechos y obligaciones que contenga el inmueble en comento.</strong> 
                 </p>
                 <br/>
                 <p>
@@ -39,7 +39,7 @@
                 <p align="center">_____________________________________________</p>
 
                 <div style="width: 70% !important; margin-left: 60px !important;">
-                    <p style="font-size: 14px !important;" align="center"><strong>C. automatico contacto</strong></p>
+                    <p style="font-size: 14px !important;" align="center"><strong><span t-field="doc.cliente_anterior"/></strong></p>
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
                 <p style="font-size: 14px !important;" align="center"><strong>CEDENTE: </strong></p>
                 <p align="center">_____________________________________________</p>
             <div style="width: 70% !important; margin-left: 60px !important;">
-                <p style="font-size: 14px !important;" align="center"><strong>C. automatico nuevo contacto</strong></p>
+                <p style="font-size: 14px !important;" align="center"><strong><span t-field="doc.partner_id.name"/></strong></p>
             </div>
             </div>
             
