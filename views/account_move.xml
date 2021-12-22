@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
 
-                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"
-                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>
+<!--                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"-->
+<!--                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>-->
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text"
@@ -54,11 +54,12 @@
                                 <field name="date" optional="hide"/>
                                 <field name="date_maturity" optional="show"/>
                                 <field name="at_date" optional="hide"/>
-                                <field name="month_number" optional="show"/>
+                                <field name="month_number" optional="hide"/>
                                 <field name="amount_unit_moratorium" optional="show"/>
-                                <field name="amount_total_moratorium" optional="show"/>
+                                <field name="amount_pay" optional="show"/>
                                 <field name="real_amount_moratorium" optional="show"/>
-                                <field name="moratorium_accumulated" optional="hide"/>
+                                <field name="amount_total_moratorium" optional="show"/>
+                                <field name="amount_total_moratorium" optional="hide"/>
                             </tree>
                     </field>
                     <group class="oe_subtotal_footer">
@@ -106,6 +107,7 @@
             <field name="journal_id" position="before" >
                 <field name="x_studio_tipo_de_pago" />
                 <field name="ji_moratorio" attrs="{'invisible':[('x_studio_tipo_de_pago', '!=', 'Intererses Moratorios + Mensualidades')]}" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_moratorio_date" attrs="{'invisible':[('x_studio_tipo_de_pago', '!=', 'Intererses Moratorios + Mensualidades')]}" groups="jibaritolotes.group_ji_apply_developments"/>
 
             </field>
 

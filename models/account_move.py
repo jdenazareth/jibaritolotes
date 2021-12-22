@@ -19,6 +19,7 @@ class AccountMove(models.Model):
     last_payment_date = fields.Date(string="Ultima fecha de pago", compute="_compute_paymentlast")
     last_payment_name = fields.Char(string="Recivo", compute="_compute_paymentlast")
     last_payment = fields.Float(string="Ultimo Pago", compute="_compute_paymentlast")
+    motarorio_pay = fields.Monetary(string="Moratorio Pagados", compute="_compute_paymentlast")
 
 
     def _compute_paymentlast(self):
@@ -27,16 +28,20 @@ class AccountMove(models.Model):
             date = fields.Date.today()
             name = ""
             pay = 0.0
+            morap = 0.0
             i=0
             for lp in pagos:
                 if i == 0:
                     date = lp["payment_date"]
                     name = lp["name"]
                     pay = lp["amount"]
+
                     i = i + 1
+                morap = morap + lp["ji_moratorio"]
             res.last_payment_date = date
             res.last_payment_name = name
             res.last_payment = pay
+            res.motarorio_pay = morap
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
@@ -319,20 +324,14 @@ class AccountMoveLine(models.Model):
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.payment"
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
-    x_studio_tipo_de_pago = fields.Selection( string="Tipo de Pago",
+    x_studio_tipo_de_pago = fields.Selection(string="Tipo de Pago",
         selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios + Mensualidades","Intererses Moratorios + Mensualidades")])
-    ji_moratorio = fields.Float(string="Total Moratorios a pagar")
+    ji_moratorio = fields.Monetary(string="Total Moratorios a pagar")
+    ji_moratorio_totoal = fields.Float(string="Total Moratorios")
+    ji_moratorio_date = fields.Date(string="Fecha Moratorio Vencido")
 
     @api.depends("partner_id")
     def _compute_ji_contrato(self):
         for res in self:
             res.x_studio_contrato = res.partner_id.sale_order_ids.x_studio_contrato
 
-    @api.onchange("x_studio_tipo_de_pago")
-    def calculo_mora(self):
-        for res in self:
-            mora=0
-            if(res.x_studio_tipo_de_pago == "Intererses Moratorios + Mensualidades"):
-                for fac in res.invoice_ids:
-                    mora = fac.total_moratorium
-            res.ji_moratorio = mora

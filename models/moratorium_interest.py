@@ -11,15 +11,15 @@ class JiMoratoriumInterest(models.Model):
     _description = "Interest for moratorium"
     _order = "at_date"
 
-    def copy(self, default=None):
-        self.ensure_one()
-        raise UserError(_("You cannot duplicate this record, please create a new one."))
-        return super(JiMoratoriumInterest, self).copy(default=default)
-
-    def unlink(self):
-        if self.state == "invoiced":
-            raise UserError(_("You cannot delete a record in invoiced."))
-        return super(JiMoratoriumInterest, self).unlink()
+    # def copy(self, default=None):
+    #     self.ensure_one()
+    #     raise UserError(_("You cannot duplicate this record, please create a new one."))
+    #     return super(JiMoratoriumInterest, self).copy(default=default)
+    #
+    # def unlink(self):
+    #     if self.state == "invoiced":
+    #         raise UserError(_("You cannot delete a record in invoiced."))
+    #     return super(JiMoratoriumInterest, self).unlink()
 
     invoice_id = fields.Many2one(comodel_name="account.move", string="Invoice")
 
@@ -126,7 +126,7 @@ class JiMoratoriumInterest(models.Model):
                 number_slow_payer, amls = p.get_number_slow_payer_cron(company)
                 partners.append({"partner": p, "amls": amls})
             if len(partners) > 0:
-                self.interest_line.unlink()
+                # self.interest_line.unlink()
                 for partner in partners:
                     notification_lines = []
                     for aml in partner["amls"]:

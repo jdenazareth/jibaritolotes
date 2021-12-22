@@ -13,10 +13,10 @@ class moratorio_move(models.Model):
         raise UserError(_("You cannot duplicate this record, please create a new one."))
         return super(moratorio_move, self).copy(default=default)
 
-    def unlink(self):
-        if self.state == "invoiced":
-            raise UserError(_("You cannot delete a record in invoiced."))
-        return super(moratorio_move, self).unlink()
+    # def unlink(self):
+    #     if self.state == "invoiced":
+    #         raise UserError(_("You cannot delete a record in invoiced."))
+    #     return super(moratorio_move, self).unlink()
 
     at_date = fields.Date(string="At Date", default=fields.Date.context_today)
     #interest_line = fields.One2many(comodel_name="ji.moratorium.interest.line", string="Interest line",
@@ -128,7 +128,7 @@ class moratorio_move(models.Model):
         for record in self:
             record.validate_regenerate_aml()
             companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
-            mora=0.0
+            mora = 0.0
             mesp = 0
             if len(companies.ids) == 0:
                 mora = 0.0
@@ -146,19 +146,29 @@ class moratorio_move(models.Model):
                     for partner in partners:
                         # notification_lines = []
                         # raise UserError(_(partner["amls"]))
-
+                        tpay = 0.0
                         for aml in partner["amls"]:
-
+                            pagos = self.env["account.payment"].search([('invoice_ids', '=', aml.move_id.id)])
                             if aml.move_id.id == record.id:
                                 # if aml.id not in record.get_exist_payments():
                                 # record.ji_accoun_line.append(aml)
+                                pay = 0.0
+                                pay2 = 0.0
+                                for lp in pagos:
+                                   if aml.date_maturity == lp["ji_moratorio_date"]:
+                                       pay = pay + lp["ji_moratorio"]
                                 mesp = mesp + 1
                                 r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
                                 month_number = r.months + 1
                                 amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
                                 unit_moratorium = ((record.percent_moratorium / 100) * amount)
                                 amount_total_moratorium = month_number * unit_moratorium
-                                mora = mora + amount_total_moratorium
+                                if tpay != 0:
+                                    pay = tpay
+                                if pay > amount_total_moratorium:
+                                    tpay = pay - amount_total_moratorium
+                                    pay = (pay - tpay)
+                                mora = mora + amount_total_moratorium - pay
                                 # objects = {'o': record, 'amount_residual': amount, 'month_number': month_number}
                                 # python_code = record.company_id.ji_codev
                                 #
@@ -222,6 +232,8 @@ class JiMoratoriumaccountLine(models.Model):
     amount_unit_moratorium = fields.Monetary(string="Amount Unit Moratorium", compute="_compute_amount_unit_moratorium")
     amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium",
                                               compute="_compute_amount_total_moratorium")
+    amount_pay = fields.Monetary(string="Pagos",
+                                              compute="_compute_amount_total_moratorium")
     real_amount_moratorium = fields.Monetary(string="Total Moratorium", store=True,
                                              compute="_compute_real_amount_moratorium")
 
@@ -258,7 +270,7 @@ class JiMoratoriumaccountLine(models.Model):
     def _compute_real_amount_moratorium(self):
         for mora in self:
             # raise UserError(_(self.moratorium_id.company_id.name))
-            mora.real_amount_moratorium = mora.exec_formula_python()
+            mora.real_amount_moratorium = (mora.exec_formula_python()) - mora.amount_pay
 
     def exec_formula_python(self):
         objects = {'o': self}
@@ -276,7 +288,14 @@ class JiMoratoriumaccountLine(models.Model):
     @api.depends("month_number", "amount_unit_moratorium")
     def _compute_amount_total_moratorium(self):
         for line in self:
-            line.amount_total_moratorium = line.month_number * line.amount_unit_moratorium
+            pagos = self.env["account.payment"].search([('invoice_ids', '=', line.moratorium_id.id)])
+            pay = 0.0
+            pay2 = 0.0
+            for lp in pagos:
+                if line.date_maturity == lp["ji_moratorio_date"]:
+                    pay = pay + lp["ji_moratorio"]
+            line.amount_pay = pay
+            line.amount_total_moratorium = (line.month_number * line.amount_unit_moratorium) - pay
 
     @api.depends("date_maturity", "at_date")
     def _compute_month_number(self):

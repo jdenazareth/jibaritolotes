@@ -43,7 +43,7 @@
         "views/manzana.xml",
         "views/calle.xml",
         "views/account_payment_term.xml",
-        "views/moratorium_interest.xml",
+        # "views/moratorium_interest.xml",
         "views/account_move.xml",
         "views/template_apartado.xml",
         "views/templatesdevo.xml",
