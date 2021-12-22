@@ -5,6 +5,7 @@
         <t t-call="web.external_layout">
 
             <div class="page">
+                <t t-set="total_con_mora" t-value="doc.amount_residual+doc.total_moratorium"/>
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
                 <p align="center"><img style="width: 40%; margin-top: -10px !important;" src="jibaritolotes/static/img/logotipo.png"/></p>
                 <h3 align="center">CARTA DE COBRO PREJURÍDICO</h3>
@@ -16,7 +17,7 @@
                 <p style="font-size: 14px !important;">P r e s e n t e .</p>
                 <br/>
 
-                <p style="text-align: justify !important; line-height: 1.5 !important;">Reciba un cordial saludo en nombre de la Oficina de Gestión del Col. Vista Bella, por este medio nos permitimos recordarle que, de acuerdo al registro de cartera de colonos al _______(fecha de la consulta), el saldo de su cuenta es la siguiente: <span t-field="doc.invoice_payments_widget.content"/></p>
+                <p style="text-align: justify !important; line-height: 1.5 !important;">Reciba un cordial saludo en nombre de la Oficina de Gestión del Col. Vista Bella, por este medio nos permitimos recordarle que, de acuerdo al registro de cartera de colonos al <span t-field="doc.invoice_date"/>, el saldo de su cuenta es la siguiente:</p>
 
                 <p align="right" style="margin-left: 500px !important; width: 30% !important; padding: 2px !important; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6; height: 20px !important; text-align: center !important;">Mensualidades vencidas</p>
 
@@ -39,11 +40,11 @@
                             <td><span t-field="p.product_id.x_studio_manzana" /></td>
                             <td><span t-field="p.product_id.x_studio_lote" /></td>
                             <td><span t-field="p.product_id.x_studio_calle" /></td>
-                            <td>Dato</td>
-                            <td>Dato</td>
-                            <td>Dato</td>
-                            <td>Dato</td>
-                            <td>Dato</td>
+                            <td><span t-field="doc.last_payment_date"/></td>
+                            <td><span t-field="doc.last_payment_name"/></td>
+                            <td>$ <span t-field="doc.last_payment"/></td>
+                            <td><span t-field="doc.total_moratorium"/></td>
+                            <td>$ <t t-esc="total_con_mora"/></td>
                         </tr>
                     </tbody>
                 </table>
