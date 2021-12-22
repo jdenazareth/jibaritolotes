@@ -15,6 +15,15 @@ class ReporteFactura(models.Model):
     resta_letra = fields.Char(string="Resta letra ", compute="get_text_amount_calculo")
     cantidad_letra = fields.Char(string="Cantidad letra", compute="get_text_amount_calculo")
     total_letra = fields.Char(string="total letra", compute="get_text_amount_calculo")
+    total_a_devolver = fields.Float(string="Total a devolver", compute="_total_devolver", digits=(16, 2))
+    total_a_devolver_letra = fields.Char(string="Total Letra", compute="get_text_amount_calculo")
+    
+
+    
+
+    def _total_devolver(self):
+        self.total_a_devolver = self.amount_total-self.amount_residual
+
     
     @api.depends("invoice_payment_term_id")
     def _format_apartado(self):
@@ -40,6 +49,7 @@ class ReporteFactura(models.Model):
         self.resta_letra =  num2words(self.resta, lang='es').upper()
         self.cantidad_letra =  num2words(self.cantidad, lang='es').upper()
         self.total_letra =  num2words(self.amount_total, lang='es').upper()
+        self.total_a_devolver_letra = num2words(self.total_a_devolver, lang='es').upper()
 
 #self.porcentaje_letra = num2words(round(self.porcentaje,2), lang='es').lower()
 
