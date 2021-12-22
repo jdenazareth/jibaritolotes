@@ -44,23 +44,23 @@
                     </tr>
                     <tr>
                         <td class="border-warning">Fecha de contrato</td>
-                        <td> <span t-field="doc.partner_id.name"/></td>
+                        <td> <span t-field="doc.invoice_date"/></td>
                     </tr>
                     <tr>
                         <td class="border-warning">Plazo</td>
-                        <td> <span t-field="doc.partner_id.name"/></td>
+                        <td> <span t-field="doc.invoice_payment_term_id.ji_numbers_monthly"/></td>
                     </tr>
                     <tr>
                         <td class="border-warning">Fecha de pago</td>
-                        <td> <span t-field="doc.partner_id.name"/></td>
+                        <td> Los días <span t-field="doc.invoice_payment_term_id.dia_dato"/> de cada mes</td>
                     </tr>
                     <tr>
                         <td class="border-warning">Mensualidad</td>
-                        <td> <span t-field="doc.partner_id.name"/></td>
+                        <td> <span t-field="doc.invoice_payment_term_id.ji_numbers_monthly"/></td>
                     </tr>
                     <tr>
                         <td class="tborderwarning">Cargo por mora</td>
-                        <td> <span t-field="doc.partner_id.name"/></td>
+                        <td> <span t-field="doc.total_moratorium"/></td>
                     </tr>
                     <tr>
                         <td class="border-warning">Número de control</td>
