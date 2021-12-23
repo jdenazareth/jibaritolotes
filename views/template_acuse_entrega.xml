@@ -12,7 +12,7 @@
                <h4 align="center" style="font-size: 12;">Acuse entrega</h4>
 
                <!-- Fecha -->
-               <p align="right">Tijuana, B.C. a <span t-field="doc.invoice_date"/></p>
+               <p align="right">Tijuana, B.C.  <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/> </p>
 
                <!-- Estimado(a) -->
                <p>Estimado señor(a): <span t-field="doc.partner_id.name"/></p>
