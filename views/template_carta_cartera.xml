@@ -10,14 +10,14 @@
                 <p align="center"><img style="width: 40%; margin-top: -10px !important;" src="jibaritolotes/static/img/logotipo.png"/></p>
                 <h3 align="center">CARTA DE COBRO PREJURÍDICO</h3>
                 <br/>
-                <p align="right">Tijuana, B.C a <span t-field="doc.invoice_date"/></p>
+                <p align="right">Tijuana, B.C <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></p>
                 <br/>
 
                 <p>Sr(a).- <strong><span t-field="doc.partner_id.name"/></strong></p>
                 <p style="font-size: 14px !important;">P r e s e n t e .</p>
                 <br/>
 
-                <p style="text-align: justify !important; line-height: 1.5 !important;">Reciba un cordial saludo en nombre de la Oficina de Gestión del Col. Vista Bella, por este medio nos permitimos recordarle que, de acuerdo al registro de cartera de colonos al <span t-field="doc.invoice_date"/>, el saldo de su cuenta es la siguiente:</p>
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Reciba un cordial saludo en nombre de la Oficina de Gestión del Col. Vista Bella, por este medio nos permitimos recordarle que, de acuerdo al registro de cartera de colonos al <span t-field="doc.invoice_date"/>, el saldo de su cuenta es la siguiente:</p>
 
                 <p align="right" style="margin-left: 500px !important; width: 30% !important; padding: 2px !important; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; border-right: 1px solid #dee2e6; height: 20px !important; text-align: center !important;">Mensualidades vencidas</p>
 

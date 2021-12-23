@@ -6,11 +6,11 @@
             <div class="page">
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
                 <h4 style=" font-weight: bold !important; margin-left: 200px !important; color: #8d8d8d !important;">TERMINACIÓN DEL CONTRATO DE TRANSACCIÓN</h4>
-                <p align="right"><strong>Tijuana, Baja California; <span t-field="doc.invoice_date"/></strong></p>
+                <p align="right"><strong>Tijuana, Baja California; <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></strong></p>
                 <br/>
                 
 
-                <p style="text-align: justify !important;">
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     
                     Yo <span t-field="doc.partner_id.name"/>, manifiesto sin presión alguna que por medio del presente <strong> DOY POR TERMINADA LA RELACIÓN DERIVADA DEL CONTRATO DE TRANSACCIÓN</strong> respecto del inmueble identificado como<strong> LOTE <span t-field="p.product_id.x_studio_lote"/> DE LA MANZANA  <span t-field="p.product_id.x_studio_manzana"/> CON SUPERFICIE DE <span t-field="p.product_id.ji_area"/> METROS CUADRADOS, DE LA CALLE <span t-field="p.product_id.x_studio_calle"/>, DE LA COLONIA VISTA BELLA, DE ESTA CIUDAD DE TIJUANA BAJA CALIFORNIA,</strong> toda vez que el inmueble <span t-field="doc.narration"/> y solicito la devolución total del dinero entregado por el inmueble antes descrito.
                 </p>
@@ -32,15 +32,15 @@
 
                 </table>
                 
-                <p style="text-align: justify !important;">
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     Con un total de $<span t-field="doc.total_a_devolver"/> (<span t-field="doc.total_a_devolver_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA).
                     Lo anterior por así convenir a los intereses de las partes que intervinieron para su firma.
                 </p>
 
-                <p style="text-align: justify !important;">
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     Por lo que desde este momento entrego la posesión material del multicitado inmueble a favor de la señora MARIA FERNANDA LOAIZA ÁLVAREZ, para que lo incorpore a su padrón general de su base de datos, dejando sin efecto el contrato celebrado en fecha <span t-field="doc.invoice_date"/>
                 </p>
-                <p style="text-align: justify !important;">
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     Por lo cual, estando conforme con lo establecido, firman las partes que intervienen en la presente Cesión de Derechos a fin de darle la validez correspondiente.
                 </p>
                 <br/>
