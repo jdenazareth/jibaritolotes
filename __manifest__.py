@@ -54,6 +54,7 @@
         "views/template_cesion_derechos.xml", 
         "views/template_acuse_entrega.xml",
         "views/template_contrato_transaccion.xml",
+        "views/comprobante_pago.xml",
         "report/account_report.xml",
         "report/account_payment.xml",
         "report/report_amortizacion.xml",

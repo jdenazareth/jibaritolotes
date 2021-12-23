@@ -1010,7 +1010,7 @@ msgstr "Notificar a"
 #. module: jibaritolotes
 #: model:ir.actions.report,name:jibaritolotes.ji_report_payment_receipt
 msgid "Payment Receipt jibaritolotes"
-msgstr "Comprobante de Pago - jibaritolotes"
+msgstr "Comprobante de pago de anticipo"
 
 #. module: jibaritolotes
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_report_account_payment

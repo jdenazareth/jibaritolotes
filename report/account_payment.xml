@@ -46,7 +46,7 @@
     <report
             id="ji_report_payment_receipt"
             model="account.payment"
-            string="Payment Receipt jibarito"
+            string="Recibo de pago de anticipo"
             report_type="qweb-pdf"
             name="jibaritolotes.ji_report_account_payment"
             file="jibaritolotes.ji_report_account_payment"
