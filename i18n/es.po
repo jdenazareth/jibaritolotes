@@ -345,31 +345,31 @@ msgid "<strong>Vendor:</strong>"
 msgstr "<strong>Vendedor:</strong>"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__moratorium_accumulated
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__moratorium_accumulated
 msgid "Accumulated Moratorium"
 msgstr "Moratoria Acumulada"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__active
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__active
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__active
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_search
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.notification_slow_payer_search
 msgid "Active"
 msgstr "Activo"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__amount_residual
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__amount_residual
 msgid "Amount"
 msgstr "Monto"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__amount_total_moratorium
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__amount_total_moratorium
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__amount_total_moratorium
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__amount_total_moratorium
 msgid "Amount Total Moratorium"
 msgstr "Monto total de moratoria"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__amount_unit_moratorium
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__amount_unit_moratorium
 msgid "Amount Unit Moratorium"
 msgstr "Monto Unitario de Moratoria"
 
@@ -471,7 +471,7 @@ msgid "April"
 msgstr "Abril"
 
 #. module: jibaritolotes
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_search
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.notification_slow_payer_search
 msgid "Archived"
 msgstr "Archivado"
@@ -483,8 +483,8 @@ msgid "Area"
 msgstr "Area"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__at_date
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__at_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__at_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__at_date
 msgid "At Date"
 msgstr "Hasta Fecha"
 
@@ -533,7 +533,7 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__company_id
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__company_id
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__company_id
 msgid "Company"
 msgstr "Compañía"
@@ -588,34 +588,34 @@ msgid "Country"
 msgstr "País"
 
 #. module: jibaritolotes
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_form
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_form
 msgid "Create Invoice"
 msgstr "Crear Factura"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__create_uid
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__create_uid
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__create_uid
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__create_uid
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__create_uid
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__create_date
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__create_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__create_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__create_date
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__create_date
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__create_date
 msgid "Created on"
 msgstr "Creado en"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__currency_id
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__currency_id
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__currency_id
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__currency_id
 msgid "Currency"
 msgstr "Moneda"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__partner_id
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__partner_id
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__partner_id
 msgid "Customer"
 msgstr "Cliente"
@@ -627,7 +627,7 @@ msgid "Customer Invoice Moratorium"
 msgstr "Moratoria por impuntualidad"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__date
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__date
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__name
 msgid "Date"
 msgstr "Fecha"
@@ -645,20 +645,20 @@ msgid "December"
 msgstr "Diciembre"
 
 #. module: jibaritolotes
-#: model:ir.model,name:jibaritolotes.model_ji_moratorium_interest_line
+#: model:ir.model,name:jibaritolotes.model_ji_moratorium_account_line
 msgid "Details Interest for moratorium"
 msgstr "Detalles de la moratoria"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__display_name
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__display_name
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__display_name
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__display_name
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__display_name
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__display_name
 msgid "Display Name"
 msgstr "Nombre a mostrar"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__date_maturity
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__date_maturity
 msgid "Due Date"
 msgstr "Fecha de vencimiento"
 
@@ -694,39 +694,39 @@ msgid "Group for apply developments"
 msgstr "Grupo para aplicar los desarrollos"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__id
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__id
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__id
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__id
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__id
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__id
 msgid "ID"
 msgstr ""
 
 #. module: jibaritolotes
-#: model:ir.model.fields.selection,name:jibaritolotes.selection__ji_moratorium_interest__state__in_progress
+#: model:ir.model.fields.selection,name:jibaritolotes.selection__account.move__state__in_progress
 msgid "In Progress"
 msgstr "En progreso"
 
 #. module: jibaritolotes
-#: model:ir.ui.menu,name:jibaritolotes.ji_moratorium_interest_menu
+#: model:ir.ui.menu,name:jibaritolotes.account.move_menu
 msgid "Interest for Moratorium"
 msgstr "Intereses por Moratoria"
 
 #. module: jibaritolotes
-#: model:ir.actions.act_window,name:jibaritolotes.ji_moratorium_interest_action
-#: model:ir.model,name:jibaritolotes.model_ji_moratorium_interest
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_form
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_tree
+#: model:ir.actions.act_window,name:jibaritolotes.account.move_action
+#: model:ir.model,name:jibaritolotes.model_account.move
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_form
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_tree
 msgid "Interest for moratorium"
 msgstr "Intereses por Moratoria"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__interest_line
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__interest_line
 msgid "Interest line"
 msgstr "Linea de interes"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__invoice_id
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_form
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__invoice_id
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_form
 msgid "Invoice"
 msgstr "Factura"
 
@@ -736,7 +736,7 @@ msgid "Invoice Detail"
 msgstr "Detalle de Factura"
 
 #. module: jibaritolotes
-#: model:ir.model.fields.selection,name:jibaritolotes.selection__ji_moratorium_interest__state__invoiced
+#: model:ir.model.fields.selection,name:jibaritolotes.selection__account.move__state__invoiced
 msgid "Invoiced"
 msgstr "Facturado"
 
@@ -791,31 +791,31 @@ msgid "June"
 msgstr "Junio"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest____last_update
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line____last_update
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move____last_update
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line____last_update
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer____last_update
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__write_uid
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__write_uid
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__write_uid
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__write_uid
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__write_uid
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__write_date
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__write_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__write_date
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__write_date
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer__write_date
 #: model:ir.model.fields,field_description:jibaritolotes.field_ji_notification_slow_payer_line__write_date
 msgid "Last Updated on"
 msgstr "Ultima actualización en"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__line_count
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__line_count
 msgid "Line Count"
 msgstr "Numero de Linea"
 
@@ -858,7 +858,7 @@ msgstr "Mensualidad"
 
 #. module: jibaritolotes
 #: model:ir.model.fields,field_description:jibaritolotes.field_account_move__ji_is_moratorium
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__moratorium_id
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__moratorium_id
 msgid "Moratorium"
 msgstr "Moratoria"
 
@@ -885,7 +885,7 @@ msgstr "Nacionalidad"
 
 #. module: jibaritolotes
 #: model:ir.model.fields,field_description:jibaritolotes.field_account_move_line__ji_name
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__name
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__name
 msgid "Name"
 msgstr "Nombre"
 
@@ -950,7 +950,7 @@ msgid "Number Advance Payment"
 msgstr "Numero de Anticipos"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__month_number
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__month_number
 msgid "Number Month"
 msgstr "Meses"
 
@@ -1038,7 +1038,7 @@ msgid "Percent Commission"
 msgstr "Porcentaje de Comision"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__percent_moratorium
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__percent_moratorium
 #: model:ir.model.fields,field_description:jibaritolotes.field_res_company__ji_percent_moratorium
 #: model:ir.model.fields,field_description:jibaritolotes.field_res_config_settings__ji_percent_moratorium
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_res_config_settings
@@ -1068,7 +1068,7 @@ msgid "Punctual"
 msgstr "Puntual"
 
 #. module: jibaritolotes
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_form
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_form
 msgid "Regenerate Moratorium"
 msgstr "Regenerar Intereses de Morosidad"
 
@@ -1104,13 +1104,13 @@ msgid "September"
 msgstr "Septiembre"
 
 #. module: jibaritolotes
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_search
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.notification_slow_payer_search
 msgid "Show active"
 msgstr "Mostrar Activos"
 
 #. module: jibaritolotes
-#: model_terms:ir.ui.view,arch_db:jibaritolotes.ji_moratorium_interest_search
+#: model_terms:ir.ui.view,arch_db:jibaritolotes.account.move_search
 #: model_terms:ir.ui.view,arch_db:jibaritolotes.notification_slow_payer_search
 msgid "Show archived"
 msgstr "Mostrar Archivados"
@@ -1136,12 +1136,12 @@ msgid "Spouse"
 msgstr "Esposo (a)"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__state
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__state
 msgid "State"
 msgstr "Estado"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest__state_invoice
+#: model:ir.model.fields,field_description:jibaritolotes.field_account.move__state_invoice
 msgid "State of Invoice"
 msgstr "Estado de Factura"
 
@@ -1175,7 +1175,7 @@ msgid "Total In Words"
 msgstr "Total en Letras"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__real_amount_moratorium
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__real_amount_moratorium
 msgid "Total Moratorium"
 msgstr "Monto de Moratoria"
 
@@ -1191,7 +1191,7 @@ msgid "Type Payment"
 msgstr "Tipo de Pago"
 
 #. module: jibaritolotes
-#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_interest_line__unreconciled_aml
+#: model:ir.model.fields,field_description:jibaritolotes.field_ji_moratorium_account_line__unreconciled_aml
 msgid "Unreconciled Due"
 msgstr "Cuotas vencidas"
 
