@@ -8,10 +8,10 @@ from odoo.tools.safe_eval import safe_eval, test_python_expr
 class moratorio_move(models.Model):
     _inherit = "account.move"
 
-    def copy(self, default=None):
-        self.ensure_one()
-        raise UserError(_("You cannot duplicate this record, please create a new one."))
-        return super(moratorio_move, self).copy(default=default)
+    # def copy(self, default=None):
+    #     self.ensure_one()
+    #     raise UserError(_("You cannot duplicate this record, please create a new one."))
+    #     return super(moratorio_move, self).copy(default=default)
 
     # def unlink(self):
     #     if self.state == "invoiced":
@@ -26,8 +26,7 @@ class moratorio_move(models.Model):
     percent_moratorium = fields.Float(related="company_id.ji_percent_moratorium", string="Percent Moratorium")
     ji_condition = fields.Selection(related="partner_id.ji_condition", string="Condicion")
     ji_number_slow_payer = fields.Integer(related="partner_id.ji_number_slow_payer", string="Number Slow Payer")
-    amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium",
-                                              compute="_compute_amount_total_moratorium")
+    amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium")
 
     def _prapare_invoice(self):
         line_vals = []
@@ -120,7 +119,7 @@ class moratorio_move(models.Model):
                     # raise UserError(_(notification_lines))
                     self.write({"moratorio_line": notification_lines})
 
-    ji_accoun_line = fields.One2many('account.move.line', 'move_id', string="Moratorium S")
+    # ji_accoun_line = fields.One2many('account.move.line', 'move_id', string="Moratorium S")
     total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
     total_mes = fields.Integer(string="Meses a Pagar")
     @api.depends("company_id", "partner_id", "percent_moratorium", "at_date")

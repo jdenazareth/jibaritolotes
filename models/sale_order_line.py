@@ -38,4 +38,5 @@ class SaleOrderLine(models.Model):
                     line.ji_corner_with = line.product_id.ji_corner_with
                     line.product_uom_qty = line.product_id.ji_area
                     line.price_subtotal = line.product_uom_qty * line.price_unit
+                    line.qty_delivered = line.product_id.ji_area
 

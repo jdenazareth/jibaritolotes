@@ -6,49 +6,51 @@ from odoo.exceptions import UserError
 class AccountPaymentTerm(models.Model):
     _inherit = "account.payment.term"
 
-    def regenerate_lines(self):
-        anticipos = self.line_ids.filtered(lambda l: l.ji_type == 'money_advance')
-        anticipo = anticipos.sorted(lambda a: a.days, True)[0]
-        mensualidades = self.line_ids.filtered(
-            lambda l: l.ji_type == 'monthly_payments' and l.option != "day_following_month")
-        primer_dia = 0
-        for a in self.line_ids.filtered(lambda l:l.ji_type == 'monthly_payments' and l.option == "day_following_month"):
-            primer_dia = primer_dia + a.days
+    # def regenerate_lines(self):
+    #     anticipos = self.line_ids.filtered(lambda l: l.ji_type == 'money_advance')
+    #     anticipo = anticipos.sorted(lambda a: a.days, True)[0]
+    #     mensualidades = self.line_ids.filtered(
+    #         lambda l: l.ji_type == 'monthly_payments' and l.option != "day_following_month")
+    #     primer_dia = 0
+    #     for a in self.line_ids.filtered(lambda l:l.ji_type == 'monthly_payments' and l.option == "day_following_month"):
+    #         primer_dia = primer_dia + a.days
+    #
+    #     sum_dias = anticipo.days + primer_dia + 30
+    #     meses = self.ji_numbers_monthly
+    #     anipor = self.ji_advance_payment
+    #     val_mount= (100 - anipor) / meses
+    #
+    #     print("sum_dias", sum_dias)
+    #     sum_dias = 34
+    #     montp_lines = []
+    #     montp_lines.append([0, 0, {
+    #         "days": 0,
+    #         "option": "after_invoice_month",
+    #         "ji_type": "balance",
+    #         "value": "balance",
+    #         "day_of_the_month": 0
+    #     }])
+    #     for f in range(1,meses):
+    #         montp_lines.append([0, 0, {
+    #             "days": sum_dias,
+    #             "option": "after_invoice_month",
+    #             "ji_type": "monthly_payments",
+    #             "value": "percent",
+    #             "value_amount": val_mount,
+    #             "day_of_the_month": 4
+    #         }])
+    #         # day_after_invoice_date
+    #         # day_following_month
+    #         # after_invoice_month
+    #         # day_current_month
+    #         #  "day_of_the_month": sum_dias,
+    #
+    #         sum_dias += 30
+    #
+    #     # raise UserError(_(montp_lines))
+    #     self.write({"line_ids": montp_lines})
 
-        sum_dias = anticipo.days + primer_dia + 30
-        meses = self.ji_numbers_monthly
-        anipor = self.ji_advance_payment
-        val_mount= (100 - anipor) / meses
 
-        print("sum_dias", sum_dias)
-        sum_dias = 34
-        montp_lines = []
-        montp_lines.append([0, 0, {
-            "days": 0,
-            "option": "after_invoice_month",
-            "ji_type": "balance",
-            "value": "balance",
-            "day_of_the_month": 0
-        }])
-        for f in range(1,meses):
-            montp_lines.append([0, 0, {
-                "days": sum_dias,
-                "option": "after_invoice_month",
-                "ji_type": "monthly_payments",
-                "value": "percent",
-                "value_amount": val_mount,
-                "day_of_the_month": 4
-            }])
-            # day_after_invoice_date
-            # day_following_month
-            # after_invoice_month
-            # day_current_month
-            #  "day_of_the_month": sum_dias,
-
-            sum_dias += 30
-
-        # raise UserError(_(montp_lines))
-        self.write({"line_ids": montp_lines})
     ji_advance_payment = fields.Float(string="% Advance Payment")
     ji_number_quotation = fields.Integer(string="Number Advance Payment", store=False,
                                          compute="_compute_ji_number_quotation")

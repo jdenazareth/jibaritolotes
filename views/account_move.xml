@@ -63,7 +63,7 @@
                             </tree>
                     </field>
                     <group class="oe_subtotal_footer">
-                        <field name="amount_total_moratorium"/>
+<!--                        <field name="amount_total_moratorium"/>-->
                         <field name="total_moratorium" />
                     </group>
                 </page>
