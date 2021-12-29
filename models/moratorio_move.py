@@ -126,57 +126,58 @@ class moratorio_move(models.Model):
     @api.depends("company_id", "partner_id", "percent_moratorium", "at_date")
     def action_moratorio_dues(self):
         for record in self:
-            record.validate_regenerate_aml()
-            companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+            # record.validate_regenerate_aml()
             mora = 0.0
             mesp = 0
-            if len(companies.ids) == 0:
-                mora = 0.0
-            partners = []
-            for company in companies:
-                partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
+            if record.partner_id:
+                companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+                if len(companies.ids) == 0:
+                    mora = 0.0
+                partners = []
+                for company in companies:
+                    partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
 
-                for p in partners_slow_payer:
-                    number_slow_payer, amls = p.get_number_slow_payer_cron(company)
-                    partners.append({"partner": p, "amls": amls})
+                    for p in partners_slow_payer:
+                        number_slow_payer, amls = p.get_number_slow_payer_cron(company)
+                        partners.append({"partner": p, "amls": amls})
 
-                    # raise UserError(_(amls))
-                if len(partners) > 0:
-                    # record.moratorio_line.unlink()
-                    for partner in partners:
-                        # notification_lines = []
-                        # raise UserError(_(partner["amls"]))
-                        tpay = 0.0
-                        for aml in partner["amls"]:
-                            pagos = self.env["account.payment"].search([('invoice_ids', '=', aml.move_id.id)])
-                            if aml.move_id.id == record.id:
-                                # if aml.id not in record.get_exist_payments():
-                                # record.ji_accoun_line.append(aml)
-                                pay = 0.0
-                                pay2 = 0.0
-                                for lp in pagos:
-                                   if aml.date_maturity == lp["ji_moratorio_date"]:
-                                       pay = pay + lp["ji_moratorio"]
-                                mesp = mesp + 1
-                                r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
-                                month_number = r.months + 1
-                                amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
-                                unit_moratorium = ((record.percent_moratorium / 100) * amount)
-                                amount_total_moratorium = month_number * unit_moratorium
-                                if tpay != 0:
-                                    pay = tpay
-                                if pay > amount_total_moratorium:
-                                    tpay = pay - amount_total_moratorium
-                                    pay = (pay - tpay)
-                                mora = mora + amount_total_moratorium - pay
-                                # objects = {'o': record, 'amount_residual': amount, 'month_number': month_number}
-                                # python_code = record.company_id.ji_codev
-                                #
-                                # if python_code:
-                                #     safe_eval(record.company_id.ji_codev, objects, mode="exec", nocopy=True)
-                                #     real_amount_moratorium = objects['result']
-                                # else:
-                                #     real_amount_moratorium = 0.00
+                        # raise UserError(_(amls))
+                    if len(partners) > 0:
+                        # record.moratorio_line.unlink()
+                        for partner in partners:
+                            # notification_lines = []
+                            # raise UserError(_(partner["amls"]))
+                            tpay = 0.0
+                            for aml in partner["amls"]:
+                                pagos = self.env["account.payment"].search([('invoice_ids', '=', aml.move_id.id)])
+                                if aml.move_id.id == record.id:
+                                    # if aml.id not in record.get_exist_payments():
+                                    # record.ji_accoun_line.append(aml)
+                                    pay = 0.0
+                                    pay2 = 0.0
+                                    for lp in pagos:
+                                       if aml.date_maturity == lp["ji_moratorio_date"]:
+                                           pay = pay + lp["ji_moratorio"]
+                                    mesp = mesp + 1
+                                    r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
+                                    month_number = r.months + 1
+                                    amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
+                                    unit_moratorium = ((record.percent_moratorium / 100) * amount)
+                                    amount_total_moratorium = month_number * unit_moratorium
+                                    if tpay != 0:
+                                        pay = tpay
+                                    if pay > amount_total_moratorium:
+                                        tpay = pay - amount_total_moratorium
+                                        pay = (pay - tpay)
+                                    mora = mora + amount_total_moratorium - pay
+                                    # objects = {'o': record, 'amount_residual': amount, 'month_number': month_number}
+                                    # python_code = record.company_id.ji_codev
+                                    #
+                                    # if python_code:
+                                    #     safe_eval(record.company_id.ji_codev, objects, mode="exec", nocopy=True)
+                                    #     real_amount_moratorium = objects['result']
+                                    # else:
+                                    #     real_amount_moratorium = 0.00
             record.total_mes = mesp
             record.total_moratorium = mora
                 # raise UserError(_(notification_lines))

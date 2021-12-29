@@ -24,75 +24,74 @@ class JiMoratoriumInterest(models.Model):
     invoice_id = fields.Many2one(comodel_name="account.move", string="Invoice")
 
     state_invoice = fields.Selection(related="invoice_id.state", string="State of Invoice")
-    currency_id = fields.Many2one(comodel_name="res.currency", string="Currency", store=True,
-                                  compute="_compute_currency_id")
+    currency_id = fields.Many2one(comodel_name="res.currency", string="Currency"
+                                  )
 
-    line_count = fields.Integer(compute="_compute_line_count")
+    line_count = fields.Integer()
 
-    @api.depends("interest_line")
-    def _compute_line_count(self):
-        for moratorium in self:
-            moratorium.line_count = len(moratorium.interest_line.ids)
+    # @api.depends("interest_line")
+    # def _compute_line_count(self):
+    #     for moratorium in self:
+    #         moratorium.line_count = len(moratorium.interest_line.ids)
+    #
+    # @api.depends("partner_id")
+    # def _compute_currency_id(self):
+    #     for moratorium in self:
+    #         moratorium.currency_id = moratorium.partner_id.property_product_pricelist.currency_id.id
 
-    @api.depends("partner_id")
-    def _compute_currency_id(self):
-        for moratorium in self:
-            moratorium.currency_id = moratorium.partner_id.property_product_pricelist.currency_id.id
+    amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium")
 
-    amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium",
-                                              compute="_compute_amount_total_moratorium")
+    # @api.depends("interest_line")
+    # def _compute_amount_total_moratorium(self):
+    #     for moratorium in self:
+    #         moratorium.amount_total_moratorium = sum(line.amount_total_moratorium for line in self.interest_line)
+    #
+    # def _prapare_invoice(self):
+    #     line_vals = []
+    #     for line in self.interest_line:
+    #         line_vals.append([0, 0, line._prepare_invoice_line()])
+    #     vals = {
+    #         "partner_id": self.partner_id.id,
+    #         "invoice_date": self.at_date,
+    #         "company_id": self.company_id.id,
+    #         "invoice_line_ids": line_vals,
+    #         "type": "out_invoice",
+    #         "ji_is_moratorium": True
+    #     }
+    #     return vals
+    #
+    # def validate_create_invoice(self):
+    #     if len(self.interest_line.ids) == 0:
+    #         raise UserError(_("It does not contain overdue payments."))
 
-    @api.depends("interest_line")
-    def _compute_amount_total_moratorium(self):
-        for moratorium in self:
-            moratorium.amount_total_moratorium = sum(line.amount_total_moratorium for line in self.interest_line)
-
-    def _prapare_invoice(self):
-        line_vals = []
-        for line in self.interest_line:
-            line_vals.append([0, 0, line._prepare_invoice_line()])
-        vals = {
-            "partner_id": self.partner_id.id,
-            "invoice_date": self.at_date,
-            "company_id": self.company_id.id,
-            "invoice_line_ids": line_vals,
-            "type": "out_invoice",
-            "ji_is_moratorium": True
-        }
-        return vals
-
-    def validate_create_invoice(self):
-        if len(self.interest_line.ids) == 0:
-            raise UserError(_("It does not contain overdue payments."))
-
-    def create_invoice(self):
-        self.ensure_one()
-        self.validate_create_invoice()
-        if not self.invoice_id.id:
-            vals = self._prapare_invoice()
-            invoice = self.env["account.move"].create(vals)
-            self.write({"invoice_id": invoice.id})
-
-        self.write({"state": "invoiced"})
-
-    def action_view_invoice(self):
-        self.ensure_one()
-        # self.invoice_id.write({"ji_is_moratorium": True})
-        return {
-            'name': _('Customer Invoice Moratorium'),
-            'view_mode': 'form',
-            'view_id': self.env.ref('account.view_move_form').id,
-            'res_model': 'account.move',
-            'context': "{'type':'out_invoice'}",
-            'type': 'ir.actions.act_window',
-            'res_id': self.invoice_id.id,
-        }
-
-    def name_get(self):
-        res = []
-        for moratorium in self:
-            res.append((moratorium.id, moratorium.partner_id.name))
-        return res
+    # def create_invoice(self):
+    #     self.ensure_one()
+    #     self.validate_create_invoice()
+    #     if not self.invoice_id.id:
+    #         vals = self._prapare_invoice()
+    #         invoice = self.env["account.move"].create(vals)
+    #         self.write({"invoice_id": invoice.id})
+    #
+    #     self.write({"state": "invoiced"})
+    #
+    # def action_view_invoice(self):
+    #     self.ensure_one()
+    #     # self.invoice_id.write({"ji_is_moratorium": True})
+    #     return {
+    #         'name': _('Customer Invoice Moratorium'),
+    #         'view_mode': 'form',
+    #         'view_id': self.env.ref('account.view_move_form').id,
+    #         'res_model': 'account.move',
+    #         'context': "{'type':'out_invoice'}",
+    #         'type': 'ir.actions.act_window',
+    #         'res_id': self.invoice_id.id,
+    #     }
+    #
+    # def name_get(self):
+    #     res = []
+    #     for moratorium in self:
+    #         res.append((moratorium.id, moratorium.partner_id.name))
+    #     return res
 
     partner_id = fields.Many2one(comodel_name="res.partner", string="Customer")
     company_id = fields.Many2one(comodel_name="res.company", string="Company", default=lambda self: self.env.company)
@@ -105,39 +104,39 @@ class JiMoratoriumInterest(models.Model):
 
     percent_moratorium = fields.Float(related="company_id.ji_percent_moratorium", string="Percent Moratorium")
 
-    def validate_regenerate_aml(self):
-        if not self.partner_id.id:
-            raise UserError(_("Client not selected"))
-
-    def get_exist_payments(self):
-        moratoriums = self.env['ji.moratorium.interest'].search(
-            [('partner_id', '=', self.partner_id.id), ('state_invoice', 'not in', ['draft', 'cancel'])])
-        return moratoriums.interest_line.mapped('unreconciled_aml').ids
-
-    def action_regenerate_unreconciled_aml_dues(self):
-        self.validate_regenerate_aml()
-        companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
-        if len(companies.ids) == 0:
-            raise UserError(_('No Apply for this companies'))
-        partners = []
-        for company in companies:
-            partners_slow_payer = self.partner_id.get_partners_slow_payer_moratorium(company)
-            for p in partners_slow_payer:
-                number_slow_payer, amls = p.get_number_slow_payer_cron(company)
-                partners.append({"partner": p, "amls": amls})
-            if len(partners) > 0:
-                # self.interest_line.unlink()
-                for partner in partners:
-                    notification_lines = []
-                    for aml in partner["amls"]:
-                        if aml.id not in self.get_exist_payments():
-                            notification_lines.append([0, 0, {
-                                "name": len(partner["amls"]),
-                                "unreconciled_aml": aml.id,
-                                "moratorium_id": aml.move_id.id
-                            }])
-                # raise UserError(_(notification_lines))
-                self.write({"interest_line": notification_lines})
+    # def validate_regenerate_aml(self):
+    #     if not self.partner_id.id:
+    #         raise UserError(_("Client not selected"))
+    #
+    # def get_exist_payments(self):
+    #     moratoriums = self.env['ji.moratorium.interest'].search(
+    #         [('partner_id', '=', self.partner_id.id), ('state_invoice', 'not in', ['draft', 'cancel'])])
+    #     return moratoriums.interest_line.mapped('unreconciled_aml').ids
+    #
+    # def action_regenerate_unreconciled_aml_dues(self):
+    #     self.validate_regenerate_aml()
+    #     companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
+    #     if len(companies.ids) == 0:
+    #         raise UserError(_('No Apply for this companies'))
+    #     partners = []
+    #     for company in companies:
+    #         partners_slow_payer = self.partner_id.get_partners_slow_payer_moratorium(company)
+    #         for p in partners_slow_payer:
+    #             number_slow_payer, amls = p.get_number_slow_payer_cron(company)
+    #             partners.append({"partner": p, "amls": amls})
+    #         if len(partners) > 0:
+    #             # self.interest_line.unlink()
+    #             for partner in partners:
+    #                 notification_lines = []
+    #                 for aml in partner["amls"]:
+    #                     if aml.id not in self.get_exist_payments():
+    #                         notification_lines.append([0, 0, {
+    #                             "name": len(partner["amls"]),
+    #                             "unreconciled_aml": aml.id,
+    #                             "moratorium_id": aml.move_id.id
+    #                         }])
+    #             # raise UserError(_(notification_lines))
+    #             self.write({"interest_line": notification_lines})
 
 class JiMoratoriumInterestLine(models.Model):
     _name = "ji.moratorium.interest.line"

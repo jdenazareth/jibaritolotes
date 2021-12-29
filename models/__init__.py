@@ -3,7 +3,7 @@ from . import notification_slow_payer
 
 from . import estados
 from . import campos_dinamicos
-from . import moratorium_interest
+# from . import moratorium_interest
 from . import res_company
 from . import res_config_settings
 #from . import account_followup_report
