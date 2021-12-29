@@ -19,7 +19,7 @@
                     <p align="right">Del día __________</p>
                     <p align="right">Del mes __________</p>
                     <p align="right">Del año __________</p>
-                    <p align="right"><strong>Se hace entrega POSESIÓN del lote número</strong> <span t-field="p.product_id.x_studio_lote"/></p>
+                    <p align="right"><strong>Se hace POSESIÓN del lote número</strong> <span t-field="p.product_id.x_studio_lote"/></p>
                     <p align="right"><strong>De la manzana</strong> <span t-field="p.product_id.x_studio_manzana" /></p>
                     <p align="right"><strong>En la calle</strong> <span t-field="p.product_id.x_studio_calle" /></p>
                     <p align="right">De la colonia Vista Bella.</p>
@@ -37,9 +37,9 @@
                         <div class="row">
                             <div class="col-6">
                                 <p align="center">_______________________</p>
-                                <p align="center">Por la propiedad</p>
+                                <p align="center">Por la copropiedad</p>
                                 <div style="width: 80% !important; margin-left: 90px;">
-                                    <p>Nombre: <span t-field="doc.invoice_user_id"/></p>
+                                    <p>Entrega:________________________</p>
                                 </div>
                             </div>
 
@@ -47,7 +47,7 @@
                                 <p align="center">_______________________</p>
                                 <p align="center">Titular</p>
                                 <div style="width: 80% !important; margin-left: 90px;">
-                                    <p>Nombre: <span t-field="doc.partner_id"/></p>
+                                    <p>Recibe: <span t-field="doc.partner_id"/></p>
                                 </div>
                             </div>
                         </div>
