@@ -15,10 +15,8 @@
                <p align="right">Tijuana, B.C.  <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/> </p>
 
                <!-- Estimado(a) -->
-               <p>Estimado señor(a):<span>&#160;</span> <span t-field="doc.partner_id.name"/><br/>
-                &#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160; &#160; &#160; &#160; &#160; &#160; &#160;&#160;&#160;&#160;&#160;&#160;P r e s e n t e
-                </p>
-               
+               <p>Estimado señor(a):<span>&#160;</span> <span t-field="doc.partner_id.name"/></p>
+               <p style="font-size: 14px !important;">P r e s e n t e .</p>
                <br/>
 
                <!-- Texto -->
