@@ -8,16 +8,16 @@
                 <form string="Generar Moratorios">
 
                     <p class="oe_grey">
-                        Revise el total de moratorio a pagar, este puede ser cambiado
+                        Seleccione Las Fechas a Generar el Reporte
                     </p>
                     <group>
                         <group>
-                            <field name="total_moratorium"/>
-                            <field name="mes_apagar"/>
-                            <field name="factura_id"/>
+                            <field name="date_i"/>
+                            <field name="date_f"/>
+
                         </group>
                         <group>
-                            <field name="name" placeholder="Title" />
+
                         </group>
                     </group>
                     <footer>
@@ -35,7 +35,7 @@
         </record>
 
         <record id="Moraasiento_act_window" model="ir.actions.act_window">
-            <field name="name">Generar Asiento</field>
+            <field name="name">Generar Reporte de Gastos</field>
 
             <field name="res_model">ji.mora.asiento</field>
             <field name="view_mode">form</field>
@@ -46,7 +46,7 @@
         <menuitem id="ji_mora_asiento_menu"
               sequence="5"
               groups="jibaritolotes.group_ji_apply_developments"
-              name="Generar Asiento Mora"
+              name="Generar Reporte de Gastos"
               parent="account.menu_finance_reports"
               action="Moraasiento_act_window"/>
 

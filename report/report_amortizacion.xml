@@ -17,9 +17,9 @@
         <template id="jibaritolotes.report_tabpay">
             <t t-call="web.html_container">
                     <t t-call="jibaritolotes.internal_layaut_ji">
-						<t t-call-assets="web.report_assets_common" t-js="false" />
-						<t t-call-assets="web.assets_common" t-css="false" />
-						<t t-call-assets="web.report_assets_common" t-css="false" />
+<!--						<t t-call-assets="web.report_assets_common" t-js="false" />-->
+<!--						<t t-call-assets="web.assets_common" t-css="false" />-->
+<!--						<t t-call-assets="web.report_assets_common" t-css="false" />-->
                         <div class="page">
 							<div class="row">
 
@@ -45,10 +45,10 @@
 											<t t-foreach="acco" t-as="ac">
 												<tr>
 													<td> <t t-esc="ac['number']" /></td>
-													<td> <t t-esc="ac['date_f']" /></td>
+													<td> <t t-esc="ac['date_f']" t-options='{"format": "d-m-y"}' /></td>
 													<td> 0</td>
-													<td> <t t-esc="ac['debit']" /></td>
-													<td> <t t-esc="ac['total']" /></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['debit'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 
 												</tr>
 											</t>

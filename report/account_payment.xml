@@ -49,7 +49,7 @@
                             <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
                             <p align="right"><strong>Interés <span t-field="o.ji_moratorio"/></strong></p>
                             <p align="right"><strong>Capital <span t-field="o.amount"/></strong></p>
-                            <p align="right"><strong>Total $<span t-field="o.total_amount"/></strong></p>
+                            <p align="right"><strong>Total <span t-field="o.total_amount"/></strong></p>
                             <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
                         </t>
                     </div>
@@ -60,7 +60,7 @@
     <report
             id="ji_report_payment_receipt"
             model="account.payment"
-            string="Recibo de pago de anticipo"
+            string="Recibo de pago de Mensualidad"
             report_type="qweb-html"
             name="jibaritolotes.ji_report_account_payment"
             file="jibaritolotes.ji_report_account_payment"

@@ -18,6 +18,7 @@
                 </button>
         </xpath>
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
+                <field name="id" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_sequence_payments" widget="handle" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_number" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_term_line_id" groups="jibaritolotes.group_ji_migration"/>
@@ -29,6 +30,7 @@
             <xpath expr="//field[@name='line_ids']" position="after">
                 <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibaritolotes.group_ji_migration"
                         type="object" class="btn-primary"/>
+                <button name="recompute_payment_terms_line" string="Prueba payments" type="object" class="btn-primary"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page name="ji_mora" string="Moratorios" groups="jibaritolotes.group_ji_apply_developments">
@@ -125,6 +127,18 @@
                 <field name="last_payment" attrs="{'invisible':True}"/>
             </xpath>
 
+        </field>
+    </record>
+
+    <record id="action_bulk_account_move_confirm" model="ir.actions.server">
+        <field name="name">Order Confirm</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">
+            for rec in records:
+            rec.action_confirm()
         </field>
     </record>
 
