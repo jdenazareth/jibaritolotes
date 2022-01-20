@@ -58,6 +58,7 @@
         "report/account_report.xml",
         "report/account_payment.xml",
         "report/report_amortizacion.xml",
+        "report/report_amortizacionv2.xml",
         "report/report_gastos.xml",
         "views/hr_employee.xml",
         "wizard/asiento_mora.xml",
