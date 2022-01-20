@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
+from odoo.tools import safe_eval
 import json
 
 class AccountMove(models.Model):
@@ -24,6 +25,28 @@ class AccountMove(models.Model):
     def action_confirm(self):
         for sales in self:
             sales.action_post()
+
+    def open_payments(self):
+        self.ensure_one()
+        invoice_payments_widget = json.loads(self.invoice_payments_widget)
+        payment_ids = []
+        for item in invoice_payments_widget["content"]:
+            payment_ids.append(item["account_payment_id"])
+
+        if self.type == "out_invoice":
+            action_ref = "account.action_account_payments_payable"
+        else:
+            action_ref = "account.action_account_payments"
+        [action] = self.env.ref(action_ref).read()
+        action["context"] = dict(safe_eval(action.get("context")))
+
+        if len(payment_ids) > 1:
+            action["domain"] = [("id", "in", payment_ids)]
+        elif payment_ids:
+            action["views"] = [(self.env.ref("account.view_account_payment_form").id, "form")]
+            action["res_id"] = payment_ids[0]
+        return action
+
     def _compute_paymentlast(self):
         for res in self:
             pagos = self.env["account.payment"].search([('invoice_ids', '=', res.id)])
@@ -70,10 +93,12 @@ class AccountMove(models.Model):
             compaRecords=[]
             compani = res.company_id
             tov = res.amount_untaxed
+            pagov = 1
+            ofpa = 0
             for lin in res.line_ids:
                 if lin.debit > 0:
                     tov = tov - lin.debit
-                    if lin.ji_number.find('A') != 0:
+                    if lin.ji_number.find('A') != 0 and lin.debit >=1:
                         account.append({
                             "number": lin.ji_number.replace('/', ' de '),
                             "date_f": lin.date_maturity.strftime('%d-%m-%y'),
@@ -81,6 +106,8 @@ class AccountMove(models.Model):
                             "credit": lin.credit,
                             "total" : tov
                         })
+                        pagov = pagov + 1
+                        ofpa = pagov
 
             move.append({
                 "name": res.name,
@@ -104,12 +131,117 @@ class AccountMove(models.Model):
 
             data = {
                 'move_id': move,
+                'ofpay': ofpa,
                 'acco': account,
                 'comapany': compaRecords,
             }
             return self.env.ref('jibaritolotes.report_amortizacion').report_action(self, data=data)
             # raise UserError(_(data))
 
+    @api.depends("line_ids")
+    def get_reporte_amoritizacionv2(self):
+        for res in self:
+            move = []
+            account = []
+            name = res.name
+            pagos = self.env["account.payment"].search([('communication', '=', name)], order='id asc')
+            lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
+            compaRecords = []
+            compani = res.company_id
+            tov = res.amount_untaxed
+            sald_ant=0
+            cont=0
+
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('mejoras'),
+                    'message': lines,
+                    'type': 'success',  # types: success,warning,danger,info
+                    'sticky': True,  # True/False will display for few seconds if false
+                },
+            }
+            # return notification
+            pagov = 1
+            ofpa = ""
+            for lin in lines:
+                if lin.debit > 0:
+                    co_pay = 1
+                    mora = 0
+                    impo = 0 + sald_ant
+                    cont = cont + 1
+                    if lin.ji_number.find('A') == 0:
+                        for pay in pagos:
+                            if co_pay == cont:
+                                mora = pay.ji_moratorio
+                                impo = pay.amount
+                            co_pay = co_pay + 1
+                        tov = tov - impo
+                        # account.append({
+                        #     "number": lin.ji_number.replace('/', ' de '),
+                        #     "date_f": lin.date_maturity.strftime('%d-%m-%y'),
+                        #     "mora": mora,
+                        #     "impo": impo,
+                        #     "debit": lin.debit,
+                        #     "credit": lin.credit,
+                        #     "total": tov
+                        # })
+
+                    if lin.ji_number.find('A') != 0 and lin.debit >=1:
+                        tov = tov - impo
+                        for pay in pagos:
+                            if co_pay == cont:
+                                mora = pay.ji_moratorio
+                                impo = pay.amount
+
+                            co_pay = co_pay + 1
+                        if impo > lin.debit:
+                            sald_ant = impo - lin.debit
+                            impo = lin.debit
+                        else:
+                            sald_ant = 0
+                        account.append({
+                            "number": pagov ,
+                            "date_f": lin.date_maturity.strftime('%d-%m-%y'),
+                            "mora": mora,
+                            "impo": impo,
+                            "debit": lin.debit,
+                            "credit": lin.credit,
+                            "total": tov
+                        })
+                        pagov = pagov + 1
+                        ofpa =" de "+str(pagov)
+
+
+            move.append({
+                "name": res.name,
+                "cliente": res.partner_id.name,
+                "date": res.invoice_date,
+                "company": res.invoice_date
+            })
+
+            compaRecords.append({
+                'name': compani.name,
+                'zip': compani.zip,
+                'street': compani.street,
+                'street2': compani.street2,
+                'city': compani.city,
+                'state_id': compani.state_id.name,
+                'country_id': compani.country_id.name,
+                'phone': compani.phone,
+                'id': compani.id,
+                'website': compani.website,
+            })
+
+            data = {
+                'move_id': move,
+                'ofpay': ofpa,
+                'acco': account,
+                'comapany': compaRecords,
+            }
+            return self.env.ref('jibaritolotes.report_amortizacionv2').report_action(self, data=data)
+            # raise UserError(_(data))
     @api.model
     def update_computes(self):
         for move in self.search([('id', '=', 19154)]):

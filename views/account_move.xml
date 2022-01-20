@@ -11,11 +11,25 @@
 <!--                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>-->
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="get_reporte_amoritizacionv2" class="oe_stat_button" icon="fa-file-text"
+                            string="Tabla de amortizacion"  type="object" groups="jibaritolotes.group_ji_migration"/>
                 <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text"
                             string="Calendario de pagos"  type="object" groups="jibaritolotes.group_ji_migration"/>
                 <button name="action_regenerate_unreconciled_aml_dues" class="oe_stat_button" icon="fa-list" type="object" groups="jibaritolotes.group_ji_migration" >
                     Generar Moratorio
                 </button>
+                <button
+                    type="object"
+                    class="oe_stat_button"
+                    attrs="{'invisible':[('type', '=', 'entry')]}"
+                    name="open_payments"
+                    icon="fa-usd"
+                >
+                        <div class="o_field_widget o_stat_info">
+
+                            <span class="o_stat_text">Pagos</span>
+                        </div>
+                    </button>
         </xpath>
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
                 <field name="id" groups="jibaritolotes.group_ji_apply_developments"/>
