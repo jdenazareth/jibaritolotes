@@ -189,7 +189,7 @@ class AccountMove(models.Model):
                         # })
 
                     if lin.ji_number.find('A') != 0 and lin.debit >=1:
-                        tov = tov - impo
+
                         for pay in pagos:
                             if co_pay == cont:
                                 mora = pay.ji_moratorio
@@ -210,6 +210,7 @@ class AccountMove(models.Model):
                             "credit": lin.credit,
                             "total": tov
                         })
+                        tov = tov - impo
                         pagov = pagov + 1
                         ofpa =" de "+str(pagov)
 
