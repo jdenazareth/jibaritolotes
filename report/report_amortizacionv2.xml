@@ -10,7 +10,7 @@
                 file="jibaritolotes.report_tabpayv2"
                 report_type="qweb-html"
 				menu = "False"
-				print_report_name = "'Tabla de Pagos' % (object.move_id.cliente)"
+				print_report_name = "'Tabla de amortizacion' % (object.move_id.cliente)"
 
 		/>
 
@@ -25,7 +25,13 @@
 
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
-								<div class="col-xs-12" aling="center">
+								<div class="col-sm-6">
+									<p>Contrato: <t t-esc="contrato" /></p>
+									<p>Cliente: <t t-esc="client" /></p>
+									<p><t t-esc="produc" /></p>
+									<p><t t-esc="date" /></p>
+								</div>
+								<div class="col-sm-4" aling="center">
 									<h3>Tabla de amortizacion</h3>
 								</div>
 							</div>
@@ -34,10 +40,37 @@
 									<table class="table mt16">
 										<thead class="thead-dark">
 											<tr>
-												<th>Mensualidad / anticipos</th>
+												<th>Anticipos</th>
+												<th>Pago</th>
+												<th>Interes</th>
+												<th>Pago a Capital</th>
+												<th>Pago real</th>
+												<th>Saldo</th>
+											</tr>
+										</thead>
+										<tbody>
+											<t t-foreach="anti" t-as="ac">
+												<tr>
+													<td> <t t-esc="ac['number']" /> </td>
+													<td> <t t-esc="ac['date_f']" /></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+												</tr>
+											</t>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-sm-12">
+									<table class="table mt16">
+										<thead class="thead-dark">
+											<tr>
+												<th>Mensualidad</th>
 												<th>Vencimiento</th>
 												<th>Interes</th>
 												<th>Pago a Capital</th>
+												<th>Pago real</th>
 												<th>Saldo Insoluto</th>
 											</tr>
 										</thead>
@@ -48,8 +81,8 @@
 													<td> <t t-esc="ac['date_f']" /></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-
 												</tr>
 											</t>
 										</tbody>

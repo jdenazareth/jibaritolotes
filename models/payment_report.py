@@ -17,7 +17,9 @@ class ReportePayment(models.Model):
     total_factura = fields.Float(string="Total Facturas", compute="get_origin")
     total_amount = fields.Monetary(string="Total", compute="get_text_amount_total")
     def get_text_amount_total(self):
-        totall = self.ji_moratorio + self.amount
+        totall = 0
+        for rec in self:
+            totall = rec.ji_moratorio + rec.amount
         self.total_amount = totall
         self.cantidad_letra = num2words(totall, lang='es').upper()
 

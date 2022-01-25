@@ -92,16 +92,28 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
-
     x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
-
     x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", compute="_compute_ji_product_information_form")
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", compute="_compute_ji_product_information_form")
-    estado_producto = fields.Many2one('estados.g', string='Estado de Producto')
-    x_studio_contrato = fields.Char(string="Contrato")
+    estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
+    x_studio_contrato = fields.Char(string="Contrato" , compute="state_product")
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
+
+    @api.depends("state")
+    def state_product(self):
+        for line in self:
+            cont = ""
+            if line.invoice_ids:
+                for fact in line.invoice_ids:
+                    cont = fact.name
+                line.estado_producto = line.order_line.product_id.estado_producto
+            elif line.state == "sale":
+                line.estado_producto = 13
+            else:
+                line.estado_producto = 21
+            line.x_studio_contrato = cont
 
     @api.depends("order_line")
     def _compute_ji_product_information_form(self):
@@ -112,7 +124,6 @@ class SaleOrder(models.Model):
                 line.x_studio_calle = line.order_line.product_id.x_studio_calle
                 if line.state == "sale":
                     line.order_line.product_id.estado_producto = line.estado_producto
-
         except Exception as e:
             raise UserError("No es posible agregar otro producto a la línea de pedido.")
 
@@ -121,16 +132,19 @@ class SaleOrder(models.Model):
         for order in self:
             order.order_line.product_id.estado_producto = order.estado_producto
 
-
-
     @api.model
     def get_name_month(self, month):
         return month_name(month)
 
     def ji_get_name_product(self):
         if self.order_line:
-            _name = self.order_line[0].name or ''
-            return _name.upper()
+            dat = ""
+            for line in self:
+                dat = "MANZANA " + line.x_studio_manzana.name + " LOTE " + line.x_studio_lote.name
+            # _name =
+            # self.order_line.update_computes.name or ''
+            # return _name.upper()
+            return dat
         return ""
 
     def ji_get_area(self):
@@ -140,7 +154,7 @@ class SaleOrder(models.Model):
 
     def ji_get_street_address(self):
         if self.order_line:
-            ji_street = self.order_line[0].ji_street or ''
+            ji_street = self.order_line[0].product_id.x_studio_calle.name or ''
             return ji_street.upper()
         return ""
 

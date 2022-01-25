@@ -14,4 +14,8 @@
         <field name="name">Group for Migration</field>
         <field name="category_id" ref="ji_category"/>
     </record>
+    <record id="group_ji_factura" model="res.groups">
+        <field name="name">Confirmar y Crear Factura</field>
+        <field name="category_id" ref="ji_category"/>
+    </record>
 </odoo>

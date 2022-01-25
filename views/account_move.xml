@@ -5,12 +5,25 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="inside">
-
+            <xpath expr="//header" position="before">
+                 <xpath expr="//button[@name='action_confirm']" position="attributes">
+                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>
+                 </xpath>
+                <xpath expr="//button[@name='456']" position="attributes">
+                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>
+                </xpath>
 <!--                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"-->
 <!--                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>-->
             </xpath>
+<!--            <xpath expr="//button[@name='456']" position="attributes">-->
+<!--                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>-->
+<!--            </xpath>-->
+
             <xpath expr="//div[@name='button_box']" position="inside">
+                <button  class="oe_stat_button" icon="fa-file-text"
+                         name="printcontratoAction"
+                          attrs="{'invisible':[('estado_producto', '!=', 12)]}"
+                            string="Contrato"/>
                 <button name="get_reporte_amoritizacionv2" class="oe_stat_button" icon="fa-file-text"
                             string="Tabla de amortizacion"  type="object" groups="jibaritolotes.group_ji_migration"/>
                 <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text"
@@ -103,6 +116,7 @@
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//group" position="inside">
+
                 <filter string="Por Comercial" name="ji_partner_contract"
                         context="{'group_by':'ji_partner_contract'}"
                         groups="jibaritolotes.group_ji_apply_developments"/>
@@ -137,6 +151,7 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='invoice_origin']" position="after">
+                <field name="estado_producto"></field>
                 <field name="cliente_anterior" />
                 <field name="last_payment" attrs="{'invisible':True}"/>
             </xpath>
