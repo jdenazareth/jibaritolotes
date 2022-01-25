@@ -35,6 +35,8 @@ class ResPartner(models.Model):
         return {}
     _constraints = [(is_curp, 'Error: Invalid curp', ['curp']), ]
 
+    ji_name_americ = fields.Char(string="Nombre Americano")
+    ji_hijos = fields.Text(string="Hijos")
     ji_civil_status = fields.Char(string="Civil Status")
     ji_occupation = fields.Char(string="Occupation")
     ji_spouse = fields.Char(string="Spouse")

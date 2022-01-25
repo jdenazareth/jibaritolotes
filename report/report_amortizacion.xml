@@ -10,7 +10,7 @@
                 file="jibaritolotes.report_tabpay"
                 report_type="qweb-html"
 				menu = "False"
-				print_report_name = "'Tabla de Pagos' % (object.move_id.cliente)"
+				print_report_name = "'Calendario de Pagos' % (object.move_id.cliente)"
 
 		/>
 
@@ -38,11 +38,7 @@
 
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
-								<div class="mb-4 mt-4" style="width: 100% !important;" aling="center">
-									<h3>Tabla de amortizacion</h3>
-									<hr/>
-								</div>
-							</div>
+							
 							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<div class="col-sm-12">
 									<table class="table mt16">
@@ -50,7 +46,6 @@
 											<tr>
 												<th>Mensualidad</th>
 												<th>Vencimiento</th>
-												<th>Interes</th>
 												<th>Total a pagar</th>
 												<th>Saldo Insoluto</th>
 											</tr>
@@ -60,7 +55,7 @@
 												<tr>
 													<td> <t t-esc="ac['number']" /></td>
 													<td> <t t-esc="ac['date_f']" /></td>
-													<td> 0</td>
+
 													<td> <t t-esc="'{0:,.2f}'.format(ac['debit'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 
@@ -71,6 +66,7 @@
 								</div>
 							</div>
                         </div>
+						</div>
                     </t>
             </t>
         </template>

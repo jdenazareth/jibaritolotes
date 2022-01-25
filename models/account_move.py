@@ -1,8 +1,92 @@
 # -*- coding: utf-8 -*-
-from odoo import api, models, fields, _
+import datetime
+import functools
+import copy
+import logging
+_logger = logging.getLogger(__name__)
+from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError
 from odoo.tools import safe_eval
+import dateutil.relativedelta as relativedelta
+from werkzeug import urls
+from num2words import num2words
 import json
+
+try:
+    # We use a jinja2 sandboxed environment to render mako templates.
+    # Note that the rendering does not cover all the mako syntax, in particular
+    # arbitrary Python statements are not accepted, and not all expressions are
+    # allowed: only "public" attributes (not starting with '_') of objects may
+    # be accessed.
+    # This is done on purpose: it prevents incidental or malicious execution of
+    # Python code that may break the security of the server.
+    from jinja2.sandbox import SandboxedEnvironment
+
+    mako_template_env = SandboxedEnvironment(
+        block_start_string="<%",
+        block_end_string="%>",
+        variable_start_string="${",
+        variable_end_string="}",
+        comment_start_string="<%doc>",
+        comment_end_string="</%doc>",
+        line_statement_prefix="%",
+        line_comment_prefix="##",
+        trim_blocks=True,  # do not output newline after blocks
+        autoescape=True,  # XML/HTML automatic escaping
+    )
+    mako_template_env.globals.update({
+        'str': str,
+        'quote': urls.url_quote,
+        'urlencode': urls.url_encode,
+        'datetime': tools.wrap_module(datetime, []),
+        'len': len,
+        'abs': abs,
+        'min': min,
+        'max': max,
+        'sum': sum,
+        'filter': filter,
+        'reduce': functools.reduce,
+        'map': map,
+        'round': round,
+
+        # dateutil.relativedelta is an old-style class and cannot be directly
+        # instanciated wihtin a jinja2 expression, so a lambda "proxy" is
+        # is needed, apparently.
+        'relativedelta': lambda *a, **kw: relativedelta.relativedelta(*a, **kw),
+    })
+    mako_safe_template_env = copy.copy(mako_template_env)
+    mako_safe_template_env.autoescape = False
+except ImportError:
+    _logger.warning("jinja2 not available, templating features will not work!")
+
+
+def month_name(number):
+    if number == 0:
+        return _('No Date Selected')
+    if number == 1:
+        return _('January')
+    elif number == 2:
+        return _('February')
+    elif number == 3:
+        return _('March')
+    elif number == 4:
+        return _('April')
+    elif number == 5:
+        return _('May')
+    elif number == 6:
+        return _('June')
+    elif number == 7:
+        return _('July')
+    elif number == 8:
+        return _('August')
+    elif number == 9:
+        return _('September')
+    elif number == 10:
+        return _('October')
+    elif number == 11:
+        return _('November')
+    elif number == 12:
+        return _('December')
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -18,9 +102,153 @@ class AccountMove(models.Model):
     fecha_entrega = fields.Datetime(string="Fecha de entrega")
     mes_entrega = fields.Char(string="Mes")
     last_payment_date = fields.Date(string="Ultima fecha de pago", compute="_compute_paymentlast")
+    last_payment_anticipo = fields.Date(string="Ultima fecha de pago Anticipo", compute="state_product")
     last_payment_name = fields.Char(string="Recivo", compute="_compute_paymentlast")
     last_payment = fields.Float(string="Ultimo Pago", compute="_compute_paymentlast")
     motarorio_pay = fields.Monetary(string="Moratorio Pagados", compute="_compute_paymentlast")
+    estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
+
+    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", related="invoice_line_ids.product_id.x_studio_manzana")
+    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", related="invoice_line_ids.product_id.x_studio_lote")
+    x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", related="invoice_line_ids.product_id.x_studio_calle")
+
+
+    def printcontratoAction(self):
+        return self.env.ref('jibaritolotes.action_report_sale_order_contract').report_action(self)
+    def get_amount_advance_payment(self):
+        if not self.invoice_payment_term_id.ji_advance_payment:
+            return ""
+        if not self.amount_total:
+            return ""
+        return '{:,.2f}'.format(self.invoice_payment_term_id.ji_advance_payment / 100 * self.amount_total)
+
+    def get_text_amount_advance_payment(self):
+        if "" == self.get_amount_advance_payment():
+            return ""
+        _amount = num2words((self.invoice_payment_term_id.ji_advance_payment / 100 * self.amount_total), lang='es').upper()
+        _amount_text = "SON: " + (_amount or '') + " DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA"
+        return _amount_text
+
+    def get_amount_monthly(self):
+        amount_monthly = 0.00
+        for li in self:
+            for line in li.line_ids:
+                if line.ji_term_line_id.ji_type == 'monthly_payments':
+                    amount_monthly = line.debit
+                    break
+        return amount_monthly
+
+    def get_amount_monthly_separator(self):
+        amount_string = '{:,.2f}'.format(self.get_amount_monthly())
+        return amount_string
+    def get_text_amount_monthly(self):
+        _amount = num2words(self.get_amount_monthly(), lang='es').upper()
+        _amount_text = "SON: " + (_amount or '') + " DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA"
+        return _amount_text
+
+    def ji_render_template(self, template_txt):
+        self.ensure_one()
+        mako_env = mako_safe_template_env if self.env.context.get('safe') else mako_template_env
+        template = mako_env.from_string(tools.ustr(template_txt))
+        variables = {
+            "object": self
+        }
+        render_result = template.render(variables)
+        return render_result
+    def get_amount_with_separators(self):
+        # import locale
+        # locale.setlocale(locale.LC_ALL, self.env.user.lang)
+        # amount_string = locale.format_string("%d", self.amount_total, grouping=True)
+        amount_string = '{:,.2f}'.format(self.amount_total)
+        return amount_string
+
+    def get_amount_total_text(self):
+        _amount = num2words(self.amount_total, lang='es').upper()
+        _amount_text = "SON: " + (_amount or '') + " DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA"
+        return _amount_text
+    def ji_day(self):
+        _today = self.last_payment_anticipo
+        return _today
+
+    def ji_month_name(self):
+        _today = self.last_payment_anticipo
+        return month_name(_today.month)
+
+    def get_last_payment_move(self):
+        if self.last_payment_date:
+            line_ids = self.invoice_ids[0].mapped('line_ids').sorted(lambda l: l.ji_sequence_payments, reverse=True)
+            if line_ids.ids:
+                return line_ids[0]
+        return False
+
+    def ji_get_last_date_payment_text(self):
+        for move in self:
+            if move.last_payment_date:
+                _today = move.last_payment_date
+                return "el día " + str(_today.day) + " de " + str(month_name(_today.month)) + " del " + str(_today.year)
+        return ""
+    def ji_get_name_product(self):
+            dat = ""
+            for line in self:
+                dat = "MANZANA " + line.x_studio_manzana.name + " LOTE " + line.x_studio_lote.name
+            # _name =
+            # self.order_line.update_computes.name or ''
+            # return _name.upper()
+            return dat
+
+    def ji_get_area(self):
+        if not self.invoice_line_ids.ids:
+            return ""
+        dat = ""
+        for line in self:
+            dat = " METROS CUADRADOS, DE LA CALLE, " + line.x_studio_calle.name
+        return self.invoice_line_ids[0].quantity
+
+    def ji_get_street(self):
+        for line in self:
+            ji_street = ""
+            for stre in line.x_studio_calle:
+                ji_street = line.x_studio_calle.name
+            return ji_street.upper()
+
+    def ji_get_number_payments(self):
+        return self.payment_term_id.ji_number_quotation or ""
+
+    def ji_get_number_payments_advance_now(self):
+        return self.payment_term_id.get_number_payments_advance_now()
+
+    def ji_get_amount_month_payment(self):
+        percent = self.payment_term_id.get_percent_month_payments()
+        return (percent / 100) * self.amount_total
+
+    def ji_get_text_amount_month_payment(self):
+        return num2words(round(self.ji_get_amount_month_payment()), lang='es')
+
+    @api.depends("state")
+    def state_product(self):
+        for line in self:
+            pagos = self.env["account.payment"].search([('invoice_ids', '=', line.id),('x_studio_tipo_de_pago','=','Anticipo')], order='payment_date desc')
+            last_pay = fields.Date.today()
+            apar = line.amount_total - (line.amount_total * 0.10)
+            # 10000 <= 12056,18
+            if line.amount_residual <= apar:
+                line.estado_producto = 12
+                last_pay = pagos[0].payment_date
+            elif line.state == "cancel":
+                line.estado_producto = 22
+            else:
+                line.estado_producto = line.invoice_line_ids.product_id.estado_producto
+            line.last_payment_anticipo = last_pay
+            line._compute_ji_product_information_form()
+
+    @api.depends("invoice_line_ids")
+    def _compute_ji_product_information_form(self):
+        for line in self:
+            if line.state == "posted" and line.invoice_line_ids.product_id:
+                if line.estado_producto:
+                    line.invoice_line_ids.product_id.estado_producto = line.estado_producto
+
+
 
     def action_confirm(self):
         for sales in self:
@@ -89,13 +317,15 @@ class AccountMove(models.Model):
         for res in self:
             move = []
             account = []
-
+            today = fields.Date.today()
             compaRecords=[]
             compani = res.company_id
             tov = res.amount_untaxed
             pagov = 1
             ofpa = 0
-            for lin in res.line_ids:
+            lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
+
+            for lin in lines:
                 if lin.debit > 0:
                     tov = tov - lin.debit
                     if lin.ji_number.find('A') != 0 and lin.debit >=1:
@@ -130,6 +360,10 @@ class AccountMove(models.Model):
             })
 
             data = {
+                'client':res.partner_id.name,
+                'contrato': res.name,
+                'produc':"Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name + ", Calle" + res.x_studio_calle.name,
+                'date': str(today.day) + " de " + str(month_name(today.month)) + " del " + str(today.year),
                 'move_id': move,
                 'ofpay': ofpa,
                 'acco': account,
@@ -143,12 +377,18 @@ class AccountMove(models.Model):
         for res in self:
             move = []
             account = []
+            today = fields.Date.today()
+            anticipo = []
             name = res.name
             pagos = self.env["account.payment"].search([('communication', '=', name)], order='id asc')
             lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
+            pagosa = self.env["account.payment"].search([('invoice_ids', '=', res.id),('x_studio_tipo_de_pago','=','Anticipo')], order='payment_date asc')
+
             compaRecords = []
             compani = res.company_id
             tov = res.amount_untaxed
+            por = res.amount_untaxed * 0.1
+            anticp = por
             sald_ant=0
             cont=0
 
@@ -165,53 +405,73 @@ class AccountMove(models.Model):
             # return notification
             pagov = 1
             ofpa = ""
+            conan = 1
+            co_pay = 1
+            for pay in pagosa:
+                mora = pay.ji_moratorio
+                impo = pay.amount
+                fecpag = pay.payment_date.strftime('%d-%m-%y')
+                pimp = pay.ji_moratorio + pay.amount
+                anticp = anticp - impo
+                tov = tov - impo
+                anticipo.append({
+                    "number": "Anticipo " + str(conan),
+                    "date_f": fecpag,
+                    "mora": mora,
+                    "impo": impo,
+                    "total": anticp,
+                    "real": pimp,
+                })
+                conan = conan + 1
+                co_pay = co_pay + 1
             for lin in lines:
                 if lin.debit > 0:
-                    co_pay = 1
+
                     mora = 0
                     impo = 0 + sald_ant
                     cont = cont + 1
-                    if lin.ji_number.find('A') == 0:
-                        for pay in pagos:
-                            if co_pay == cont:
-                                mora = pay.ji_moratorio
-                                impo = pay.amount
-                            co_pay = co_pay + 1
-                        tov = tov - impo
-                        # account.append({
-                        #     "number": lin.ji_number.replace('/', ' de '),
-                        #     "date_f": lin.date_maturity.strftime('%d-%m-%y'),
-                        #     "mora": mora,
-                        #     "impo": impo,
-                        #     "debit": lin.debit,
-                        #     "credit": lin.credit,
-                        #     "total": tov
-                        # })
+                    pimp = 0.0
+                    # if lin.ji_number.find('A') == 0:
+                    #     fecpag=lin.date_maturity.strftime('%d-%m-%y')
+                    #     for pay in pagos:
+                    #         if co_pay == cont:
+                    #             mora = pay.ji_moratorio
+                    #             impo = pay.amount
+                    #             fecpag = pay.payment_date.strftime('%d-%m-%y')
+                    #             pimp = pay.ji_moratorio + pay.amount
+                    #         co_pay = co_pay + 1
+                    #     anticp = anticp - impo
+                    #     tov = tov - impo
+
 
                     if lin.ji_number.find('A') != 0 and lin.debit >=1:
-                        tov = tov - impo
+
                         for pay in pagos:
                             if co_pay == cont:
                                 mora = pay.ji_moratorio
                                 impo = pay.amount
+                                pimp = pay.ji_moratorio + pay.amount
 
                             co_pay = co_pay + 1
-                        if impo > lin.debit:
-                            sald_ant = impo - lin.debit
-                            impo = lin.debit
-                        else:
-                            sald_ant = 0
+                        # if impo > lin.debit:
+                        #     sald_ant = impo - lin.debit
+                        #     impo = lin.debit
+                        # else:
+                        #     sald_ant = 0
+                        tov = tov - impo
                         account.append({
-                            "number": pagov ,
+                            "number": pagov,
                             "date_f": lin.date_maturity.strftime('%d-%m-%y'),
                             "mora": mora,
                             "impo": impo,
                             "debit": lin.debit,
                             "credit": lin.credit,
-                            "total": tov
+                            "total": tov,
+                            "real": pimp,
                         })
-                        pagov = pagov + 1
+
                         ofpa =" de "+str(pagov)
+                        pagov = pagov + 1
 
 
             move.append({
@@ -235,9 +495,15 @@ class AccountMove(models.Model):
             })
 
             data = {
+                'client': res.partner_id.name,
+                'contrato': res.name,
+                'produc': "Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name + ", Calle " + res.x_studio_calle.name,
+                'date': str(today.day) + " de " + str(month_name(today.month)) + " del " + str(today.year),
+
                 'move_id': move,
                 'ofpay': ofpa,
                 'acco': account,
+                'anti': anticipo,
                 'comapany': compaRecords,
             }
             return self.env.ref('jibaritolotes.report_amortizacionv2').report_action(self, data=data)

@@ -7,11 +7,13 @@
         <field name="arch" type="xml">
             <field name="category_id" position="after" >
 
+                <field name="ji_name_americ" />
                 <field name="ji_civil_status" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_occupation" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_spouse" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_date_of_birth" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_place_of_birth" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_hijos" />
 
 
             </field>
