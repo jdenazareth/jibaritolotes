@@ -21,12 +21,26 @@
 <!--						<t t-call-assets="web.assets_common" t-css="false" />-->
 <!--						<t t-call-assets="web.report_assets_common" t-css="false" />-->
                         <div class="page">
+
+							<style>
+
+								h3{
+									text-align: center !important;
+									font-weight: normal !important;
+								}
+
+								tr:nth-child(even){
+									background: #ededed !important;
+								}
+							</style>
+
 							<div class="row">
 
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
-								<div class="col-xs-12" aling="center">
+								<div class="mb-4 mt-4" style="width: 100% !important;" aling="center">
 									<h3>Tabla de amortizacion</h3>
+									<hr/>
 								</div>
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
