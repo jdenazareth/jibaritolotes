@@ -233,7 +233,9 @@ class AccountMove(models.Model):
             # 10000 <= 12056,18
             if line.amount_residual <= apar:
                 line.estado_producto = 12
-                last_pay = pagos[0].payment_date
+                for pay in pagos:
+                    last_pay = pay.payment_date
+                    break
             elif line.state == "cancel":
                 line.estado_producto = 22
             else:
@@ -380,7 +382,7 @@ class AccountMove(models.Model):
             today = fields.Date.today()
             anticipo = []
             name = res.name
-            pagos = self.env["account.payment"].search([('communication', '=', name)], order='id asc')
+            pagos = self.env["account.payment"].search([('invoice_ids', '=', res.id),('x_studio_tipo_de_pago','!=','Anticipo')], order='payment_date asc')
             lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
             pagosa = self.env["account.payment"].search([('invoice_ids', '=', res.id),('x_studio_tipo_de_pago','=','Anticipo')], order='payment_date asc')
 
@@ -397,7 +399,7 @@ class AccountMove(models.Model):
                 'tag': 'display_notification',
                 'params': {
                     'title': ('mejoras'),
-                    'message': lines,
+                    'message': pagos,
                     'type': 'success',  # types: success,warning,danger,info
                     'sticky': True,  # True/False will display for few seconds if false
                 },
@@ -424,12 +426,16 @@ class AccountMove(models.Model):
                 })
                 conan = conan + 1
                 co_pay = co_pay + 1
+
+            co_pay = len(pagos)
+            sal_acom = 0.0
+            co = 0
             for lin in lines:
                 if lin.debit > 0:
 
                     mora = 0
                     impo = 0 + sald_ant
-                    cont = cont + 1
+
                     pimp = 0.0
                     # if lin.ji_number.find('A') == 0:
                     #     fecpag=lin.date_maturity.strftime('%d-%m-%y')
@@ -445,23 +451,39 @@ class AccountMove(models.Model):
 
 
                     if lin.ji_number.find('A') != 0 and lin.debit >=1:
-
+                        co2 = 0
+                        fecpag = ""
                         for pay in pagos:
-                            if co_pay == cont:
-                                mora = pay.ji_moratorio
-                                impo = pay.amount
-                                pimp = pay.ji_moratorio + pay.amount
+                            if co_pay > 0 and impo < lin.debit and co == cont and co == co2:
+                                fecpag = pay.payment_date.strftime('%d-%m-%y')
 
-                            co_pay = co_pay + 1
-                        # if impo > lin.debit:
-                        #     sald_ant = impo - lin.debit
-                        #     impo = lin.debit
-                        # else:
-                        #     sald_ant = 0
+                                impo = impo + pay.amount
+                                mora = mora + pay.ji_moratorio
+                                pimp = impo + mora - sald_ant
+                                co_pay = co_pay - 1
+                                if impo >= lin.debit:
+                                    co = co + 1
+                            elif co_pay > 0 and impo > lin.debit and co == cont and co == co2:
+                                fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                impo = impo + pay.amount
+                                mora = mora + pay.ji_moratorio
+                                pimp = impo + mora - sald_ant
+                                co_pay = co_pay - 1
+                                if impo >= lin.debit:
+                                    co = co + 1
+                            if co > co2:
+                                co2 = co2 + 1
+                        cont = cont + 1
+                        if impo > lin.debit:
+                            sald_ant = impo - lin.debit
+                            impo = lin.debit
+                        else:
+                            sald_ant = 0
                         tov = tov - impo
                         account.append({
                             "number": pagov,
                             "date_f": lin.date_maturity.strftime('%d-%m-%y'),
+                            "date_p": fecpag,
                             "mora": mora,
                             "impo": impo,
                             "debit": lin.debit,

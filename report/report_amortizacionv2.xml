@@ -32,7 +32,7 @@
 									<p><t t-esc="date" /></p>
 								</div>
 								<div class="col-sm-4" aling="center">
-									<h3>Tabla de amortizacion</h3>
+									<h3>Tabla de amortización</h3>
 								</div>
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
@@ -68,6 +68,7 @@
 											<tr>
 												<th>Mensualidad</th>
 												<th>Vencimiento</th>
+												<th>Fecha de pago</th>
 												<th>Interes</th>
 												<th>Pago a Capital</th>
 												<th>Pago real</th>
@@ -79,6 +80,7 @@
 												<tr>
 													<td> <t t-esc="ac['number']" /><t t-esc="ofpay" /> </td>
 													<td> <t t-esc="ac['date_f']" /></td>
+													<td> <t t-esc="ac['date_p']" /></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													<td> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
