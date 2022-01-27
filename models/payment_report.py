@@ -19,9 +19,8 @@ class ReportePayment(models.Model):
     def get_text_amount_total(self):
         totall = 0
         for rec in self:
-            totall = rec.ji_moratorio + rec.amount
-        self.total_amount = totall
-        self.cantidad_letra = num2words(totall, lang='es').upper()
+            rec.total_amount = rec.ji_moratorio + rec.amount
+            rec.cantidad_letra = num2words(totall, lang='es').upper()
 
     def get_origin(self):
         datos=self.env['account.move'].search([('name','=',self.communication)]) #consulta
