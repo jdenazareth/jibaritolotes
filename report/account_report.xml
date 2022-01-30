@@ -168,7 +168,7 @@
        id="report_comprobante_pago"
        model="account.payment"
        string="Comprobante de pago Mesualidad"
-       report_type="qweb-pdf"
+       report_type="qweb-html"
        name="jibaritolotes.report_comprobante_pago"
        file="jibaritolotes.report_comprobante_pago"
        print_report_name="'Comprobante de pago Mensualidad - %s' % (object.name).replace('/','')"/>

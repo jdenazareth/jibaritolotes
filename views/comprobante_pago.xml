@@ -4,7 +4,7 @@
         <t t-call="web.html_container">
         <t t-call="web.external_layout">
             <div class="page">
-                <h3 aling="center">Comprobante de Pago</h3>
+                <h3 aling="center">Comprobante de Pago Mensualidad</h3>
 
                 <p align="right">Tijuana, Baja California;<span t-field="doc.payment_date"/> </p>
                 <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.total_amount"/></p>
