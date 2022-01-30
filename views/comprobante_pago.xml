@@ -7,14 +7,46 @@
                 <h3 aling="center">Comprobante de Pago</h3>
 
                 <p align="right">Tijuana, Baja California;<span t-field="doc.payment_date"/> </p>
-                <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.amount"/></p>
+                <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.total_amount"/></p>
+                <p align="right"><strong>Mensualidad numero: </strong>_____________________________</p>
                 <t t-foreach="doc.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="p">
                     <br/>
 
-                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="doc.partner_id.name" />, 
-                        la cantidad de USD <span t-field="doc.amount"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), 
-                        por concepto de pago de la mensualidad del lote de terreno identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <spna t-field="p.product_id.x_studio_manzana"/> de la calle <span t-field="p.product_id.x_studio_calle"/>, que se localiza dentro del Fraccionamiento Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
+                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="doc.partner_id.name" />, <span t-field="doc.total_amount"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
+                        por concepto de pago de la mensualidad del lote de terreno identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <spna t-field="p.product_id.x_studio_manzana"/> de la calle <span t-field="p.product_id.x_studio_calle"/>,
+                        que se localiza dentro del Fraccionamiento Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
                     </p>
+                    <p>
+                        Este recibo se expide a cuenta de una cantidad mayor, 
+                        que asciende a la cantidad detallada en el ANEXO E del Contrato de Transacción firmado por LAS PARTES de mutuo acuerdo, 
+                        dicho monto asciende a la cantidad de USD $ <span t-field="doc.total_amount"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),, 
+                        y se acordó que dicho monto sería pagado en 96 exhibiciones mensuales, 
+                        pagaderas el día (<span t-field="doc.dia_dato_pago"/>) de cada mes, por un monto de USD $<span t-field="doc.pagos_mensualidad"/>(<span t-field="doc.pago_mensualidad_letra"/>
+                        DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
+                        $ <span t-field="doc.residual" /> (<span t-field="doc.residual_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
+                    </p>
+
+                    <p>
+                        En caso de incumplimiento en el pago puntual de los pagos a que se refiere este recibo o el contrato de transacción y renuncia, 
+                        e causará un 3% (tres por ciento) mensual. Será Juez competente por sumisión de las partes, 
+                        el del partido judicial de la ciudad de Tijuana, 
+                        Baja California o el del partido judicial de la ciudad de Villahermosa, Tabasco, a elección de la parte actora.
+
+                    </p>
+                    <p>
+                        Se señala como lugar de pago de las obligaciones el ubicado en Paseo de la Sierra número 231 Colonia Reforma de la ciudad de Villahermosa Tabasco y/o Avenida Paseo de los Héroes número 10289, 
+                        Primer Piso Interior, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
+                    </p>
+                    <br/>
+                    <p align="center"><strong>R E C I B Í</strong></p>
+                            <img style="width: 30%; margin-left: 300px;" src="jibaritolotes/static/img/Firma_Jibarito.png"/>
+                            <p align="center"><strong>María Fernanda Loaiza Alvarez</strong></p>
+                            <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
+                            <p align="right"><strong>Interés <span t-field="doc.ji_moratorio"/></strong></p>
+                            <p align="right"><strong>Capital <span t-field="doc.amount"/></strong></p>
+                            <p align="right"><strong>Total <span t-field="doc.total_amount"/></strong></p>
+                            <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
+
                     </t>
             </div>
         </t>
