@@ -23,29 +23,12 @@ class ResPartner(models.Model):
     def _default_ji_nationality(self):
         return self.env.ref('base.mx').id
 
-    
-    def is_curp(self, cr, uid, ids, context=None):
-        record = self.browse(cr, uid, ids)
-        pattern ="^[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]$"
-        for data in record:
-            if re.match(pattern, data.curp):
-                return True
-            else:
-                return False
-        return {}
-    _constraints = [(is_curp, 'Error: Invalid curp', ['curp']), ]
-
-    ji_name_americ = fields.Char(string="Nombre Americano")
-    ji_hijos = fields.Text(string="Hijos")
     ji_civil_status = fields.Char(string="Civil Status")
     ji_occupation = fields.Char(string="Occupation")
     ji_spouse = fields.Char(string="Spouse")
     ji_date_of_birth = fields.Date(string="Date Of Birth")
     ji_place_of_birth = fields.Char(string="Place Of Birth")
     ji_nationality = fields.Many2one(comodel_name="res.country", string="Nacionalidad", default=_default_ji_nationality)
-    curp = fields.Char(string="Curp",size = 18)
-    unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', string="Aml no reconciliado")
-    total_due = fields.Float(string="Adeudo Total", digits="8,2")
 
     def get_ji_date_of_birth(self):
         if self.ji_date_of_birth:
@@ -64,8 +47,8 @@ class ResPartner(models.Model):
         partner_ids = self.search([('company_id', '=', self.env.company.id)]).get_partners_slow_payer()
         return [('id', 'in', [p.id for p in partner_ids])]
 
-    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial", compute="_compute_ji_commercial"
-                                    )
+    ji_commercial = fields.Many2one(comodel_name="hr.employee", store=True, string="Comercial",
+                                    compute="_compute_ji_commercial")
 
     @api.depends("unreconciled_aml_ids")
     def _compute_ji_commercial(self):
@@ -79,7 +62,6 @@ class ResPartner(models.Model):
     def _compute_ji_condition(self):
         for record in self:
             if record.company_id.ji_apply_developments:
-
                 number_slow_payer, aml = record.get_number_slow_payer()
                 if self.env.company.ji_number_slow_payer > 0:
                     if number_slow_payer >= self.env.company.ji_number_slow_payer:
@@ -130,7 +112,7 @@ class ResPartner(models.Model):
         for aml in self.unreconciled_aml_ids:
             if aml.company_id == company:
                 is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
+                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium:
                     number_slow_payer += 1
                     aml_ids.append(aml)
         return number_slow_payer, aml_ids
@@ -150,7 +132,6 @@ class ResPartner(models.Model):
     @api.depends('unreconciled_aml_ids')
     def _ji_compute_for_followup(self):
         for record in self:
-
             if record.company_id.ji_apply_developments:
                 number_slow_payer, aml = record.get_number_slow_payer()
                 record.ji_number_slow_payer = number_slow_payer

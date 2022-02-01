@@ -5,102 +5,23 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//header" position="before">
-                 <xpath expr="//button[@name='action_confirm']" position="attributes">
-                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>
-                 </xpath>
-                <xpath expr="//button[@name='456']" position="attributes">
-                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>
-                </xpath>
-<!--                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"-->
-<!--                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>-->
-            </xpath>
-<!--            <xpath expr="//button[@name='456']" position="attributes">-->
-<!--                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>-->
-<!--            </xpath>-->
-
-            <xpath expr="//div[@name='button_box']" position="inside">
-                <button  class="oe_stat_button" icon="fa-file-text"
-                         name="printcontratoAction"
-                          attrs="{'invisible':[('estado_producto', '!=', 12)]}"
-                            string="Contrato"/>
-                <button name="get_reporte_amoritizacionv2" class="oe_stat_button" icon="fa-file-text"
-                            string="Tabla de amortizacion"  type="object" groups="jibaritolotes.group_ji_migration"/>
-                <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text"
-                            string="Calendario de pagos"  type="object" groups="jibaritolotes.group_ji_migration"/>
-                <button name="action_regenerate_unreconciled_aml_dues" class="oe_stat_button" icon="fa-list" type="object" groups="jibaritolotes.group_ji_migration" >
-                    Generar Moratorio
-                </button>
-                <button
-                    type="object"
-                    class="oe_stat_button"
-                    attrs="{'invisible':[('type', '=', 'entry')]}"
-                    name="open_payments"
-                    icon="fa-usd"
-                >
-                        <div class="o_field_widget o_stat_info">
-
-                            <span class="o_stat_text">Pagos</span>
-                        </div>
-                    </button>
-        </xpath>
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
-                <field name="id" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_sequence_payments" widget="handle" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_number" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_term_line_id" groups="jibaritolotes.group_ji_migration"/>
-                <field name="date_maturity" groups="jibaritolotes.group_ji_migration"/>
+                <field name="ji_sequence_payments" widget="handle" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_number" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_term_line_id" groups="jibarito.group_ji_migration"/>
+                <field name="date_maturity" groups="jibarito.group_ji_migration"/>
             </xpath>
             <xpath expr="//field[@name='line_ids']//tree" position="attributes">
                 <attribute name="default_order">ji_sequence_payments</attribute>
             </xpath>
             <xpath expr="//field[@name='line_ids']" position="after">
-                <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibaritolotes.group_ji_migration"
+                <button name="regenerate_correlative" string="Regenerate Secuences" groups="jibarito.group_ji_migration"
                         type="object" class="btn-primary"/>
-                <button name="recompute_payment_terms_line" string="Prueba payments" type="object" class="btn-primary"/>
-            </xpath>
-            <xpath expr="//notebook" position="inside">
-                <page name="ji_mora" string="Moratorios" groups="jibaritolotes.group_ji_apply_developments">
-                     <group>
-                         <group name="derecha">
-                             <field name="percent_moratorium" />
-                             <field name="ji_number_slow_payer" />
-                         </group>
-                        <group name="izquierd">
-                             <field name="ji_condition" />
-
-                         </group>
-                     </group>
-
-                    <field name="moratorio_line">
-                            <tree decoration-danger="moratorium_id" edit="0" create="0" delete="0">
-                                <field name="id" invisible="1"/>
-                                <field name="name"/>
-                                <field name="amount_residual" optional="show"/>
-                                <field name="moratorium_id" />
-                                <field name="unreconciled_aml" invisible="1"/>
-                                <field name="currency_id" invisible="1"/>
-                                <field name="date" optional="hide"/>
-                                <field name="date_maturity" optional="show"/>
-                                <field name="at_date" optional="hide"/>
-                                <field name="month_number" optional="hide"/>
-                                <field name="amount_unit_moratorium" optional="show"/>
-                                <field name="amount_pay" optional="show"/>
-                                <field name="real_amount_moratorium" optional="show"/>
-                                <field name="amount_total_moratorium" optional="show"/>
-                                <field name="amount_total_moratorium" optional="hide"/>
-                            </tree>
-                    </field>
-                    <group class="oe_subtotal_footer">
-<!--                        <field name="amount_total_moratorium"/>-->
-                        <field name="total_moratorium" />
-                    </group>
-                </page>
             </xpath>
         </field>
     </record>
     <record id="ji_account_move_tree" model="ir.ui.view">
-        <field name="name">account.move.tree</field>
+        <field name="name">account.move.jibarito.tree</field>
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_invoice_tree"/>
         <field name="arch" type="xml">
@@ -116,60 +37,14 @@
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//group" position="inside">
-
                 <filter string="Por Comercial" name="ji_partner_contract"
                         context="{'group_by':'ji_partner_contract'}"
-                        groups="jibaritolotes.group_ji_apply_developments"/>
+                        groups="jibarito.group_ji_apply_developments"/>
                 <filter string="Contract of Comercial" name="ji_order_contract"
                         context="{'group_by':'ji_order_contract'}"
-                        groups="jibaritolotes.group_ji_apply_developments"/>
+                        groups="jibarito.group_ji_apply_developments"/>
                 <separator/>
             </xpath>
         </field>
     </record>
-
-
-    <record id="ji_account_payment" model="ir.ui.view">
-        <field name="name">account.payment.jibarito</field>
-        <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
-        <field name="arch" type="xml">
-            <field name="journal_id" position="before" >
-                <field name="x_studio_tipo_de_pago" />
-                <field name="ji_moratorio" attrs="{'invisible':[('x_studio_tipo_de_pago', '!=', 'Intererses Moratorios + Mensualidades')]}" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_moratorio_date" attrs="{'invisible':[('x_studio_tipo_de_pago', '!=', 'Intererses Moratorios + Mensualidades')]}" groups="jibaritolotes.group_ji_apply_developments"/>
-
-            </field>
-
-        </field>
-    </record>
-
-    <record id="ji_other_information" model="ir.ui.view">
-        <field name="name">other.information.jibarito</field>
-        <field name="model">account.move</field>
-        <field name="inherit_id" ref="account.view_move_form"/>
-        <field name="arch" type="xml">
-
-            <xpath expr="//field[@name='invoice_origin']" position="after">
-                <field name="estado_producto"></field>
-                <field name="cliente_anterior" />
-                <field name="last_payment" attrs="{'invisible':True}"/>
-            </xpath>
-
-        </field>
-    </record>
-
-    <record id="action_bulk_account_move_confirm" model="ir.actions.server">
-        <field name="name">Order Confirm</field>
-        <field name="model_id" ref="account.model_account_move"/>
-        <field name="binding_model_id" ref="account.model_account_move"/>
-        <field name="binding_view_types">form,list</field>
-        <field name="state">code</field>
-        <field name="code">
-            for rec in records:
-            rec.action_confirm()
-        </field>
-    </record>
-
-
 </odoo>

@@ -8,7 +8,7 @@
             <filter name="filter_in_need_of_action" position="after">
                 <separator/>
                 <filter string="Slow Payer"
-                        groups="jibaritolotes.group_ji_apply_developments"
+                        groups="jibarito.group_ji_apply_developments"
                         name="ji_condition"
                         domain="[('ji_condition', '=', 'slow_payer')]"/>
                 <separator/>
@@ -23,19 +23,19 @@
             <xpath expr="//group" position="inside">
                 <filter string="Por Comercial" name="ji_commercial"
                         context="{'group_by':'ji_commercial'}"
-                        groups="jibaritolotes.group_ji_apply_developments"/>
+                        groups="jibarito.group_ji_apply_developments"/>
             </xpath>
         </field>
     </record>
-   <!--  <record id="ji_customer_statements_search_tree" model="ir.ui.view">
+    <record id="ji_customer_statements_search_tree" model="ir.ui.view">
         <field name="name">customer.statements.tree.ji</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account_followup.customer_statements_tree_view"/>
         <field name="arch" type="xml">
             <field name="total_due" position="after">
-                <field name="ji_number_slow_payer" groups="jibaritolotes.group_ji_apply_developments" optional="show"/>
-                <field name="ji_commercial" groups="jibaritolotes.group_ji_apply_developments" optional="show"/>
+                <field name="ji_number_slow_payer" groups="jibarito.group_ji_apply_developments" optional="show"/>
+                <field name="ji_commercial" groups="jibarito.group_ji_apply_developments" optional="show"/>
             </field>
         </field>
-    </record> -->
+    </record>
 </odoo>

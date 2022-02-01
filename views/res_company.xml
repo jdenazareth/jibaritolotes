@@ -10,59 +10,54 @@
                 <button name="migrate_commercial" invisible="1" string="Migrar Comerciales" type="object"/>
             </field>
             <xpath expr="//page[last()]" position="after">
-                <page string="Contract Template" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Contract Template" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_contract_template" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex A" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex A" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_a" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex B" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex B" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_b" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex C" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex C" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_c" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex D" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex D" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_d" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex E" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex E" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_e" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex F" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex F" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_f" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex G" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex G" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_g" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Annex H" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Annex H" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_annex_h" nolabel="1"/>
                     </group>
                 </page>
-                <page string="Formula Moratorium" groups="jibaritolotes.group_ji_apply_developments">
+                <page string="Formula Moratorium" groups="jibarito.group_ji_apply_developments">
                     <group>
                         <field name="ji_code" nolabel="1" widget="ace" options="{'mode': 'python'}"/>
-                    </group>
-                </page>
-                <page string="Formula Moratorium factura" groups="jibaritolotes.group_ji_apply_developments">
-                    <group>
-                        <field name="ji_codev" nolabel="1" widget="ace" options="{'mode': 'python'}"/>
                     </group>
                 </page>
             </xpath>

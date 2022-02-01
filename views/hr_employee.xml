@@ -6,8 +6,8 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='parent_id']" position="after">
-                <field name="ji_partner_id" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_percent_commission" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_partner_id" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_percent_commission" groups="jibarito.group_ji_apply_developments"/>
             </xpath>
             <!--            <xpath expr="//field[@name='user_partner_id']" position="attributes">-->
             <!--                <attribute name="invisible">1</attribute>-->

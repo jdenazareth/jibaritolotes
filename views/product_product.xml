@@ -6,9 +6,9 @@
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="ji_area" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_street" groups="jibaritolotes.group_ji_apply_developments"/>
-                <field name="ji_corner_with" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_area" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_street" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_corner_with" groups="jibarito.group_ji_apply_developments"/>
             </xpath>
         </field>
     </record>

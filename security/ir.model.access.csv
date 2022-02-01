@@ -1,9 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_Estados,access.estados.g,model_estados_g,,1,1,1,1
-asiento_mora,ji.mora.asiento,model_ji_mora_asiento,,1,1,1,1
-access_ji_notification_slow_payer,notification.slow.payer,model_ji_notification_slow_payer,group_ji_apply_developments,1,1,1,1
-access_ji_notification_slow_payer_line,notification.slow.payer.line,model_ji_notification_slow_payer_line,group_ji_apply_developments,1,1,1,1
-access_ji_moratorium_account_line,ji.moratorium.account.line,model_ji_moratorium_account_line,,1,1,1,1
-access_Lotes,access.lotes.ji,model_lotes_ji,,1,1,1,1
-access_Manzana,access.manzana.ji,model_manzana_ji,,1,1,1,1
-access_Calle,access.calle.ji,model_calle_ji,,1,1,1,1
+access_ji_notification_slow_payer,notification.slow.payer,jibarito.model_ji_notification_slow_payer,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_notification_slow_payer_line,notification.slow.payer.line,jibarito.model_ji_notification_slow_payer_line,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest,ji.moratorium.interest,jibarito.model_ji_moratorium_interest,jibarito.group_ji_apply_developments,1,1,1,1
+access_ji_moratorium_interest_line,ji.moratorium.interest.line,jibarito.model_ji_moratorium_interest_line,jibarito.group_ji_apply_developments,1,1,1,1

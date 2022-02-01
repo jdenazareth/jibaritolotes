@@ -4,7 +4,7 @@
         <field name="name">notification.slow.payer.tree</field>
         <field name="model">ji.notification.slow.payer</field>
         <field name="arch" type="xml">
-            <tree >
+            <tree string="Notification Slow Payer">
                 <field name="name"/>
                 <field name="partner_ids"/>
                 <field name="company_id"/>
@@ -73,8 +73,8 @@
     </record>
     <menuitem id="notification_slow_payer_menu"
               sequence="4"
-              groups="jibaritolotes.group_ji_apply_developments"
+              groups="jibarito.group_ji_apply_developments"
               name="Mail Notification Slow Payer"
-              parent="jibaritolotes.ji_menu"
-              action="notification_slow_payer_action"/>
+              parent="jibarito.ji_menu"
+              action="jibarito.notification_slow_payer_action"/>
 </odoo>

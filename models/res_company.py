@@ -23,7 +23,6 @@ class ResCompany(models.Model):
     ji_percent_moratorium = fields.Float(string="Percent Moratorium")
     tz = fields.Selection(related="partner_id.tz", string="TZ", readonly=False)
     ji_code = fields.Text(string="Code", default="result = 1")
-    ji_codev = fields.Text(string="Code Fondo", default="result = 1")
 
     @api.constrains('ji_code')
     def _check_python_ji_code(self):

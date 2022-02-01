@@ -63,7 +63,7 @@
     </record>
     <menuitem id="ji_menu"
               sequence="1"
-              groups="jibaritolotes.group_ji_apply_developments"
+              groups="jibarito.group_ji_apply_developments"
               name="Moratorium Setting"
               parent="account.menu_finance_reports"/>
 </odoo>
