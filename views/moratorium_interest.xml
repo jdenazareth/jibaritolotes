@@ -85,7 +85,7 @@
             </form>
         </field>
     </record>
-    <record id="ji_moratorium_interest_search" model="ir.ui.view">
+     <record id="ji_moratorium_interest_search" model="ir.ui.view">
         <field name="name">ji.moratorium.interest.search</field>
         <field name="model">ji.moratorium.interest</field>
         <field name="type">search</field>
@@ -97,18 +97,18 @@
                         help="Show archived"/>
             </search>
         </field>
-    </record>
+    </record> 
     <record id="ji_moratorium_interest_action" model="ir.actions.act_window">
         <field name="name">Interest for moratorium</field>
         <field name="res_model">ji.moratorium.interest</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">form</field>
         <field name="search_view_id" ref="ji_moratorium_interest_search"/>
         <field name="domain"></field>
     </record>
     <menuitem id="ji_moratorium_interest_menu"
               sequence="4"
-              groups="jibarito.group_ji_apply_developments"
+              groups="jibaritolotes.group_ji_apply_developments"
               name="Interest for Moratorium"
-              parent="jibarito.ji_menu"
-              action="jibarito.ji_moratorium_interest_action"/>
+              parent="ji_menu"
+              action="ji_moratorium_interest_action"/>
 </odoo>

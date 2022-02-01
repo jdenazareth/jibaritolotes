@@ -5,17 +5,25 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <field name="category_id" position="after">
-                <field name="ji_condition" invisible="1" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_number_slow_payer" invisible="1" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_civil_status" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_occupation" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_spouse" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_date_of_birth" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_place_of_birth" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_nationality" groups="jibarito.group_ji_apply_developments"
-                       context="{'show_demonym': True}"
+            <field name="category_id" position="after" >
+
+                <field name="ji_name_americ" />
+                <field name="ji_civil_status" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_occupation" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_spouse" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_date_of_birth" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_place_of_birth" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_hijos" />
+
+
+            </field>
+            <field name="vat" position="after" >
+                <field name="curp" placeholder="Por ejemplo, PERC000000MSPRMT00"  pattern ="[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]"/>
+                <field name="ji_condition" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_number_slow_payer" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_nationality" groups="jibaritolotes.group_ji_apply_developments"
                        options="{'always_reload': True,'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                <field name="company_id" />
             </field>
             <xpath expr="//field[@name='email']" position="attributes">
                 <attribute name="required">True</attribute>
@@ -30,7 +38,7 @@
             <xpath expr="//separator[last()]" position="after">
                 <separator/>
                 <filter string="Slow Payer"
-                        groups="jibarito.group_ji_apply_developments"
+                        groups="jibaritolotes.group_ji_apply_developments"
                         name="ji_condition"
                         domain="[('ji_condition', '=', 'slow_payer')]"/>
                 <separator/>
@@ -43,8 +51,8 @@
         <field name="inherit_id" ref="base.view_partner_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='phone']" position="after">
-                <field name="ji_number_slow_payer" optional="show" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_commercial" optional="show" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_number_slow_payer" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_commercial" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
             </xpath>
         </field>
     </record>

@@ -91,14 +91,62 @@ def month_name(number):
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
+    x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
+    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", compute="_compute_ji_product_information_form")
+    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
+    x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", compute="_compute_ji_product_information_form")
+    estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
+    x_studio_contrato = fields.Char(string="Contrato" , compute="state_product")
+    # x_studio_contrato = fields.Char()
+    # x_studio_calle = fields.Selection()
+
+    @api.depends("state")
+    def state_product(self):
+        for line in self:
+            cont = ""
+            if line.invoice_ids:
+                for fact in line.invoice_ids:
+                    cont = fact.name
+                line.estado_producto = line.order_line.product_id.estado_producto
+            elif line.state == "sale" or line.state == "done":
+                line.estado_producto = 13
+            elif line.state == "cancel":
+                line.estado_producto = 22
+            else:
+                line.estado_producto = 21
+            line.x_studio_contrato = cont
+
+    @api.depends("order_line")
+    def _compute_ji_product_information_form(self):
+        try:
+            for line in self:
+                line.x_studio_manzana = line.order_line.product_id.x_studio_manzana
+                line.x_studio_lote = line.order_line.product_id.x_studio_lote
+                line.x_studio_calle = line.order_line.product_id.x_studio_calle
+                if line.state == "sale":
+                    line.order_line.product_id.estado_producto = line.estado_producto
+        except Exception as e:
+            raise UserError("No es posible agregar otro producto a la línea de pedido.")
+
+    @api.depends("order_line")
+    def _compute_ji_estado(self):
+        for order in self:
+            order.order_line.product_id.estado_producto = order.estado_producto
+
     @api.model
     def get_name_month(self, month):
         return month_name(month)
 
     def ji_get_name_product(self):
         if self.order_line:
-            _name = self.order_line[0].name or ''
-            return _name.upper()
+            dat = ""
+            for line in self:
+                dat = "MANZANA " + line.x_studio_manzana.name + " LOTE " + line.x_studio_lote.name
+            # _name =
+            # self.order_line.update_computes.name or ''
+            # return _name.upper()
+            return dat
         return ""
 
     def ji_get_area(self):
@@ -108,7 +156,7 @@ class SaleOrder(models.Model):
 
     def ji_get_street_address(self):
         if self.order_line:
-            ji_street = self.order_line[0].ji_street or ''
+            ji_street = self.order_line[0].product_id.x_studio_calle.name or ''
             return ji_street.upper()
         return ""
 
@@ -253,6 +301,140 @@ class SaleOrder(models.Model):
     def ji_get_text_amount_month_payment(self):
         return num2words(self.ji_get_amount_month_payment(), lang='es')
 
+    def open_payments(self):
+        
+        payment_ids = []
+        # pagosa = self.env["account.payment"].search([('payment_reference', '=', self.name)], order='payment_date desc')
+        for order in self:
+            transactions = order.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+            
+            for item in transactions:
+                payment_ids.append(item.payment_id.id)
+
+            
+        action_ref = "account.action_account_payments"
+        
+        [action] = self.env.ref(action_ref).read()
+        action["context"] = {'default_payment_type': 'inbound', 'default_partner_type': 'customer', 'search_default_inbound_filter': 1, 'res_partner_search_mode': 'customer'}
+
+        if len(payment_ids) > 1:
+            action["domain"] = [("id", "in", payment_ids)]
+        elif payment_ids:
+            action["views"] = [(self.env.ref("account.view_account_payment_form").id, "form")]
+            action["res_id"] = payment_ids[0]
+        notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('mejoras'),
+                    'message': str(action),
+                    'type': 'success',  # types: success,warning,danger,info
+                    'sticky': True,  # True/False will display for few seconds if false
+                },
+            }
+        # return notification
+        return action
+
+    @api.depends("line_ids")
+    def get_reporte_amoritizacionv2(self):
+        for res in self:
+            move = []
+            account = []
+            today = fields.Date.today()
+            anticipo = []
+            name = res.name
+            payment_ids = []
+            transactions = res.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+            for item in transactions:
+                payment_ids.append(item.payment_id.id)
+            pagosa = self.env["account.payment"].search([('id', 'in', payment_ids)], order='payment_date asc')
+           
+            compaRecords = []
+            compani = res.company_id
+            tov = res.amount_untaxed
+            por = res.amount_untaxed * 0.1
+            anticp = por
+            sald_ant=0
+            cont=0
+
+            anticipo.append({
+                "number": "Anticipo 0",
+                "date_f": "",
+                "mora": 0,
+                "impo": 0,
+                "total": anticp,
+                "real": 0,
+            })
+
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('mejoras'),
+                    'message': "pagos",
+                    'type': 'success',  # types: success,warning,danger,info
+                    'sticky': True,  # True/False will display for few seconds if false
+                },
+            }
+            # return notification
+            pagov = 1
+            ofpa = ""
+            conan = 1
+            co_pay = 1
+            for pay in pagosa:
+                mora = pay.ji_moratorio
+                impo = pay.amount
+                fecpag = pay.payment_date.strftime('%d-%m-%y')
+                pimp = pay.ji_moratorio + pay.amount
+                anticp = anticp - impo
+                tov = tov - impo
+                anticipo.append({
+                    "number": "Anticipo " + str(conan),
+                    "date_f": fecpag,
+                    "mora": mora,
+                    "impo": impo,
+                    "total": anticp,
+                    "real": pimp,
+                })
+                conan = conan + 1
+                co_pay = co_pay + 1
+
+            
+           
+
+
+            move.append({
+                "name": res.name,
+                "cliente": res.partner_id.name,
+                "date": res.ji_fecha_apartado,
+                
+            })
+
+            compaRecords.append({
+                'name': compani.name,
+                'zip': compani.zip,
+                'street': compani.street,
+                'street2': compani.street2,
+                'city': compani.city,
+                'state_id': compani.state_id.name,
+                'country_id': compani.country_id.name,
+                'phone': compani.phone,
+                'id': compani.id,
+                'website': compani.website,
+            })
+
+            data = {
+                'client': res.partner_id.name,
+                'contrato':"PRE-"+ res.name,
+                'produc': "Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name + ", Calle " + res.x_studio_calle.name,
+                'date': str(today.day) + " de " + str(month_name(today.month)) + " del " + str(today.year),
+                'move_id': move,
+                'ofpay': ofpa,
+                'anti': anticipo,
+                'comapany': compaRecords,
+            }
+            return self.env.ref('jibaritolotes.report_amortizacionv2').report_action(self, data=data)
+
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
@@ -262,3 +444,23 @@ class SaleOrderLine(models.Model):
         if self.order_id.company_id.ji_apply_developments:
             if self.product_id.id:
                 self.product_uom_qty = self.product_id.ji_area
+
+
+    @api.model
+    @api.onchange("product_id")
+    def _produ_nuevo_renew(self):
+        for rec in self:
+            res = {}
+            if (rec.product_id):
+                productos = self.env['product.template'].search(
+                    [('estado_producto.name', '=', 'Nuevo')])
+
+                # rec.was_credit = True
+                if productos:
+                    res['domain'] = {'product_id': [('id', 'in', productos.ids)]}
+                # domain = [('id', 'in', pedido.ids)]
+                else:
+                    #    domain = [('id','=',0)]
+                    res['domain'] = {'product_id': [('id', '=', 0)]}
+
+            return res

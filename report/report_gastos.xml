@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="report_gastos"
+                model="ji.mora.asiento"
+                string="Gastos"
+                name="jibaritolotes.report_gastos"
+                file="jibaritolotes.report_gastos"
+                report_type="qweb-html"
+				menu = "False"
+				print_report_name = "'Estado de perdida y ganancias' % (object.move_id.cliente)"
+
+		/>
+
+        <template id="jibaritolotes.report_gastos">
+            <t t-call="web.html_container">
+                
+                    <t t-call="jibaritolotes.internal_layaut_ji">
+<!--						<t t-call-assets="web.report_assets_common" t-js="false" />-->
+<!--						<t t-call-assets="web.assets_common" t-css="false" />-->
+<!--						<t t-call-assets="web.report_assets_common" t-css="false" />-->
+                        <div class="page">
+
+                            <style>
+                                .one{
+                                    width: 60% !important;
+                                }
+
+                                .two{
+                                    width: 40% !important;
+                                }
+
+                                .main-table *{
+                                    font-size: 15px !important;
+                                  
+                                }
+
+                               
+                                .secondary-table *{
+                                    font-size: 15px !important;                                 
+                                }
+
+
+                                table .fila{
+                                    background: #f1f1f1 !important;
+                                }
+
+                                table tr td{
+                                    border-bottom: 1px solid #cbcbcb !important;
+                                }
+
+                                h1{
+                                    color: #1f1f1f !important;
+                                    margin-bottom: 8px;
+                                    font-weight: normal !important;
+                                    width: 100% !important;
+                                    border-bottom: 1px solid #f5b041 !important;
+                                    padding: 5px !important;
+                                }
+
+                                h2{
+                                    font-weight: normal !important;
+                                    font-size: 18px !important;
+                                    padding: 5px !important;
+                                }
+
+                                strong{
+                                    color: #282828 !important;
+                                    font-weight: normal !important;
+                                }
+                            </style>
+                         
+							<h1 align="center">Estado de Pérdidas y Ganancias</h1>
+                            <h2 class="text-muted" align="center">De <t t-esc="datei"/> al <t t-esc="datef"/></h2>
+                        
+						
+
+							<div class="row" style="width: 80% !important; margin: auto !important;">
+                                <!-- col-sm-6 -->
+                                <!-- BORDE - TABLA #D35400  -->
+                                 <div class="one">
+                                    <table style="border: 1px solid #cbcbcb !important; " class="table table-striped main-table">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="fila">Mensualidades</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="mens"/></td>
+                                                <!-- <td class="fila "><t t-esc="por"/></td>  -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Mensualidades WF</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="menswf"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+                                            <tr>
+                                                <td class="fila">Moratorios</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="mora"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+                                            <tr>
+                                                <td>Moratorios WF</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="morawf"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+                                            <tr>
+                                                <td class="fila">Enganches</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="anticipo"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+                                            <tr>
+                                                <td>Enganches WF</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="anticipowf"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Devoluciones sobre ventas</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="dev"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #F5B041 !important" >
+                                                <td class="color: #242424 !important;"><strong>Ventas Netas</strong></td>
+                                                <td><strong>=</strong></td>
+                                                <td><strong><t t-esc="ven_net"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Costo de ventas</strong></td>
+                                                <td><strong>-</strong></td>
+                                                <td><strong><t t-esc="cost_vent"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+                                            <tr>
+                                                <td class="fila">Mejoras</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="mejoras"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Seguridad</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="seguridad"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Levantamientos</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="levant"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Laboratorio</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="labora"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Jardineria</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="jardin"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Topografia</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="topog"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #F5B041 !important"  >
+                                                <td><strong>Utilidad/pérdida brut</strong></td>
+                                                <td><strong>=</strong></td>
+                                                <td><strong><t t-esc="util_perd_bru"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Gastos de ventas</strong></td>
+                                                <td><strong>-</strong></td>
+                                                <td><strong><t t-esc="Gast_ventg"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Gasto venta</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="Gast_vent"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Promocion y pubicidad </td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="prom_pub"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Comisiones</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="comis"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Predial</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="predi"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Gastos de administracion</strong></td>
+                                                <td><strong>-</strong></td>
+                                                <td><strong><t t-esc="gast_admin"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Nomina</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="nomina"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Transporte</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="trans"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Mensajeria</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="mensj"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Rentas</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="rentas"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Papeleria</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="papel"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Servicio de Oficina</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="serv_ofic"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Telefonia e internet</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="tel_inter"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Gastos varios</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="gast_var"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Mantenimiento</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="mant"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Gastos de consejo</strong></td>
+                                                <td><strong>-</strong></td>
+                                                <td><strong><t t-esc="gas_cons"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="fila">Viaticos</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="viati"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+
+                                            <tr>
+                                                <td>Dividendos</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="divid"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Gastos legales</strong></td>
+                                                <td><strong>=</strong></td>
+                                                <td><strong><t t-esc="gas_leg"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Honorarios</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="honor"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Juzgado</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="juzg"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Apoyos</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="apoyos"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Gastos legales</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="gast_leg"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Gastos legales WF</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="gast_legwf"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>INDIVI</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="indivi"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #F5B041 !important"  >
+                                                <td><strong>Utilidad/pérdida operación</strong></td>
+                                                <td><strong>=</strong></td>
+                                                <td><strong><t t-esc="util_perd_oper"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Otros gastos</strong></td>
+                                                <td><strong>-</strong></td>
+                                                <td><strong><t t-esc="otrs_gast"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td class="fila">Otros gastos</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="otr_gast"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Plan maestro</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="plan_maes"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+
+                                            <tr>
+                                                <td class="fila">Obra</td>
+                                                <td class="fila">&#160;</td>
+                                                <td class="fila"><t t-esc="obra"/></td>
+                                                <!-- <td class="fila"><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #FFDCAA !important" >
+                                                <td style="text-decoration: underline !important;"><strong>Otros Productos</strong></td>
+                                                <td><strong>+</strong></td>
+                                                <td><strong><t t-esc="otrs_prod"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr>
+                                                <td>Otros Productos</td>
+                                                <td>&#160;</td>
+                                                <td><t t-esc="otr_prod"/></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+                                            <tr style="background-color: #F5B041 !important">
+                                                <td><strong>Utilidad/pérdida del ejercicio</strong></td>
+                                                <td><strong>=</strong></td>
+                                                <td><strong><t t-esc="util_perd_ejer"/></strong></td>
+                                                <!-- <td><t t-esc="por"/></td> -->
+                                            </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+								</div>
+                                <!-- col-sm-3 -->
+                                <!-- <div class="col-sm-1">
+
+                                </div> -->
+                                <div class="two"> 
+                                    <table style="border: 1px solid #cbcbcb !important; " class="table table-striped secondary-table">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color: #f2f2f2 !important; text-align: center !important; color: #1f1f1f !important;" >
+                                                <td colspan="2">TOTAL</td>
+                                            </tr>
+                                            <tr style="background-color: #F5B041 !important" >
+                                                <td colspan="2"><strong>Comprobación</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ingresos</td>
+                                                <td><t t-esc="ven_net"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Egresos</td>
+                                                <td><t t-esc="egre"/></td>
+                                            </tr>
+                                            <tr style="background-color: #F5B041 !important" >
+                                                <td> <strong>Resultado</strong></td>
+                                                <td><t t-esc="resul"/></td>
+                                            </tr>
+                                            <tr style="background-color: #F5B041 !important" >
+                                                <td style="color: #2f2f2f !important;"><strong>Diferencia</strong></td>
+                                                <td><t t-esc="dif"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+							</div>
+                        </div>
+                    </t>
+          
+            </t>
+        </template>
+
+		<template id="internal_layaut_ji">
+			<t t-foreach="doc_company" t-as="company">
+				<div class="header o_boxed_header">
+					<div class="row">
+						<div class="col-3 mb4">
+							<img t-if="company['logo']" t-att-src="'data:image/png;base64,%s' %company['logo']" style="max-height: 120px;"/>
+						</div>
+						<div class="col-6 mb4">
+							<h2></h2>
+						</div>
+					</div>
+				</div>
+
+			</t>
+			<div class="article o_report_layout_background">
+				<t t-raw="0" />
+			</div>
+			<div class="flooter">
+<!--				<p>Este recibo cancela y sustituye a cualquier recibo provisional de dinero de misma fecha y monto"</p>-->
+			</div>
+		</template>
+
+    </data>
+</odoo>

@@ -6,7 +6,7 @@
             <field name="subject">Report of ${object.name or '' } Slow Payers</field>
             <field name="email_from">${(object.company_id.partner_id.email or user.email_formatted) |safe}</field>
             <field name="partner_to">${object.get_partner_ids()}</field>
-            <field name="model_id" ref="jibarito.model_ji_notification_slow_payer"/>
+            <field name="model_id" ref="model_ji_notification_slow_payer"/>
             <field name="auto_delete" eval="True"/>
             <field name="body_html">
                 <![CDATA[

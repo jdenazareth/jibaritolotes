@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <template id="fac_report_comprobante_pago">
+        <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h3 aling="center">Comprobante de Pago</h3>
+
+                <p align="right">Tijuana, Baja California;<span t-field="doc.payment_date"/> </p>
+                <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.amount"/></p>
+                <t t-foreach="doc.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="p">
+                    <br/>
+
+                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="doc.partner_id.name" />, 
+                        la cantidad de USD <span t-field="doc.amount"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), 
+                        por concepto de pago de la mensualidad del lote de terreno identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <spna t-field="p.product_id.x_studio_manzana"/> de la calle <span t-field="p.product_id.x_studio_calle"/>, que se localiza dentro del Fraccionamiento Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
+                    </p>
+                    </t>
+            </div>
+        </t>
+        </t>
+        </template>
+    </data>
+</odoo>

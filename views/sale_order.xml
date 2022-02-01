@@ -6,10 +6,52 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']//tree/field[@name='name']" position="after">
-                <field name="ji_area" optional="show" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_street" optional="show" groups="jibarito.group_ji_apply_developments"/>
-                <field name="ji_corner_with" optional="show" groups="jibarito.group_ji_apply_developments"/>
+                <field name="ji_area" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_street" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="ji_corner_with" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+
             </xpath>
         </field>
     </record>
+
+    <record id="ji_sale_order_form" model="ir.ui.view">
+        <field name="name">sale.order.jibarito.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="get_reporte_amoritizacionv2" class="oe_stat_button" icon="fa-file-text"
+                            string="Tabla de amortizacion"  type="object" groups="jibaritolotes.group_ji_migration"/>
+                 <button
+                    type="object"
+                    class="oe_stat_button"
+                    name="open_payments"
+                    icon="fa-usd"
+                >
+                        <div class="o_field_widget o_stat_info">
+
+                            <span class="o_stat_text">Pagos</span>
+                        </div>
+                    </button>
+             </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="ji_fecha_apartado" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="x_studio_contrato" string="Contrato"/>
+                <field name="ji_fecha_apartado" optional="show" groups="jibaritolotes.group_ji_apply_developments"/>
+                <field name="estado_producto" string="Estado del producto"/>
+                <field name="x_studio_manzana" string="Manzana"/>
+                <field name="x_studio_lote" string="Lote"/>
+                <field name="x_studio_calle" string="Calle"/>
+
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="x_studio_vendedor" />
+            </xpath>
+        </field>
+    </record>
+
+    
 </odoo>
