@@ -1,96 +1,111 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import relativedelta
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
 from odoo.tools.safe_eval import safe_eval, test_python_expr
 import json
 
-class moratorio_move(models.Model):
+
+class moratorio_sale(models.Model):
     _inherit = "sale.order"
 
-
-
-	total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
-    total_mes = fields.Integer(string="Meses a Pagar")
+    total_mes = fields.Integer(string="dias a Pagar")
+    prorroga = fields.Integer(string="Prorroga Dias")
     moratex = fields.Text(string="Mora Json")
-   
-    @api.depends("company_id", "partner_id", "percent_moratorium", "at_date")
+    at_date = fields.Date(string="At Date", default=fields.Date.context_today)
+    total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
+    saldsex = fields.Float(string="Saldo al terminar", compute="action_sal")
+    exsalds = fields.Float(string="Saldo al terminar")
+    ismora = fields.Boolean('Is Mora')
+
+    def action_sal(self):
+        for record in self:
+            diap = record.ji_fecha_apartado
+            today = record.at_date
+            pay_tipo = record.payment_term_id
+            dif = 0
+
+
+            for line in pay_tipo.line_ids:
+                if line.ji_type == "money_advance":
+                    dif = line.days
+
+            # nday = diap + relativedelta(days=line.days)
+            # if today == nday
+            dias = (today - diap) / timedelta(days=1)
+            record.total_mes = dias
+            pror = dif + 15
+            if dias > pror and not record.ismora:
+                record.ismora = True
+                record.exsalds = record.pay_anticipo
+
+            record.saldsex = record.exsalds
+
     def action_moratorio_dues(self):
         for record in self:
-            # record.validate_regenerate_aml()
-            mora = 0.0
+            mora = 0
             mest = 0
             mesp = 0
             pmora = []
-            if record.partner_id:
-                companies = self.env["res.company"].search([('ji_apply_developments', '=', True)])
-                if len(companies.ids) == 0:
-                    mora = 0.0
-                partners = []
-                for company in companies:
-                    partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
+            transactions = []
+            transactions = record.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+            if record.state != "draft" and record.state != "cancel" and record.pay_anticipo > 0:
+                if record.payment_term_id and record.payment_term_id.ji_number_quotation:
 
-                    for p in partners_slow_payer:
-                        number_slow_payer, amls = p.get_number_slow_payer_cronv(company,record)
-                        partners.append({"partner": p, "amls": amls})
+                    diap = record.ji_fecha_apartado
+                    today = record.at_date
+                    pay_tipo = record.payment_term_id
+                    amount = record.amount_total
 
-                        # raise UserError(_(amls))
-                    if len(partners) > 0:
-                        # record.moratorio_line.unlink()
-                        for partner in partners:
-                            # notification_lines = []
-                            # raise UserError(_(partner["amls"]))
-                            paml =partner["amls"]
+                    dif = 0
+                    val = 0
+                    tipe = ""
+                    for line in pay_tipo.line_ids:
+                        if line.ji_type == "money_advance":
+                            dif = line.days
+
+                    dias = (today - diap) / timedelta(days=1)
+                    pror = dif + 15
+                    if dias > pror:
+                        pay = 0
+                        payex = 0
+                        mpay = 0
+                        sald = 0
+                        expay = record.exsalds
+                        newpay = record.pay_anticipo
+                        unit_moratorium = round((record.percent_mora / 100) * expay, 2)
+                        if expay > newpay:
+                            for tran in transactions:
+                                mpay = mpay + tran.mora
+                                pay = pay + tran.amount
+                                if pay >= (expay - newpay):
+                                    payex = payex + tran.amount
+
+                            diasp = round(mpay / unit_moratorium)
+                            dif = (unit_moratorium * diasp) - mpay
+                            didif= dias - pror
+                            if dif <= 0:
+                                unit_moratorium = round((record.percent_mora / 100) * newpay, 2)
+                                mora = unit_moratorium * (didif - diasp)
+                            else:
+                                mora = unit_moratorium * ( didif - diasp) + dif
+                            # notification = {
+                            #     'type': 'ir.actions.client',
+                            #     'tag': 'display_notification',
+                            #     'params': {
+                            #         'title': ('mejoras'),
+                            #         'message': str(mora)+ " "+ str(diasp) + " " + str(didif),
+                            #         'type': 'success',  # types: success,warning,danger,info
+                            #         'sticky': True,  # True/False will display for few seconds if false
+                            #     },
+                            # }
+                            # return notification
+                        else:
+                            mora = unit_moratorium * (dias - pror)
 
 
-                            
-                            tpay = 0.0
-                            for aml in paml:
-                                pagos = self.env["account.payment"].search([('payment_reference', '=', aml.move_id.invoice_payment_ref)])
-                                if aml.move_id.id == record.id:
-                                    # if aml.id not in record.get_exist_payments():
-                                    # record.ji_accoun_line.append(aml)
-                                    pay = 0.0
-                                    pay2 = 0.0
-                                    for lp in pagos:
-                                       if aml.date_maturity == lp["ji_moratorio_date"]:
-                                           pay = pay + lp["ji_moratorio"]
-                                    # mesp = mesp + 1
-                                    todate = fields.Date.today()
-                                    r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
-                                    month_number = r.months + 1
-                                    if month_number > mesp:
-                                        mesp = month_number
-                                    amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
-                                    unit_moratorium = ((record.percent_moratorium / 100) * amount)
-                                    amount_total_moratorium = round(float(month_number) * float(unit_moratorium),2)
-                                    if tpay != 0:
-                                        pay = tpay
-                                    if pay > amount_total_moratorium:
-                                        tpay = pay - amount_total_moratorium
-                                        pay = (pay - tpay)
-                                    mora = mora + amount_total_moratorium - pay
-                                    mest = mest +1
-                                    pmora.append({
-                                        
-                                        "fecha": str(aml.date_maturity),
-                                        "mora": amount_total_moratorium - pay,
-                                        "pay": pay,
-                                        "unimora": unit_moratorium,
-                                        "mes":month_number,
-                                        "tmes": mest,
-                                       
-                                    })
-                                    
 
-                                    # objects = {'o': record, 'amount_residual': amount, 'month_number': month_number}
-                                    # python_code = record.company_id.ji_codev
-                                    #
-                                    # if python_code:
-                                    #     safe_eval(record.company_id.ji_codev, objects, mode="exec", nocopy=True)
-                                    #     real_amount_moratorium = objects['result']
-                                    # else:
-                                    #     real_amount_moratorium = 0.00
-            record.moratex=json.dumps(pmora)
-            record.total_mes = mesp
+
+
+            record.moratex = json.dumps(pmora)
             record.total_moratorium = mora

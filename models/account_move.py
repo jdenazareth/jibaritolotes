@@ -252,9 +252,7 @@ class AccountMove(models.Model):
 
 
 
-    def action_confirm(self):
-        for sales in self:
-            sales.action_post()
+
 
     def open_payments(self):
         self.ensure_one()

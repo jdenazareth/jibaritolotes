@@ -1,8 +1,8 @@
 <odoo>
     <record id="ji_category" model="ir.module.category">
-        <field name="name">Moratorium Setting Apply</field>
+        <field name="name">Premisos Jibarito</field>
         <field name="description">
-            Category for apply developments on company
+            Configuracion para ver campos y objetos
         </field>
         <field name="sequence">5</field>
     </record>

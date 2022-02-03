@@ -17,3 +17,4 @@ from . import moratorio_move
 from . import hr_employee
 from . import payment_report
 from . import report_factura
+from . import sale_mora

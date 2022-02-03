@@ -98,6 +98,8 @@ class SaleOrder(models.Model):
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", compute="_compute_ji_product_information_form")
     estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
     x_studio_contrato = fields.Char(string="Contrato" , compute="state_product")
+    percent_mora = fields.Float(related="company_id.ji_percent_moratorium", string="Porcentaje Mora")
+
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
 
@@ -112,7 +114,7 @@ class SaleOrder(models.Model):
             elif line.state == "sale" or line.state == "done":
                 line.estado_producto = 13
             elif line.state == "cancel":
-                line.estado_producto = 22
+                line.estado_producto = 21
             else:
                 line.estado_producto = 21
             line.x_studio_contrato = cont
