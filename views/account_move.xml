@@ -12,25 +12,40 @@
                 <xpath expr="//button[@name='456']" position="attributes">
                     <attribute name="groups">jibaritolotes.group_ji_factura</attribute>
                 </xpath>
+                <xpath expr="//button[@name='action_invoice_register_payment']" position="replace">
+                    <button name="action_invoice_register_payment" id="account_invoice_payment_btn" type="object"
+                        attrs="{'invisible': ['|', '|', ('state', '!=', 'posted'), ('invoice_payment_state', '!=', 'not_paid'), ('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt'))]}" string="Register Payment"
+                        class="oe_highlight"
+                        groups="deltatech_sale_payment.group_caja_pagos"/>
+                </xpath>
 <!--                <button name="action_generate_asiento_mora" class="oe_highlight" action="Moraasiento_act_window"-->
 <!--                            string="Generar Asiento Moratorio"  type="object" groups="jibaritolotes.group_ji_migration"/>-->
+
+
+<!--                    </div>-->
+            </xpath>
+            <xpath expr="//header" position="after">
+                <div groups="account.group_account_invoice" class="alert alert-info" role="alert" style="margin-bottom:0px;"
+                     attrs="{'invisible': [('ji_documents','=',True)]}">
+                        <field name="ji_textalert" nolabel="1"/>
+                </div>
             </xpath>
 <!--            <xpath expr="//button[@name='456']" position="attributes">-->
 <!--                    <attribute name="groups">jibaritolotes.group_ji_factura</attribute>-->
 <!--            </xpath>-->
 
             <xpath expr="//div[@name='button_box']" position="inside">
-                <button  class="oe_stat_button" icon="fa-file-text"
-                         name="printcontratoAction"
+                <button
+                         name="printcontratoaction" type="object" class="oe_stat_button" icon="fa-file-text"
                           attrs="{'invisible':[('estado_producto', '!=', 12)]}"
                             string="Contrato"/>
                 <button name="get_reporte_amoritizacionv2" class="oe_stat_button" icon="fa-file-text"
                             string="Tabla de amortizacion"  type="object" groups="jibaritolotes.group_ji_migration"/>
-                <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text"
+                <button name="get_reporte_amoritizacion" class="oe_stat_button" icon="fa-file-text" attrs="{'invisible': [('ji_documents','=',False)]}"
                             string="Calendario de pagos"  type="object" groups="jibaritolotes.group_ji_migration"/>
-                <button name="action_regenerate_unreconciled_aml_dues" class="oe_stat_button" icon="fa-list" type="object" groups="jibaritolotes.group_ji_migration" >
-                    Generar Moratorio
-                </button>
+                <button name="action_regenerate_unreconciled_aml_dues" class="oe_stat_button" icon="fa-list" type="object"
+                        string="Generar Lista Mora"
+                        attrs="{'invisible': [('ji_documents','=',False)]}" groups="jibaritolotes.group_ji_migration" />
                 <button
                     type="object"
                     class="oe_stat_button"
@@ -44,6 +59,7 @@
                         </div>
                     </button>
         </xpath>
+
             <xpath expr="//field[@name='line_ids']//tree/field[@name='account_id']" position="before">
                 <field name="id" groups="jibaritolotes.group_ji_apply_developments"/>
                 <field name="ji_sequence_payments" widget="handle" groups="jibaritolotes.group_ji_apply_developments"/>
@@ -63,6 +79,7 @@
                 <page name="ji_mora" string="Moratorios" groups="jibaritolotes.group_ji_apply_developments">
                      <group>
                          <group name="derecha">
+                             <field name="ji_documents" invisible="1"/>
                              <field name="percent_moratorium" />
                              <field name="ji_number_slow_payer" />
                          </group>

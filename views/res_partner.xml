@@ -5,6 +5,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
+            <field name="mobile" position="attributes">
+              <attribute name="required">True</attribute>
+            </field>
             <field name="category_id" position="after" >
 
                 <field name="ji_name_americ" />

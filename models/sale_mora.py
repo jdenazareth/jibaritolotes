@@ -9,15 +9,20 @@ import json
 class moratorio_sale(models.Model):
     _inherit = "sale.order"
 
-    total_mes = fields.Integer(string="dias a Pagar")
+    total_mes = fields.Integer(string="Dias a Pagar")
     prorroga = fields.Integer(string="Prorroga Dias")
     moratex = fields.Text(string="Mora Json")
     at_date = fields.Date(string="At Date", default=fields.Date.context_today)
     total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
+    # adeudo = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
     saldsex = fields.Float(string="Saldo al terminar", compute="action_sal")
     exsalds = fields.Float(string="Saldo al terminar")
     ismora = fields.Boolean('Is Mora')
+    ant_pay = fields.Monetary(string="Anticipo a pagar", compute="get_anticipot")
 
+    def get_anticipot(self):
+        for line in self:
+            line.ant_pay = line.total_moratorium + line.pay_anticipo
     def action_sal(self):
         for record in self:
             diap = record.ji_fecha_apartado
@@ -74,21 +79,12 @@ class moratorio_sale(models.Model):
                         expay = record.exsalds
                         newpay = record.pay_anticipo
                         unit_moratorium = round((record.percent_mora / 100) * expay, 2)
-                        if expay > newpay:
-                            for tran in transactions:
-                                mpay = mpay + tran.mora
-                                pay = pay + tran.amount
-                                if pay >= (expay - newpay):
-                                    payex = payex + tran.amount
 
-                            diasp = round(mpay / unit_moratorium)
-                            dif = (unit_moratorium * diasp) - mpay
-                            didif= dias - pror
-                            if dif <= 0:
-                                unit_moratorium = round((record.percent_mora / 100) * newpay, 2)
-                                mora = unit_moratorium * (didif - diasp)
-                            else:
-                                mora = unit_moratorium * ( didif - diasp) + dif
+                        for tran in transactions:
+                            mpay = mpay + tran.mora
+                            pay = pay + tran.amount
+
+                        mora = unit_moratorium - mpay
                             # notification = {
                             #     'type': 'ir.actions.client',
                             #     'tag': 'display_notification',
@@ -100,12 +96,7 @@ class moratorio_sale(models.Model):
                             #     },
                             # }
                             # return notification
-                        else:
-                            mora = unit_moratorium * (dias - pror)
-
-
-
-
 
             record.moratex = json.dumps(pmora)
+            record.total_moratorium = mora
             record.total_moratorium = mora

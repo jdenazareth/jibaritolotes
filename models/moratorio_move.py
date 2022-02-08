@@ -139,9 +139,10 @@ class moratorio_move(models.Model):
                 if len(companies.ids) == 0:
                     mora = 0.0
                 partners = []
+
                 for company in companies:
                     partners_slow_payer = record.partner_id.get_partners_slow_payer_moratorium(company)
-
+                    # raise UserError(_(partners_slow_payer))
                     for p in partners_slow_payer:
                         number_slow_payer, amls = p.get_number_slow_payer_cronv(company,record)
                         partners.append({"partner": p, "amls": amls})
@@ -170,7 +171,7 @@ class moratorio_move(models.Model):
                                     # mesp = mesp + 1
                                     todate = fields.Date.today()
                                     r = relativedelta.relativedelta(record.at_date, aml.date_maturity)
-                                    month_number = r.months + 1
+                                    month_number = r.months + 2
                                     if month_number > mesp:
                                         mesp = month_number
                                     amount = aml.amount_residual_currency if aml.currency_id else aml.amount_residual
@@ -190,7 +191,7 @@ class moratorio_move(models.Model):
                                         "pay": pay,
                                         "unimora": unit_moratorium,
                                         "mes":month_number,
-                                        "tmes": mest,
+                                        "tmes": r.months,
                                        
                                     })
                                     
@@ -203,7 +204,7 @@ class moratorio_move(models.Model):
                                     #     real_amount_moratorium = objects['result']
                                     # else:
                                     #     real_amount_moratorium = 0.00
-            record.moratex=json.dumps(pmora)
+            record.moratex = json.dumps(pmora)
             record.total_mes = mesp
             record.total_moratorium = mora
                 # raise UserError(_(notification_lines))

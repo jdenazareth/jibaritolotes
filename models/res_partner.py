@@ -94,7 +94,6 @@ class ResPartner(models.Model):
 
     ji_number_slow_payer = fields.Integer(string="Number Slow Payer", compute="_ji_compute_for_followup")
 
-    @api.depends('unreconciled_aml_ids')
     def get_partners_slow_payer_cron(self, company):
         partner_ids = []
         for record in self:
@@ -130,41 +129,37 @@ class ResPartner(models.Model):
         today = fields.Date.context_today(company.partner_id)
         aml_ids = []
         for aml in self.unreconciled_aml_ids:
-            if not aml.reconciled :
-                if aml.company_id == company:
-                    is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                    if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
-                        number_slow_payer += 1
-                        aml_ids.append(aml)
-            return number_slow_payer, aml_ids
+            if aml.company_id == company:
+                is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
+                if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
+                    number_slow_payer += 1
+                    aml_ids.append(aml)
+        return number_slow_payer, aml_ids
 
     def get_number_slow_payer_cronv(self, company, move):
         number_slow_payer = 0
         today = fields.Date.context_today(company.partner_id)
         aml_ids = []
         for aml in self.unreconciled_aml_ids:
-            if not aml.reconciled :
-                if aml.move_id == move:
-                    if aml.company_id == company:
-                        is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                        if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
-                            number_slow_payer += 1
-                            aml_ids.append(aml)
+
+            if aml.move_id == move:
+                if aml.company_id == company:
+                    is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
+                    if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
+                        number_slow_payer += 1
+                        aml_ids.append(aml)
         return number_slow_payer, aml_ids
 
-    @api.depends('unreconciled_aml_ids')
     def get_number_slow_payer(self):
         number_slow_payer = 0
         today = fields.Date.context_today(self)
         aml_ids = []
         for aml in self.unreconciled_aml_ids:
-            if not aml.reconciled :
-                if aml.company_id == self.env.company:
-                    is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
-                    if is_overdue and not aml.blocked and not aml.move_id.ji_is_moratorium and not aml.reconciled and not aml.product_id:
-                        number_slow_payer += 1
-                        aml_ids.append(aml)
-        # raise UserError(_(str(number_slow_payer) + str(today)))
+            if aml.company_id == self.env.company:
+                is_overdue = today > aml.date_maturity if aml.date_maturity else today > aml.date
+                if is_overdue and not aml.blocked:
+                    number_slow_payer += 1
+                    aml_ids.append(aml)
         return number_slow_payer, aml_ids
 
     @api.depends('unreconciled_aml_ids')

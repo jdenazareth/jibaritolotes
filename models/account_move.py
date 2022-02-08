@@ -107,14 +107,68 @@ class AccountMove(models.Model):
     last_payment = fields.Float(string="Ultimo Pago", compute="_compute_paymentlast")
     motarorio_pay = fields.Monetary(string="Moratorio Pagados", compute="_compute_paymentlast")
     estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
-
+    ji_documents = fields.Boolean(string="Revision de documentacion", compute="get_documents")
+    ji_textalert = fields.Char(string="mjs")
     x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", related="invoice_line_ids.product_id.x_studio_manzana")
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", related="invoice_line_ids.product_id.x_studio_lote")
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", related="invoice_line_ids.product_id.x_studio_calle")
 
+    def action_invoice_register_payment(self):
+        for res in self:
+            flag = self.env['res.users'].has_group('deltatech_sale_payment.group_caja_pagos')
+            if not flag:
+                raise UserError(_("No tienes Permiso Para realizar el pago"))
+            if not res.ji_documents:
+                raise UserError(_("Completar la Documentacion Faltante"))
+            return self.env['account.payment'] \
+                .with_context(active_ids=self.ids, active_model='account.move', active_id=self.id) \
+                .action_register_payment()
+    def noti_docs(self,mesaje,title):
+        notification = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': (title),
+                'message': mesaje,
+                'type': 'warning',  # types: success,warning,danger,info
+                'sticky': True,  # True/False will display for few seconds if false
+            },
+        }
+        return notification
+    def get_documents(self):
+        for mov in self:
+            cli = mov.partner_id
+            ndoc= cli.count_doct
+            aprov = False
+            if ndoc >= 3:
 
-    def printcontratoAction(self):
-        return self.env.ref('jibaritolotes.action_report_sale_order_contract').report_action(self)
+                for doc in cli.attachment_ids:
+                    if doc.aprobado:
+                        aprov = doc.aprobado
+                    else:
+                        aprov = doc.aprobado
+                        break
+
+                if not aprov:
+                    mov.ji_textalert = "Los ducumentos No se encuentran Aprobados, Verificar información"
+
+                mov.ji_documents = aprov
+
+
+            else:
+                mov.ji_textalert = "Sin Documentación, Favor de Subir la documentacion requerida"
+                mov.ji_documents = aprov
+                # mov.noti_docs("", "")
+
+
+
+    def printcontratoaction(self):
+        for res in self:
+            if not res.ji_documents:
+                raise UserError(_("Completar la Documentacion Faltante"))
+            if not res.partner_id.street or not res.partner_id.city or not res.partner_id.street or not res.partner_id.state_id or not res.partner_id.zip or not res.partner_id.country_id:
+                raise UserError(_("El cliente no cuenta con su dirección completa, favor de completar su dirección!"))
+            return self.env.ref('jibaritolotes.action_report_sale_order_contract').report_action(self)
     def get_amount_advance_payment(self):
         if not self.invoice_payment_term_id.ji_advance_payment:
             return ""
@@ -229,9 +283,11 @@ class AccountMove(models.Model):
         for line in self:
             pagos = self.env["account.payment"].search([('payment_reference', '=', line.invoice_payment_ref),('x_studio_tipo_de_pago','=','Anticipo')], order='payment_date desc')
             last_pay = fields.Date.today()
-            apar = line.amount_total - (line.amount_total * 0.10)
+            apar = line.amount_total - round(line.amount_total * 0.10,2)
+            # raise UserError(_( str(line.amount_residual)+ " " +str(apar)))
             # 10000 <= 12056,18
             if line.amount_residual <= apar:
+                # raise UserError(_(pagos))
                 line.estado_producto = 12
                 for pay in pagos:
                     last_pay = pay.payment_date
@@ -326,6 +382,8 @@ class AccountMove(models.Model):
     @api.depends("line_ids")
     def get_reporte_amoritizacion(self):
         for res in self:
+            if not res.ji_documents:
+                raise UserError(_("Completar la Documentacion Faltante"))
             move = []
             account = []
             today = fields.Date.today()
@@ -386,6 +444,9 @@ class AccountMove(models.Model):
     @api.depends("line_ids")
     def get_reporte_amoritizacionv2(self):
         for res in self:
+            # for res in self:
+            #     if not res.ji_documents:
+            #         raise UserError(_("Completar la Documentacion Faltante"))
             move = []
             account = []
             today = fields.Date.today()
@@ -393,7 +454,7 @@ class AccountMove(models.Model):
             name = res.name
             pagos = self.env["account.payment"].search([('communication', '=', res.invoice_payment_ref),('x_studio_tipo_de_pago','!=','Anticipo'),('state','=','posted')], order='payment_date asc')
             lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
-            pagosa = self.env["account.payment"].search([('payment_reference', '=', res.invoice_payment_ref),('x_studio_tipo_de_pago','=','Anticipo'),('state','=','posted')], order='payment_date asc')
+            pagosa = self.env["account.payment"].search([('communication', '=', res.invoice_payment_ref),('x_studio_tipo_de_pago','=','Anticipo'),('state','=','posted')], order='payment_date asc')
             if(len(pagosa) == 0):
                sale = self.env["sale.order"].search([('name', '=', res.invoice_payment_ref)])
                payment_ids = []
@@ -420,16 +481,7 @@ class AccountMove(models.Model):
                 "real": 0,
             })
 
-            notification = {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': ('mejoras'),
-                    'message': pagos,
-                    'type': 'success',  # types: success,warning,danger,info
-                    'sticky': True,  # True/False will display for few seconds if false
-                },
-            }
+
             # return notification
             pagov = 1
             ofpa = ""
@@ -504,59 +556,80 @@ class AccountMove(models.Model):
                         co2 = 0
                         if sald_ant < lin.debit:
                             for pay in pagos:
-                                if co_pay > 0 and impo < round(lin.debit) and co == cont and co == co2:
+                                if co_pay > 0 and impo < lin.debit and co == cont and co == co2:
                                     fecpag = pay.payment_date.strftime('%d-%m-%y')
 
                                     impo = impo + pay.amount
                                     mora = mora + pay.ji_moratorio
                                     pimp = impo + mora - sald_ant + sald_ant2
                                     co_pay = co_pay - 1
-                                    if impo >= round(lin.debit):
+                                    if impo >= lin.debit:
                                         co = co + 1
-                                elif co_pay > 0 and impo >= round(lin.debit) and co == cont and co == co2:
+                                elif co_pay > 0 and impo >= lin.debit and co == cont and co == co2:
                                     fecpag = pay.payment_date.strftime('%d-%m-%y')
                                     impo = impo + pay.amount
                                     mora = mora + pay.ji_moratorio
                                     pimp = impo + mora - sald_ant + sald_ant2
                                     co_pay = co_pay - 1
-                                    if impo >= round(lin.debit):
+                                    if impo >= lin.debit:
                                         co = co + 1
                                 if co > co2:
                                     co2 = co2 + 1
                             cont = cont + 1
+                        # prox_sa = round(float(unit_p) * float(mes_p), 2)
+                        prox_pay = json.loads(res.moratex)
+                        mora_prox= 0.0
+                        for px_py in prox_pay:
+                            if px_py["fecha"] == str(lin.date_maturity):
+                                unit_p = px_py["unimora"]
+                                mes_p = px_py["mes"]
+                                mora_prox = px_py["mora"]
+                                notification = {
+                                    'type': 'ir.actions.client',
+                                    'tag': 'display_notification',
+                                    'params': {
+                                        'title': ('mejoras'),
+                                        'message': str(px_py["mes"])+ " "+ str(lin.date_maturity) + " " + str(px_py["unimora"]),
+                                        'type': 'success',  # types: success,warning,danger,info
+                                        'sticky': True,  # True/False will display for few seconds if false
+                                    },
+                                }
+                                # return notification
+
+                        prox_sal = lin.debit - sald_ant + mora + round(float(mora_prox), 2)
                         if impo > lin.debit:
                             sald_ant = impo - lin.debit + sald_ant2
                             impo = lin.debit
                         elif impo < lin.debit:
                              sald_ant = impo - lin.debit + sald_ant2
-                             
+
                         else:
                             sald_ant = 0
-                        tov = tov - (pimp - mora)
+                        tov = tov - (pimp - mora) + round(float(mora_prox) ,2)
                         if(impo == 0):
                             fecpag = ""
                             sald_ant = 0
                         if mes_p >= 1:
                             mes_p = mes_p - 1
-                        prox_pay = json.loads(res.moratex)
 
-                        if prox_pay[0]["fecha"] == str(lin.date_maturity):
-                            unit_p = prox_pay[0]["unimora"]
-                            mes_p = prox_pay[0]["mes"]
+
+
+
                         # for pay in prox_pay:
-                        prox_sal = round(float(unit_p) * float(mes_p),2)
 
-                        prox_sal = lin.debit + prox_sal - sald_ant + mora
+                        # if prox_sal <= 0:
+                        #     prox_sal = lin.debit
+
                         account.append({
                             "number": pagov,
                             "date_f": lin.date_maturity.strftime('%d-%m-%y'),
                             "date_p": fecpag,
-                            "mora": mora + round(float(unit_p) * float(mes_p),2),
+                            "mora": mora + round(float(mora_prox) ,2),
                             "sald": sald_ant,
                             "impo": impo,
                             "debit": lin.debit,
                             "credit": lin.credit,
-                            "total": tov,
+                            "total": tov ,
                             "real": pimp,
                             "prox_sal": prox_sal,
                         })

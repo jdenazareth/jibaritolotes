@@ -12,4 +12,20 @@
             </xpath>
         </field>
     </record>
+    <record model="ir.ui.view" id="ji_product_producttree">
+    <field name="name">product.product.tree</field>
+    <field name="model">product.product</field>
+    <field name="type">tree</field>
+    <field name="inherit_id" ref="product.product_product_tree_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='default_code']" position="after">
+
+            <field name="x_studio_lote"/>
+            <field name="x_studio_manzana"/>
+             <field name="x_studio_calle"/>
+            <field name="ji_area"/>
+            <field name="estado_producto"/>
+        </xpath>
+    </field>
+</record>
 </odoo>

@@ -91,7 +91,7 @@ def month_name(number):
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    ji_fecha_apartado = fields.Date(string="Fecha de Apartado")
+    ji_fecha_apartado = fields.Date(string="Fecha de Apartado", default=fields.Date.context_today)
     x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", string="Vendedor")
     x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", compute="_compute_ji_product_information_form")
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", compute="_compute_ji_product_information_form")
@@ -100,8 +100,10 @@ class SaleOrder(models.Model):
     x_studio_contrato = fields.Char(string="Contrato" , compute="state_product")
     percent_mora = fields.Float(related="company_id.ji_percent_moratorium", string="Porcentaje Mora")
 
+
     # x_studio_contrato = fields.Char()
     # x_studio_calle = fields.Selection()
+
 
     @api.depends("state")
     def state_product(self):
@@ -127,6 +129,8 @@ class SaleOrder(models.Model):
                 line.x_studio_lote = line.order_line.product_id.x_studio_lote
                 line.x_studio_calle = line.order_line.product_id.x_studio_calle
                 if line.state == "sale":
+                    line.order_line.product_id.estado_producto = line.estado_producto
+                elif line.state == "cancel":
                     line.order_line.product_id.estado_producto = line.estado_producto
         except Exception as e:
             raise UserError("No es posible agregar otro producto a la línea de pedido.")
