@@ -18,4 +18,12 @@
         <field name="name">Confirmar y Crear Factura</field>
         <field name="category_id" ref="ji_category"/>
     </record>
+    <record id="group_ji_pagos" model="res.groups">
+        <field name="name">Ver Pagos</field>
+        <field name="category_id" ref="ji_category"/>
+    </record>
+    <record id="group_jj_contact" model="res.groups">
+        <field name="name">Editar Contacto</field>
+        <field name="category_id" ref="ji_category"/>
+    </record>
 </odoo>

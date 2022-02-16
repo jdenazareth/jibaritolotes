@@ -31,6 +31,7 @@
             <field name="arch" type="xml">
                 <field name="value" position="after">
                     <field name="ji_type" groups="jibaritolotes.group_ji_apply_developments"/>
+                    <field name="ji_dia" attrs="{'invisible':[('ji_type', '!=', 'money_advance')]}"/>
                 </field>
             </field>
         </record>

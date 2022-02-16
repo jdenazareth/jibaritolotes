@@ -59,4 +59,10 @@
             </xpath>
         </field>
     </record>
+
+    <template id="assets_backend" name="custom_web_changes assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/jibaritolotes/static/src/js/hide_buton.js"/>
+        </xpath>
+    </template>
 </odoo>

@@ -28,6 +28,197 @@ class moratorio_move(models.Model):
     ji_condition = fields.Selection(related="partner_id.ji_condition", string="Condicion")
     ji_number_slow_payer = fields.Integer(related="partner_id.ji_number_slow_payer", string="Number Slow Payer")
     amount_total_moratorium = fields.Monetary(string="Amount Total Moratorium")
+    ji_plazo_actual = fields.Integer(string="Meses pagados en totalidad", compute="get_plazo_actual")
+
+    @api.depends("line_ids")
+    def get_plazo_actual(self):
+        for res in self:
+            move = []
+            account = []
+            today = fields.Date.today()
+            anticipo = []
+            name = res.name
+            pagosto = 0
+            if self.type == "out_invoice":
+                pagos = self.env["account.payment"].search(
+                    [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '!=', 'Anticipo'),
+                    ('state', '=', 'posted')], order='payment_date,id asc')
+                lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
+                pagosa = self.env["account.payment"].search(
+                    [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '=', 'Anticipo'),
+                    ('state', '=', 'posted')], order='id asc')
+                if (len(pagosa) == 0):
+                    sale = self.env["sale.order"].search([('name', '=', res.invoice_payment_ref)])
+                    payment_ids = []
+                    for order in sale:
+                        transactions = order.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+                        for item in transactions:
+                            payment_ids.append(item.payment_id.id)
+                    pagosa = self.env["account.payment"].search([('id', 'in', payment_ids), ('state', '=', 'posted')],
+                                                                order='payment_date asc')
+                compaRecords = []
+                compani = res.company_id
+                tov = res.amount_untaxed
+                por = res.amount_untaxed * 0.1
+                anticp = por
+
+
+                anticipo.append({
+                    "number": "Anticipo 0",
+                    "date_f": "",
+                    "mora": 0,
+                    "impo": 0,
+                    "total": anticp,
+                    "real": 0,
+                })
+
+                conan = 1
+                co_pay = 1
+
+                for pay in pagosa:
+                    mora = pay.ji_moratorio
+                    impo = pay.amount
+                    fecpag = pay.payment_date.strftime('%d-%m-%y')
+                    pimp = pay.ji_moratorio + pay.amount
+                    anticp = anticp - impo
+                    tov = tov - impo
+
+                    anticipo.append({
+                        "number": "Anticipo " + str(conan),
+                        "date_f": fecpag,
+                        "mora": mora,
+                        "impo": impo,
+                        "total": anticp,
+                        "real": pimp,
+                    })
+                    conan = conan + 1
+                    co_pay = co_pay + 1
+                pagov = 1
+                ofpa = ""
+                account.append({
+                    "number": 0,
+                    "date_f": "",
+                    "date_p": "",
+                    "mora": 0,
+                    "sald": 0,
+                    "impo": 0,
+                    "debit": 0,
+                    "credit": 0,
+                    "total": tov,
+                    "real": 0,
+                    "prox_sal": 0,
+                })
+
+                co_pay = len(pagos)
+                sal_acom = 0.0
+                co = 0
+                cont = 0
+                cont2 = 0
+                sald_ant2 = 0
+                fecpag = ""
+                sald_ant = 0
+                for lin in lines:
+
+                    mora = 0
+                    mora_prox = 0.0
+                    prox_sal = 0.0
+                    if sald_ant > 0:
+                        impo = 0 + sald_ant
+                        sald_ant2 = 0
+
+                    else:
+                        impo = 0
+                        sald_ant2 = sald_ant
+                    pimp = 0.0
+                    if lin.ji_number.find('A') != 0 and lin.debit >= 1:
+                        co2 = 0
+                        fechan=""
+                        if sald_ant < lin.debit:
+                            co3 = 0
+                            for pay in pagos:#103
+                                if co_pay > 0 and impo < lin.debit and cont2 == cont and co == co2:
+                                    fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                    fechan = pay.payment_date.strftime('%d-%m-%y')
+
+                                    impo = impo + pay.amount
+                                    mora = mora + pay.ji_moratorio
+                                    pimp = impo + mora - sald_ant + sald_ant2
+                                    co_pay = co_pay - 1
+                                    co3 = co3 + 1
+                                    if impo >= lin.debit:
+                                        co = co + co3
+                                        cont2 = cont2 + 1
+                                        co3 = 0
+                                elif co_pay > 0 and impo >= lin.debit and co == cont and co == co2:
+                                    fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                    fechan = pay.payment_date.strftime('%d-%m-%y')
+                                    impo = impo + pay.amount
+                                    mora = mora + pay.ji_moratorio
+                                    pimp = impo + mora - sald_ant + sald_ant2
+                                    co_pay = co_pay - 1
+                                    if impo >= lin.debit:
+                                        co = co + 1
+                                        cont2 = cont2 + 1
+                                        co3 = 0
+                                if co > co2:
+                                    co2 = co2 + 1
+                            cont = cont + 1
+                            if sald_ant > 0:
+                                prox_sal = lin.debit - sald_ant + mora
+                            else:
+                                prox_sal = lin.debit + mora
+                        else:
+                            prox_sal = 0
+
+                        prox_pay = json.loads(res.moratex)
+                        mora_prox = 0.0
+                        for px_py in prox_pay:
+                            if px_py["fecha"] == str(lin.date_maturity):
+                                unit_p = float(px_py["unimora"])
+                                mes_p = float(px_py["mes"])
+                                mora_prox = unit_p * mes_p
+
+                                # return notification
+                        prox_sal = prox_sal + round(mora_prox, 2)
+                        if impo > lin.debit:
+                            sald_ant = impo - lin.debit + sald_ant2
+                            impo = lin.debit
+                        elif impo < lin.debit:
+                            sald_ant = impo - lin.debit + sald_ant2
+
+                        else:
+                            sald_ant = 0
+                            impo = lin.debit
+                        tov = tov - (pimp - mora) + round(mora_prox, 2)
+                        if (impo == 0):
+                            fecpag = ""
+                            sald_ant = 0
+                        # mora + round(mora_prox, 2)
+                        if mora <= 0:
+                            mora = mora_prox
+
+                        account.append({
+                            "number": pagov,
+                            "date_f": lin.date_maturity.strftime('%d-%m-%y'),
+                            "date_p": fechan,
+                            "mora": mora,
+                            "sald": sald_ant,
+                            "impo": impo,
+                            "debit": lin.debit,
+                            "credit": lin.credit,
+                            "total": tov,
+                            "real": pimp,
+                            "prox_sal": prox_sal,
+                        })
+
+                        ofpa = " de " + str(pagov)
+                        pagov = pagov + 1
+
+                pagosto = co
+            res.ji_plazo_actual = pagosto
+
+
+
 
     def _prapare_invoice(self):
         line_vals = []
@@ -204,9 +395,15 @@ class moratorio_move(models.Model):
                                     #     real_amount_moratorium = objects['result']
                                     # else:
                                     #     real_amount_moratorium = 0.00
+
             record.moratex = json.dumps(pmora)
             record.total_mes = mesp
             record.total_moratorium = mora
+        if self.total_moratorium > 0:
+            self.ji_is_moratorium = True
+        else:
+            self.ji_is_moratorium = False
+
                 # raise UserError(_(notification_lines))
                 # self.write({"moratorio_line": notification_lines})
 

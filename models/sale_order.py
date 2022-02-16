@@ -112,7 +112,10 @@ class SaleOrder(models.Model):
             if line.invoice_ids:
                 for fact in line.invoice_ids:
                     cont = fact.name
-                line.estado_producto = line.order_line.product_id.estado_producto
+                if cont != "":
+                    line.estado_producto = line.order_line.product_id.estado_producto
+                else:
+                    line.estado_producto = 12
             elif line.state == "sale" or line.state == "done":
                 line.estado_producto = 13
             elif line.state == "cancel":
@@ -308,7 +311,9 @@ class SaleOrder(models.Model):
         return num2words(self.ji_get_amount_month_payment(), lang='es')
 
     def open_payments(self):
-        
+        flag = self.env['res.users'].has_group('jibaritolotes.group_ji_pagos')
+        if not flag:
+            raise UserError(_("No tienes Permiso Para ver el pagos"))
         payment_ids = []
         # pagosa = self.env["account.payment"].search([('payment_reference', '=', self.name)], order='payment_date desc')
         for order in self:

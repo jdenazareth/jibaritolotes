@@ -177,7 +177,7 @@ class AccountPaymentTermLine(models.Model):
 
     ji_type = fields.Selection([('money_advance', 'Money Advance'), ('monthly_payments', 'Monthly Payments'),
                                 ('balance', 'Balance')], string="Type Payment", default="monthly_payments")
-
+    ji_dia = fields.Integer('Dias de anticipo', default=1)
     value = fields.Selection([
         ('balance', 'Balance'),
         ('percent', 'Percent'),

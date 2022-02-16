@@ -5,7 +5,17 @@ import copy
 import logging
 _logger = logging.getLogger(__name__)
 from odoo import _, api, fields, models, tools
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+
+from collections import defaultdict
+MAP_INVOICE_TYPE_PARTNER_TYPE = {
+    'out_invoice': 'customer',
+    'out_refund': 'customer',
+    'out_receipt': 'customer',
+    'in_invoice': 'supplier',
+    'in_refund': 'supplier',
+    'in_receipt': 'supplier',
+}
 from odoo.tools import safe_eval
 import dateutil.relativedelta as relativedelta
 from werkzeug import urls
@@ -90,7 +100,7 @@ def month_name(number):
 
 class AccountMove(models.Model):
     _inherit = "account.move"
-
+    fecha_fact = fields.Date(string="Fecha de Factura")
     ji_partner_contract = fields.Many2one(comodel_name="res.partner", string="Commission Agent")
     ji_order_contract = fields.Many2one(comodel_name="sale.order", string="Order Contract")
     ji_is_moratorium = fields.Boolean(string="Moratorium", default=False)
@@ -113,6 +123,8 @@ class AccountMove(models.Model):
     x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", related="invoice_line_ids.product_id.x_studio_lote")
     x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", related="invoice_line_ids.product_id.x_studio_calle")
 
+    def onchange_invoice_date(self):
+        self._recompute_dynamic_lines(recompute_tax_base_amount=True)
     def action_invoice_register_payment(self):
         for res in self:
             flag = self.env['res.users'].has_group('deltatech_sale_payment.group_caja_pagos')
@@ -151,10 +163,7 @@ class AccountMove(models.Model):
 
                 if not aprov:
                     mov.ji_textalert = "Los ducumentos No se encuentran Aprobados, Verificar información"
-
                 mov.ji_documents = aprov
-
-
             else:
                 mov.ji_textalert = "Sin Documentación, Favor de Subir la documentacion requerida"
                 mov.ji_documents = aprov
@@ -311,6 +320,9 @@ class AccountMove(models.Model):
 
 
     def open_payments(self):
+        flag = self.env['res.users'].has_group('jibaritolotes.group_ji_pagos')
+        if not flag:
+            raise UserError(_("No tienes Permiso Para ver el pagos"))
         self.ensure_one()
         invoice_payments_widget = json.loads(self.invoice_payments_widget)
         payment_ids = []
@@ -444,6 +456,211 @@ class AccountMove(models.Model):
     @api.depends("line_ids")
     def get_reporte_amoritizacionv2(self):
         for res in self:
+            move = []
+            account = []
+            today = fields.Date.today()
+            anticipo = []
+            name = res.name
+            pagos = self.env["account.payment"].search(
+                [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '!=', 'Anticipo'),
+                 ('state', '=', 'posted')], order='payment_date,id asc')
+            lines = self.env["account.move.line"].search([('move_id.id', '=', res.id)], order='date_maturity asc')
+            pagosa = self.env["account.payment"].search(
+                [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '=', 'Anticipo'),
+                 ('state', '=', 'posted')], order='id asc')
+            if (len(pagosa) == 0):
+                sale = self.env["sale.order"].search([('name', '=', res.invoice_payment_ref)])
+                payment_ids = []
+                for order in sale:
+                    transactions = order.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+                    for item in transactions:
+                        payment_ids.append(item.payment_id.id)
+                pagosa = self.env["account.payment"].search([('id', 'in', payment_ids), ('state', '=', 'posted')],
+                                                            order='payment_date asc')
+            compaRecords = []
+            compani = res.company_id
+            tov = res.amount_untaxed
+            por = res.amount_untaxed * 0.1
+            anticp = por
+
+
+            anticipo.append({
+                "number": "Anticipo 0",
+                "date_f": "",
+                "mora": 0,
+                "impo": 0,
+                "total": anticp,
+                "real": 0,
+            })
+
+            conan = 1
+            co_pay = 1
+
+            for pay in pagosa:
+                mora = pay.ji_moratorio
+                impo = pay.amount
+                fecpag = pay.payment_date.strftime('%d-%m-%y')
+                pimp = pay.ji_moratorio + pay.amount
+                anticp = anticp - impo
+                tov = tov - impo
+
+                anticipo.append({
+                    "number": "Anticipo " + str(conan),
+                    "date_f": fecpag,
+                    "mora": mora,
+                    "impo": impo,
+                    "total": anticp,
+                    "real": pimp,
+                })
+                conan = conan + 1
+                co_pay = co_pay + 1
+            pagov = 1
+            ofpa = ""
+            account.append({
+                "number": 0,
+                "date_f": "",
+                "date_p": "",
+                "mora": 0,
+                "sald": 0,
+                "impo": 0,
+                "debit": 0,
+                "credit": 0,
+                "total": tov,
+                "real": 0,
+                "prox_sal": 0,
+            })
+
+            co_pay = len(pagos)
+            sal_acom = 0.0
+            co = 0
+            cont = 0
+            cont2 = 0
+            sald_ant2 = 0
+            fecpag = ""
+            sald_ant = 0
+            for lin in lines:
+
+                mora = 0
+                mora_prox = 0.0
+                prox_sal = 0.0
+                if sald_ant > 0:
+                    impo = 0 + sald_ant
+                    sald_ant2 = 0
+
+                else:
+                    impo = 0
+                    sald_ant2 = sald_ant
+                pimp = 0.0
+                if lin.ji_number.find('A') != 0 and lin.debit >= 1:
+                    co2 = 0
+                    fechan=""
+                    if sald_ant < lin.debit:
+                        co3 = 0
+                        for pay in pagos:#103
+                            if co_pay > 0 and impo < lin.debit and cont2 == cont and co == co2:
+                                fecpag = pay.payment_date.strftime('%d-%m-%y')
+
+                                impo = impo + pay.amount
+                                mora = mora + pay.ji_moratorio
+                                pimp = impo + mora - sald_ant + sald_ant2
+                                co_pay = co_pay - 1
+                                co3 = co3 + 1
+                                if impo >= lin.debit:
+                                    co = co + co3
+                                    cont2 = cont2 + 1
+                                    co3 = 0
+                            elif co_pay > 0 and impo >= lin.debit and co == cont and co == co2:
+                                fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                impo = impo + pay.amount
+                                mora = mora + pay.ji_moratorio
+                                pimp = impo + mora - sald_ant + sald_ant2
+                                co_pay = co_pay - 1
+                                if impo >= lin.debit:
+                                    co = co + 1
+                                    cont2 = cont2 + 1
+                                    co3 = 0
+                            if co > co2:
+                                co2 = co2 + 1
+                        cont = cont + 1
+                        if sald_ant > 0:
+                            prox_sal = lin.debit - sald_ant + mora
+                        else:
+                            prox_sal = lin.debit + mora - sald_ant2
+
+                    else:
+                        prox_sal = 0
+
+                    prox_pay = json.loads(res.moratex)
+                    mora_prox = 0.0
+                    for px_py in prox_pay:
+                        if px_py["fecha"] == str(lin.date_maturity):
+                            unit_p = float(px_py["unimora"])
+                            mes_p = float(px_py["mes"])
+                            mora_prox = unit_p * mes_p
+
+                            # return notification
+                    isigual = ""
+                    prox_sal = prox_sal + round(mora_prox, 2)
+                    if impo == lin.debit:
+                        isigual = "Si"
+                        sald_ant = 0
+                        impo = lin.debit
+                        sald_ant2 = 0
+                    elif impo < lin.debit:
+                        sald_ant = round(impo - lin.debit + sald_ant2,2)
+                        isigual = "sald_ant = "+ str(sald_ant)
+
+                    else:
+                        sald_ant = round(impo - lin.debit + sald_ant2,2)
+                        impo = lin.debit
+                        isigual = ">sald_ant = " + str(sald_ant)
+
+                    tov = tov - (pimp - mora) + round(mora_prox, 2)
+                    if (impo == 0):
+                        fecpag = ""
+                        sald_ant = 0
+                    # mora + round(mora_prox, 2)
+                    if mora <= 0:
+                        mora = mora_prox
+
+                    account.append({
+                        "number": pagov,
+                        "date_f": lin.date_maturity.strftime('%d-%m-%y'),
+                        "date_p": fecpag,
+                        "mora": mora,
+                        "sald": sald_ant,
+                        "impo": impo,
+                        "debit": lin.debit,
+                        "credit": lin.credit,
+                        "total": tov,
+                        "real": pimp,
+                        "prox_sal": prox_sal,
+                    })
+
+                    ofpa = " de " + str(pagov)
+                    pagov = pagov + 1
+
+            data = {
+                'client': res.partner_id.name,
+                'contrato': res.name,
+                'produc': "Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name + ", Calle " + res.x_studio_calle.name,
+                'date': str(today.day) + " de " + str(month_name(today.month)) + " del " + str(today.year),
+
+                'move_id': move,
+                'ofpay': ofpa,
+                'acco': account,
+                'anti': anticipo,
+                'comapany': compaRecords,
+            }
+            return self.env.ref('jibaritolotes.report_amortizacionv2').report_action(self, data=data)
+
+
+
+
+
+    @api.depends("line_ids")
+    def get_reporte_amoritizacionv2ant(self):
+        for res in self:
             # for res in self:
             #     if not res.ji_documents:
             #         raise UserError(_("Completar la Documentacion Faltante"))
@@ -529,7 +746,7 @@ class AccountMove(models.Model):
             fecpag = ""
             for lin in lines:
                 if lin.debit > 0:
-
+                    mora_prox = 0.0
                     mora = 0
                     if sald_ant > 0:
                         impo = 0 + sald_ant
@@ -554,10 +771,12 @@ class AccountMove(models.Model):
 
                     if lin.ji_number.find('A') != 0 and lin.debit >=1:
                         co2 = 0
+                        fechan=""
                         if sald_ant < lin.debit:
                             for pay in pagos:
                                 if co_pay > 0 and impo < lin.debit and co == cont and co == co2:
                                     fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                    fechan = pay.payment_date.strftime('%d-%m-%y')
 
                                     impo = impo + pay.amount
                                     mora = mora + pay.ji_moratorio
@@ -567,12 +786,12 @@ class AccountMove(models.Model):
                                         co = co + 1
                                 elif co_pay > 0 and impo >= lin.debit and co == cont and co == co2:
                                     fecpag = pay.payment_date.strftime('%d-%m-%y')
+                                    fechan = pay.payment_date.strftime('%d-%m-%y')
                                     impo = impo + pay.amount
                                     mora = mora + pay.ji_moratorio
                                     pimp = impo + mora - sald_ant + sald_ant2
                                     co_pay = co_pay - 1
-                                    if impo >= lin.debit:
-                                        co = co + 1
+                                    co = co + 1
                                 if co > co2:
                                     co2 = co2 + 1
                             cont = cont + 1
@@ -623,7 +842,7 @@ class AccountMove(models.Model):
                         account.append({
                             "number": pagov,
                             "date_f": lin.date_maturity.strftime('%d-%m-%y'),
-                            "date_p": fecpag,
+                            "date_p": fechan,
                             "mora": mora + round(float(mora_prox) ,2),
                             "sald": sald_ant,
                             "impo": impo,
@@ -1030,10 +1249,13 @@ class AccountMoveLine(models.Model):
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.payment"
     x_studio_contrato = fields.Char(string="Contrato", compute="compute_ji_contrato")
-    x_studio_tipo_de_pago = fields.Selection(string="Tipo de Pago",
-        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"), ("Intererses Moratorios + Mensualidades","Intererses Moratorios + Mensualidades")])
-    ji_moratorio = fields.Monetary(string="Total Moratorios a pagar")
-    ji_moratorio_totoal = fields.Float(string="Total Moratorios")
+    x_studio_tipo_de_pago = fields.Selection(string="Tipo de Pago", default = "Intererses Moratorios + Mensualidades",
+        selection=[("Anticipo", "Anticipo"), ("Cobranza Mensualidades", "Cobranza Mensualidades"),
+                   ("Intererses Moratorios + Mensualidades","Intererses Moratorios + Mensualidades")])
+    ji_moratorio = fields.Monetary(string="Total Moratorios")
+
+    ji_mensuaidad = fields.Integer(string="Mes Pagado")
+    ji_moratorio_total = fields.Float(string="Total Moratorios in invoice")
     ji_moratorio_date = fields.Date(string="Fecha Moratorio Vencido")
 
     @api.depends("partner_id", "journal_id", "state")
@@ -1043,3 +1265,116 @@ class AccountFollowupReport(models.AbstractModel):
                 res.x_studio_tipo_de_pago = "Anticipo"
             res.x_studio_contrato = "0"
 
+    @api.model
+    def default_get(self, default_fields):
+        rec = super(AccountFollowupReport, self).default_get(default_fields)
+        active_ids = self._context.get('active_ids') or self._context.get('active_id')
+        active_model = self._context.get('active_model')
+
+        # Check for selected invoices ids
+        if not active_ids or active_model != 'account.move':
+            return rec
+
+        invoices = self.env['account.move'].browse(active_ids).filtered(
+            lambda move: move.is_invoice(include_receipts=True))
+
+        # Check all invoices are open
+        if not invoices or any(invoice.state != 'posted' for invoice in invoices):
+            raise UserError(_("You can only register payments for open invoices"))
+        # Check if, in batch payments, there are not negative invoices and positive invoices
+        dtype = invoices[0].type
+        for inv in invoices[1:]:
+            if inv.type != dtype:
+                if ((dtype == 'in_refund' and inv.type == 'in_invoice') or
+                        (dtype == 'in_invoice' and inv.type == 'in_refund')):
+                    raise UserError(
+                        _("You cannot register payments for vendor bills and supplier refunds at the same time."))
+                if ((dtype == 'out_refund' and inv.type == 'out_invoice') or
+                        (dtype == 'out_invoice' and inv.type == 'out_refund')):
+                    raise UserError(
+                        _("You cannot register payments for customer invoices and credit notes at the same time."))
+
+        amount = self._compute_payment_amount(invoices, invoices[0].currency_id, invoices[0].journal_id,
+                                              rec.get('payment_date') or fields.Date.today())
+        rec.update({
+            'currency_id': invoices[0].currency_id.id,
+            'journal_id': 8,
+            'ji_mensuaidad': invoices[0].ji_plazo_actual + 1,
+            'ji_moratorio_total': invoices[0].total_moratorium,
+            'amount': amount,
+            'payment_type': 'inbound' if amount > 0 else 'outbound',
+            'partner_id': invoices[0].commercial_partner_id.id,
+            'partner_type': MAP_INVOICE_TYPE_PARTNER_TYPE[invoices[0].type],
+            'communication': invoices[0].invoice_payment_ref or invoices[0].ref or invoices[0].name,
+            'invoice_ids': [(6, 0, invoices.ids)],
+        })
+        return rec
+
+    def action_draft(self):
+        flag = self.env['res.users'].has_group('jibaritolotes.group_ji_factura')
+        if not flag:
+            raise UserError(_("No tienes Permiso para esta acción"))
+        moves = self.mapped('move_line_ids.move_id')
+        moves.filtered(lambda move: move.state == 'posted').button_draft()
+        moves.with_context(force_delete=True).unlink()
+        self.write({'state': 'draft', 'invoice_ids': False})
+
+    def post(self):
+        """ Create the journal items for the payment and update the payment's state to 'posted'.
+            A journal entry is created containing an item in the source liquidity account (selected journal's default_debit or default_credit)
+            and another in the destination reconcilable account (see _compute_destination_account_id).
+            If invoice_ids is not empty, there will be one reconcilable move line per invoice to reconcile with.
+            If the payment is a transfer, a second journal entry is created in the destination journal to receive money from the transfer account.
+        """
+        AccountMove = self.env['account.move'].with_context(default_type='entry')
+        for rec in self:
+            if rec.ji_moratorio_total > 0 and rec.ji_moratorio == 0:
+                raise UserError(_("El contrato contiene moratorio, pagar moratorios."))
+            if rec.state != 'draft':
+                raise UserError(_("Only a draft payment can be posted."))
+
+            if any(inv.state != 'posted' for inv in rec.invoice_ids):
+                raise ValidationError(_("The payment cannot be processed because the invoice is not open!"))
+
+            # keep the name in case of a payment reset to draft
+            if not rec.name:
+                # Use the right sequence to set the name
+                if rec.payment_type == 'transfer':
+                    sequence_code = 'account.payment.transfer'
+                else:
+                    if rec.partner_type == 'customer':
+                        if rec.payment_type == 'inbound':
+                            sequence_code = 'account.payment.customer.invoice'
+                        if rec.payment_type == 'outbound':
+                            sequence_code = 'account.payment.customer.refund'
+                    if rec.partner_type == 'supplier':
+                        if rec.payment_type == 'inbound':
+                            sequence_code = 'account.payment.supplier.refund'
+                        if rec.payment_type == 'outbound':
+                            sequence_code = 'account.payment.supplier.invoice'
+                rec.name = self.env['ir.sequence'].next_by_code(sequence_code, sequence_date=rec.payment_date)
+                if not rec.name and rec.payment_type != 'transfer':
+                    raise UserError(_("You have to define a sequence for %s in your company.") % (sequence_code,))
+
+            moves = AccountMove.create(rec._prepare_payment_moves())
+            moves.filtered(lambda move: move.journal_id.post_at != 'bank_rec').post()
+
+            # Update the state / move before performing any reconciliation.
+            move_name = self._get_move_name_transfer_separator().join(moves.mapped('name'))
+            rec.write({'state': 'posted', 'move_name': move_name})
+
+            if rec.payment_type in ('inbound', 'outbound'):
+                # ==== 'inbound' / 'outbound' ====
+                if rec.invoice_ids:
+                    (moves[0] + rec.invoice_ids).line_ids \
+                        .filtered(
+                        lambda line: not line.reconciled and line.account_id == rec.destination_account_id and not (
+                                    line.account_id == line.payment_id.writeoff_account_id and line.name == line.payment_id.writeoff_label)) \
+                        .reconcile()
+            elif rec.payment_type == 'transfer':
+                # ==== 'transfer' ====
+                moves.mapped('line_ids') \
+                    .filtered(lambda line: line.account_id == rec.company_id.transfer_account_id) \
+                    .reconcile()
+
+        return True

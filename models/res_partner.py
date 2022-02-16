@@ -44,6 +44,8 @@ class ResPartner(models.Model):
     ji_place_of_birth = fields.Char(string="Place Of Birth")
     ji_nationality = fields.Many2one(comodel_name="res.country", string="Nacionalidad", default=_default_ji_nationality)
     curp = fields.Char(string="Curp", size=18)
+    ji_documents = fields.Boolean(string="Revision de documentacion", compute="get_documents")
+    ji_vent = fields.Boolean(string="Revision de documentacion", compute="get_documents")
     unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', string="Aml no reconciliado")
     total_due = fields.Float(string="Adeudo Total", digits="8,2")
 
@@ -53,6 +55,24 @@ class ResPartner(models.Model):
             return "" + str(self.ji_date_of_birth.day) + " DE " + str(_month_name.upper()) + " DE " + str(
                 self.ji_date_of_birth.year)
         return ""
+
+    def get_documents(self):
+        for cli in self:
+
+            ndoc= cli.count_doct
+            aprov = False
+            if ndoc >= 3:
+                for doc in cli.attachment_ids:
+                    if doc.aprobado:
+                        aprov = doc.aprobado
+                    else:
+                        aprov = doc.aprobado
+                        break
+
+                cli.ji_documents = aprov
+            else:
+                cli.ji_documents = aprov
+
 
     ji_condition = fields.Selection(
         selection=[("no_apply", "No Apply for this company"), ("punctual", "Punctual"), ("slow_payer", "Slow Payer")],

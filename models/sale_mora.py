@@ -33,7 +33,7 @@ class moratorio_sale(models.Model):
 
             for line in pay_tipo.line_ids:
                 if line.ji_type == "money_advance":
-                    dif = line.days
+                    dif = line.ji_dia
 
             # nday = diap + relativedelta(days=line.days)
             # if today == nday
@@ -67,7 +67,7 @@ class moratorio_sale(models.Model):
                     tipe = ""
                     for line in pay_tipo.line_ids:
                         if line.ji_type == "money_advance":
-                            dif = line.days
+                            dif = line.ji_dia
 
                     dias = (today - diap) / timedelta(days=1)
                     pror = dif + 15
