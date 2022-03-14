@@ -74,7 +74,7 @@
                          
 							<h1 align="center">Estado de Pérdidas y Ganancias</h1>
                             <h2 class="text-muted" align="center">De <t t-esc="datei"/> al <t t-esc="datef"/></h2>
-                        
+                            <h2 class="text-muted" align="center"><t t-esc="categoria"/></h2>
 						
 
 							<div class="row" style="width: 80% !important; margin: auto !important;">

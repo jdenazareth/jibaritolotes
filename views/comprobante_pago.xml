@@ -8,7 +8,8 @@
 
                 <p align="right">Tijuana, Baja California;<span t-field="doc.payment_date"/> </p>
                 <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.total_amount"/></p>
-                <!-- <p align="right"><strong>Mensualidad numero: </strong>_____________________________</p> -->
+                <p align="right" t-if="doc.ji_mesto > doc.ji_mensuaidad"><strong>Mensualidad numero(s): </strong><span t-field="doc.ji_mensuaidad"/> - <span  t-field="doc.ji_mesto"/></p>
+                <p align="right" t-if="doc.ji_mesto == doc.ji_mensuaidad"><strong>Mensualidad numero: </strong><span t-field="doc.ji_mensuaidad"/></p>
                 <t t-foreach="doc.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="p">
                     <br/>
 
@@ -21,9 +22,9 @@
                         que asciende a la cantidad detallada en el ANEXO E del Contrato de Transacción firmado por LAS PARTES de mutuo acuerdo, 
                         dicho monto asciende a la cantidad de USD <span t-field="doc.total_contrato"/> (<span t-field="doc.total_contrato_letra"/> DÓLARES <span t-field="doc.cent_contrato"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
                         y se acordó que dicho monto sería pagado en 96 exhibiciones mensuales, 
-                        pagaderas el día (<span t-field="doc.dia_dato_pago"/>) de cada mes, por un monto de USD<span t-field="doc.pagos_mensualidad"/>(<span t-field="doc.pago_mensualidad_letra"/>
-                        DÓLARES <span t-field="doc.cent_pago_mesual" />/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
-                        <span t-field="doc.residual"/> (<span t-field="doc.residual_letra"/> DÓLARES <span t-field="doc.cent_residual"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
+                        pagaderas el día (<span t-field="doc.dia_dato_pago"/>) de cada mes, por un monto de USD<span t-field="doc.pagos_mensualidad"/>&#160;(<span t-field="doc.pago_mensualidad_letra"/>
+                        DÓLARES&#160;<span t-field="doc.cent_pago_mesual" />/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
+                        <span t-field="doc.residual"/> &#160;(<span t-field="doc.residual_letra"/> DÓLARES &#160;<span t-field="doc.cent_residual"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
                     </p>                                                                                                
 
                     <p>
@@ -44,6 +45,9 @@
                             <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
                             <p align="right"><strong>Interés <span t-field="doc.ji_moratorio"/></strong></p>
                             <p align="right"><strong>Capital <span t-field="doc.amount"/></strong></p>
+                            <p align="right" t-if="doc.ji_mes_nuevo > 0 "><strong>(Del mes <span t-field="doc.ji_mensuaidad"/> son <span t-field="doc.ji_restante"/> y los
+                                <span t-field="doc.ji_mes_nuevo"/>
+                                abarco hasta el mes <span  t-field="doc.ji_mesto"/>)</strong></p>
                             <p align="right"><strong>Total <span t-field="doc.total_amount"/></strong></p>
                             <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
 

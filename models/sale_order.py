@@ -109,13 +109,12 @@ class SaleOrder(models.Model):
     def state_product(self):
         for line in self:
             cont = ""
-            if line.invoice_ids:
+            if line.ant_pay and line.invoice_ids:
                 for fact in line.invoice_ids:
                     cont = fact.name
-                if cont != "":
+
                     line.estado_producto = line.order_line.product_id.estado_producto
-                else:
-                    line.estado_producto = 12
+
             elif line.state == "sale" or line.state == "done":
                 line.estado_producto = 13
             elif line.state == "cancel":

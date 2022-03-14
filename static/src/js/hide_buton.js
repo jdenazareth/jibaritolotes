@@ -54,10 +54,10 @@ console.log("entro jsv3");
 								alldata.$buttons.find('.o_form_button_edit').css(display);
 
 								if(data.ji_documents){
-									display ={"display":"none"}
+									display ={"display":""}
 									alldata.$buttons.find('.o_form_button_edit').css(display);
 								}
-								if(data.curp != ""){
+								if(data.curp != ""  & data.street != "" & data.city != "" & data.zip != "" & data.country_id != ""){
 									display ={"display":"none"}
 									 alldata.$buttons.find('.o_form_button_edit').css(display);
 								}

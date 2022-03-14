@@ -15,21 +15,21 @@
                     <t t-foreach="tra.mapped('order_line')" t-as="p">
                     <br/>
 
-                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="o.partner_id.name" />, <span t-field="o.total_amount"/> (<span t-field="o.cantidad_letra"/> DÓLARES <span t-field="o.centa_totla"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
+                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="o.partner_id.name" />, USD <span t-field="o.total_amount"/> (<span t-field="o.cantidad_letra"/> DÓLARES <span t-field="o.centa_totla"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
                         por concepto de apartado del lote de terreno identificado como lote número  <span t-field="p.product_id.x_studio_lote"/> de la manzana <spna t-field="p.product_id.x_studio_manzana"/> de la calle <span t-field="p.product_id.x_studio_calle"/>,
                         que se localiza dentro de la Colonia Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
                     </p>
 
                     <p>
-                                            Este recibo se expide a cuenta de una cantidad mayor, y no constituye derecho de adquisición de lote alguno,
-                                            toda vez que completando el monto del apartado del lote que asciende a la cantidad de USD <span t-field="tra.anticipo"/>
-                                            (<span t-field="tra.let_anticipo"/> DÓLARES <span t-field='tra.cent_anticipo'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
-                                            (monto total del apartado del LOTE), se celebrará contrato de promesa de cesión de derechos sobre el LOTE de que se trata,
-                                            y se acordó que dicho apartado sería pagado en (<span t-field="tra.payment_term_id.ji_number_quotation"/>) exhibiciones cada quince días,
-                                            por un monto de USD <span t-field="tra.quincena"/> (<span t-field="tra.let_quincena"/>
-                                            DÓLARES <span t-field='tra.cent_quincena'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
-                                            <span t-field="tra.pay_anticipo"/> (<span t-field="tra.let_restanti"/> DÓLARES <span t-field='tra.cent_restanti'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
-                                        </p>
+                        Este recibo se expide a cuenta de una cantidad mayor, y no constituye derecho de adquisición de lote alguno,
+                        toda vez que completando el monto del apartado del lote que asciende a la cantidad de USD <span t-field="tra.anticipo"/>
+                        (<span t-field="tra.let_anticipo"/> DÓLARES <span t-field='tra.cent_anticipo'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
+                        (monto total del apartado del LOTE), se celebrará contrato de promesa de cesión de derechos sobre el LOTE de que se trata,
+                        y se acordó que dicho apartado sería pagado en (<span t-field="tra.payment_term_id.ji_number_quotation"/>) exhibiciones cada quince días,
+                        por un monto de USD <span t-field="tra.quincena"/> (<span t-field="tra.let_quincena"/>
+                        DÓLARES <span t-field='tra.cent_quincena'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
+                         USD <span t-field="tra.pay_anticipo"/> (<span t-field="tra.let_restanti"/> DÓLARES <span t-field='tra.cent_restanti'/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
+                    </p>
 
 
 

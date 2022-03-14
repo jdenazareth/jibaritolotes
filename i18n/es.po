@@ -822,12 +822,12 @@ msgstr "Numero de Linea"
 #. module: jibaritolotes
 #: model:ir.model,name:jibaritolotes.model_ji_notification_slow_payer_line
 msgid "Lines for Notification Slow Payer"
-msgstr "Lineas de Notificacion por morosidad"
+msgstr "Lineas de Notificacion"
 
 #. module: jibaritolotes
 #: model:ir.ui.menu,name:jibaritolotes.notification_slow_payer_menu
 msgid "Mail Notification Slow Payer"
-msgstr "Notificacion por Correo de Morosos"
+msgstr "Notificacion por Corre"
 
 #. module: jibaritolotes
 #: code:addons/jibaritolotes/models/sale_order.py:0
@@ -865,7 +865,7 @@ msgstr "Moratoria"
 #. module: jibaritolotes
 #: model:ir.ui.menu,name:jibaritolotes.ji_menu
 msgid "Moratorium Setting"
-msgstr "Configuraciones de Moratoria"
+msgstr "Configuraciones de email"
 
 #. module: jibaritolotes
 #: model:ir.module.category,name:jibaritolotes.ji_category

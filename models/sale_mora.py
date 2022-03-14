@@ -10,7 +10,7 @@ class moratorio_sale(models.Model):
     _inherit = "sale.order"
 
     total_mes = fields.Integer(string="Dias a Pagar")
-    prorroga = fields.Integer(string="Prorroga Dias")
+    prorroga = fields.Integer(string="Prorroga Dias", default=15)
     moratex = fields.Text(string="Mora Json")
     at_date = fields.Date(string="At Date", default=fields.Date.context_today)
     total_moratorium = fields.Monetary(string="Total Moratorios", compute="action_moratorio_dues")
@@ -39,8 +39,9 @@ class moratorio_sale(models.Model):
             # if today == nday
             dias = (today - diap) / timedelta(days=1)
             record.total_mes = dias
-            pror = dif + 15
-            if dias > pror and not record.ismora:
+            pror = dif
+            # raise UserError(_(pror))
+            if dias > pror and record.exsalds == 0:
                 record.ismora = True
                 record.exsalds = record.pay_anticipo
 
@@ -70,7 +71,10 @@ class moratorio_sale(models.Model):
                             dif = line.ji_dia
 
                     dias = (today - diap) / timedelta(days=1)
-                    pror = dif + 15
+                    #raise UserError(_(dif))
+                    pror = dif
+                    if dias > ( pror + record.prorroga):
+                        record.action_cancel()
                     if dias > pror:
                         pay = 0
                         payex = 0
@@ -79,7 +83,7 @@ class moratorio_sale(models.Model):
                         expay = record.exsalds
                         newpay = record.pay_anticipo
                         unit_moratorium = round((record.percent_mora / 100) * expay, 2)
-
+                        # raise UserError(_(expay))
                         for tran in transactions:
                             mpay = mpay + tran.mora
                             pay = pay + tran.amount

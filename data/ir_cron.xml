@@ -13,6 +13,30 @@
             <field name="state">code</field>
             <field name="code">model.get_today_slow_payers()</field>
         </record>
+
+        <record id="cron_estado_cuenta" model="ir.cron">
+            <field name="interval_type">hours</field>
+            <field name="name">Estados de Ceuntas</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="code">model.generate_email_etado_cuenta()</field>
+            <field name="state">code</field>
+        </record>
+
+        <record id="cron_cuenta_cobrar" model="ir.cron">
+            <field name="interval_type">days</field>
+            <field name="name">Cuenta Por pagar</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="code">model.generate_mail_cxc()</field>
+            <field name="state">code</field>
+        </record>
     </data>
 </odoo>
 

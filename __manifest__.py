@@ -30,6 +30,7 @@
 
         "data/ir_cron.xml",
         "data/mail_template.xml",
+        "data/mail_template_cxp.xml",
         "data/function.xml",
         "report/sale_order_contract.xml",
         #"views/account_followup_views.xml",

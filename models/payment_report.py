@@ -22,7 +22,9 @@ class ReportePayment(models.Model):
     cent_contrato = fields.Char(string="Centavos contrato", comput="get_origin")
     cent_residual = fields.Char(string="Centavos residual", comput="get_origin")
     cent_pago_mesual = fields.Char(string="Centavos pagos mensua", comput="get_origin")
-
+    ji_mesto =  fields.Integer(string="Mes Pagado Total", compute="get_origin")
+    ji_mes_nuevo = fields.Float(string="Mes nuevo")
+    ji_mesnuevo_let = fields.Char(string="Mes abarcado", compute="get_origin")
     
 
     def get_text_amount_total(self):
@@ -45,13 +47,15 @@ class ReportePayment(models.Model):
             res.payment_reference = com[0]
     def get_origin(self):
         for res in self:
-            # datos=self.env['account.move'].search([('invoice_payment_ref','=',res.payment_reference)]) #consulta
+            datos=self.env['account.move'].search([('invoice_payment_ref','=',res.communication)]) #consulta
             dia = 0
-            mensual = 0
-            total = 0
+            mensual = 0.0
+            total = 0.0
             rtotal = 0.0
-            contrato = 0
-            for fact in res.invoice_ids:
+            contrato = 0.0
+            messtr = 0.0
+            mesesp = res.ji_mensuaidad
+            for fact in datos:
                 total = fact.amount_total
                 anticipo = round(total * fact.invoice_payment_term_id.ji_advance_payment / 100, 2)
                 contrato = total - anticipo
@@ -61,13 +65,65 @@ class ReportePayment(models.Model):
                         dia = lin.date_maturity.day
                         mensual = lin.debit
                         break
+            restante = res.ji_restante
+            letra_m = ""
+            ultimo_mes = 0.0
+            total = 0
+            if mensual > 0 and res.amount > 0:
+
+                if restante > 0 and restante <= res.amount:
+
+                    mes_abado = (res.amount - restante)/ mensual
+                    ultimo_mes = res.amount - restante
+
+                # elif restante == 0 and restante <= res.amount:
+                #     restante = res.pagos_mensualidad
+                #     res.ji_restante = restante
+                #     mes_abado = (res.amount - mesesp) / mensual
+                #     res.ji_mes_nuevo = res.amount - mesesp
+                else:
+                    restante = mensual
+                    # res.ji_restante = restante
+                    mes_abado = res.amount / mensual
+                    ultimo_mes= res.amount - restante
+
+                res.ji_mes_nuevo = ultimo_mes
+                # messtr=str(round(mes_abado, 2)).split(".")[0]
+
+                if float(str(round(mes_abado, 2)).split(".")[1]) > 0:
+                    mesesp = mesesp + 1
+
+
+            total = ultimo_mes
+
+            ji_mesto = mesesp
+            meses_t =0
+            if ultimo_mes >= mensual:
+                for l in range(res.ji_mensuaidad, ji_mesto):
+                    meses_t += 1
+                    total = total - mensual
+
+
+            res.ji_mesto = ji_mesto + meses_t
+            letra_m1 = ""
+
+            if total > 0 and res.ji_mesto > res.ji_mensuaidad:
+                letra_m = " y en Parcialidad el mes " + str(res.ji_mesto) +" con $ " + str(round(total,2))
+            if res.ji_mesto > res.ji_mensuaidad:
+                if res.ji_mesto -1 > res.ji_mensuaidad:
+                    letra_m1 = "Meses pagados en su totalidad del " + str(res.ji_mensuaidad) + " al " + str(res.ji_mesto - 1)
+                else:
+                    letra_m1 = "Mes Pagado en su totalidad " + str(res.ji_mensuaidad)
+
+
+            res.ji_mesnuevo_let = letra_m1 + letra_m
             res.dia_dato_pago = dia
             res.total_factura = total
             res.residual = round(rtotal, 3)
             centavo_redisual = str(round(res.residual, 2)).split(".")[1]
             res.cent_residual = centavo_redisual if len(centavo_redisual) > 1 else centavo_redisual+'0'
                 
-            res.total_contrato =  contrato
+            res.total_contrato = contrato
             res.pagos_mensualidad = round(mensual, 2)
             centavo_pago_mensual = str(round(mensual, 2)).split(".")[1]
             res.cent_pago_mesual = centavo_pago_mensual if len(centavo_pago_mensual) > 1 else centavo_pago_mensual+'0'
@@ -89,6 +145,11 @@ class ReportePayment(models.Model):
     @api.depends("communication","state")
     def get_referencia(self):
         for rec in self:
+            mora = 0
+            for trns in rec.payment_transaction_id:
+                mora = trns.mora
+            if mora > 0:
+                rec.ji_moratorio = mora
             com = rec.communication.split("-")
             rec.payment_reference = com[0]
             if rec.journal_id.name == "Anticipo":

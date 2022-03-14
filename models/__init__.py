@@ -18,3 +18,4 @@ from . import hr_employee
 from . import payment_report
 from . import report_factura
 from . import sale_mora
+from . import auto_mail

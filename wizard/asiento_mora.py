@@ -10,6 +10,8 @@ class MoratorioAsiento(models.Model):
     date_i = fields.Date(string="Fecha Inicial")
     date_f = fields.Date(string="Fecha Final")
 
+    Categorias = fields.Many2one(comodel_name="product.category", string="Categoria de Producto")
+
     def searchdat(self, purch):
         dev = 0.0
         for de in purch:
@@ -18,28 +20,37 @@ class MoratorioAsiento(models.Model):
 
     def run(self):
         for res in self:
+            Categorias = res.Categorias
             datef = res.date_f
             datei = res.date_i
             account = self.env['account.move.line']
             searmen = [
+               ('ji_categoria','=',Categorias.name),
+               ('parent_state','=','posted'),
                ('date', '>=', datei),
                ('date', '<=', datef),
                ('account_id.code', '=', '101.01.001.1'),
 
             ]
             searmenwf = [
+               ('parent_state','=','posted'),
+                ('ji_categoria', '=', Categorias.name),
                ('date', '>=', datei),
                ('date', '<=', datef),
                ('account_id.code', '=', '101.01.001.4'),
 
             ]
             searant = [
+               ('parent_state','=','posted'),
+                ('ji_categoria', '=', Categorias.name),
                ('date', '>=', datei),
                ('date', '<=', datef),
                ('account_id.code', '=', '101.01.001.2'),
 
             ]
             searantwf = [
+               ('parent_state','=','posted'),
+                ('ji_categoria', '=', Categorias.name),
                ('date', '>=', datei),
                ('date', '<=', datef),
                ('account_id.code', '=', '101.01.001.5'),
@@ -47,6 +58,7 @@ class MoratorioAsiento(models.Model):
             ]
 
             devent = [
+               ('parent_state','=','posted'),
                ('date', '>=', datei),
                ('date', '<=', datef),
                ('account_id.code', '=', '101.01.001.3'),
@@ -59,37 +71,37 @@ class MoratorioAsiento(models.Model):
             anticipowf = account.search(searantwf)
             devent = account.search(devent)
 
-            mejor= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.01'),])
-            seguridad= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.02'),])
-            levantamientos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.03'),])
-            laboratorio= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.04'),])
-            jardineria= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.05'),])
-            topografia= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.06'),])
-            otros_gastos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.01'),])
-            plan_maestro= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.02'),])
-            obra= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.03'),])
-            gastos_venta= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.01'),])
-            promocion_publicidad= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.02'),])
-            comisiones= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.03'),])
-            predial= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.04'),])
-            nomina= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.01'),])
-            viaticos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.02'),])
-            dividendos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.03'),])
-            transporte= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.04'),])
-            mensajeria= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.05'),])
-            rentas= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.06'),])
-            papeleria= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.07'),])
-            servicios_oficina= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.08'),])
-            telefonia_internet= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.09'),])
-            gastos_varios= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.10'),])
-            mantenimiento= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.11'),])
-            honorarios= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.01'),])
-            juzgado= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.02'),])
-            apoyos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.03'),])
-            gastos_legales= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03'),])
-            gastos_legaleswf= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.05'),])
-            indivi= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.06'),])
-            otros_productos= account.search([('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.04'),])
+            mejor= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.01'),])
+            seguridad= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.02'),])
+            levantamientos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.03'),])
+            laboratorio= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.04'),])
+            jardineria= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.05'),])
+            topografia= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '501.01.01.06'),])
+            otros_gastos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.01'),])
+            plan_maestro= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.02'),])
+            obra= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.03'),])
+            gastos_venta= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.01'),])
+            promocion_publicidad= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.02'),])
+            comisiones= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.03'),])
+            predial= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.01.04'),])
+            nomina= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.01'),])
+            viaticos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.02'),])
+            dividendos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.03'),])
+            transporte= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.04'),])
+            mensajeria= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.05'),])
+            rentas= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.06'),])
+            papeleria= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.07'),])
+            servicios_oficina= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.08'),])
+            telefonia_internet= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.09'),])
+            gastos_varios= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.10'),])
+            mantenimiento= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.02.11'),])
+            honorarios= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.01'),])
+            juzgado= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.02'),])
+            apoyos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.03'),])
+            gastos_legales= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03'),])
+            gastos_legaleswf= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.05'),])
+            indivi= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '602.02.03.06'),])
+            otros_productos= account.search([('parent_state','=','posted'),('date', '>=', datei), ('date', '<=', datef), ('account_id.code', '=', '601.84.01.04'),])
 
             mensu = 0
             mora = 0
@@ -186,6 +198,7 @@ class MoratorioAsiento(models.Model):
             egre= cost_vent + Gast_ventg + gast_admin + gas_cons + gas_leg + otrs_gast
             por=0
             data = {
+               'categoria': Categorias.name,
                'por': por,
                'datei': datei.strftime('%d-%m-%y'),
                'datef': datef.strftime('%d-%m-%y'),

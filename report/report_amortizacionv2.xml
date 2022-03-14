@@ -5,7 +5,7 @@
         <report
                 id="report_amortizacionv2"
                 model="account.move"
-                string="Pagos"
+                string="Tabla Amortizacion"
                 name="jibaritolotes.report_tabpayv2"
                 file="jibaritolotes.report_tabpayv2"
                 report_type="qweb-html"
@@ -13,6 +13,16 @@
 				print_report_name = "'Tabla de amortizacion' % (object.move_id.cliente)"
 
 		/>
+		<report
+		   	id="report_amortizacionv2_pdf"
+		    model="account.move"
+			string="Tabla Amortizacion"
+			name="jibaritolotes.report_tabpayv2"
+			file="jibaritolotes.report_tabpayv2"
+		   	report_type="qweb-pdf"
+		   	menu="False"
+		/>
+
 
         <template id="jibaritolotes.report_tabpayv2">
             <t t-call="web.html_container">
@@ -25,16 +35,19 @@
 
 							</div>
 							<div class="row" style="width: 80% !important; margin: auto !important;">
+								<div class="col-sm-4" aling="center">
+									<h3>Tabla de amortización</h3>
+								</div>
+							</div>
+							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<div class="col-sm-6">
 									<p>Contrato: <t t-esc="contrato" /></p>
 									<p>Cliente: <t t-esc="client" /></p>
 									<p><t t-esc="produc" /></p>
 									<p><t t-esc="date" /></p>
 								</div>
-								<div class="col-sm-4" aling="center">
-									<h3>Tabla de amortización</h3>
-								</div>
 							</div>
+
 							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<div class="col-sm-12">
 									<table class="table mt16">
@@ -62,6 +75,8 @@
 										</tbody>
 									</table>
 								</div>
+							</div>
+							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<t t-if="anti" t-as="acco">
 									<div class="col-sm-12">
 										<table class="table mt16">

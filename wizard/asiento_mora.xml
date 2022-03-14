@@ -12,6 +12,7 @@
                     </p>
                     <group>
                         <group>
+                            <field name="Categorias"/>
                             <field name="date_i"/>
                             <field name="date_f"/>
 

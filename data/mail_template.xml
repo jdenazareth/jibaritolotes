@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <record id="mail_template_slow_payer" model="mail.template">
-            <field name="name">Mail Template for Notification Slow Payer</field>
-            <field name="subject">Report of ${object.name or '' } Slow Payers</field>
-            <field name="email_from">${(object.company_id.partner_id.email or user.email_formatted) |safe}</field>
-            <field name="partner_to">${object.get_partner_ids()}</field>
-            <field name="model_id" ref="model_ji_notification_slow_payer"/>
+        <record id="paltilla_factura_atraso" model="mail.template">
+            <field name="name">Plantilla Mail Facturas</field>
             <field name="auto_delete" eval="True"/>
+             <field name="model_id" ref="model_account_move" />
             <field name="body_html">
                 <![CDATA[
                 <html lang="en">
@@ -86,21 +83,25 @@
                             <table class="styled-table table_center">
                                 <thead>
                                     <tr>
-                                        <th>Customer</th>
-                                        <th>Invoice - Fee payment</th>
+                                        <th>Contrato</th>
+                                        <th>Lote</th>
+                                        <th>Manzana</th>
+                                        <th>Meses</th>
+                                        <th>Moratorio</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    % for line in object.notification_lines:
+
                                     <tr>
-                                        <td style="min-width: 200px;font-weight: bold">${line.partner_id.name}</td>
-                                        <td>
-                                            % for aml_due in line.unreconciled_aml_dues:
-                                            <a href="${line.get_link_detail()}" target="_blank" class="button button2">${aml_due.ji_name}</a>
-                                            % endfor
-                                        </td>
+                                        <td style="min-width: 200px;font-weight: bold">${object.name}</td>
+                                        <td style="font-weight: bold">${object.x_studio_lote.name}</td>
+                                        <td style="font-weight: bold">${object.x_studio_manzana.name}</td>
+                                        <td style="font-weight: bold">${object.total_mes}</td>
+                                        <td style="font-weight: bold">${object.total_moratorium}</td>
+                                        <td style="font-weight: bold">${object.saldo_pend}</td>
                                     </tr>
-                                    % endfor
+
                                 </tbody>
                             </table>
                         </div>
@@ -112,5 +113,184 @@
                  ]]>
             </field>
         </record>
+
+        <record id="mail_template_estado_cuenta" model="mail.template">
+            <field name="name">Plantilla Estado de Cuenta</field>
+            <field name="auto_delete" eval="True"/>
+             <field name="model_id" ref="model_account_move" />
+            <field name="body_html">
+                <![CDATA[
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <meta name="viewport"
+                              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                        <title>Estado de Cuenta</title>
+                        <style>
+                            .center {
+                            padding: 10px 10px 10px 10px;
+                            text-align: center;
+                            }
+                            .styled-table {
+                            border-collapse: collapse;
+                            margin: 25px 0;
+                            font-size: 0.9em;
+                            font-family: sans-serif;
+                            min-width: 400px;
+                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            .styled-table thead tr {
+                            background-color: #009879;
+                            color: #ffffff;
+                            text-align: left;
+                            }
+                            .styled-table th,
+                            .styled-table td {
+                            padding: 12px 15px;
+                            }
+                            .styled-table tbody tr {
+                            border-bottom: 1px solid #dddddd;
+                            }
+                            .styled-table tbody tr:nth-of-type(even) {
+                            background-color: #f3f3f3;
+                            }
+                            .styled-table tbody tr:last-of-type {
+                            border-bottom: 2px solid #009879;
+                            }
+                            .styled-table tbody tr.active-row {
+                            font-weight: bold;
+                            color: #009879;
+                            }
+                            .table_center {
+                            margin-left: auto;
+                            margin-right: auto;
+                            }
+                            .button {
+                            background-color: #CD5C5C; /* Green */
+                            border: none;
+                            color: white;
+                            padding: 8px 8px;
+                            border-radius: 10px;
+                            text-align: center;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: inline-block;
+                            font-size: 14px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            -webkit-transition-duration: 0.4s; /* Safari */
+                            transition-duration: 0.4s;
+                            }
+                            .button2:hover {
+                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="center">
+
+                            <p>Buen dia, ${object.partner_id.name}</p>
+                            <p>Adjuntamos tu estado de cuenta.</p>
+                        </div>
+
+                        <div class="center" style="color: #000;font-weight: bold">
+                            <p>This is an automated message, please do not reply.</p>
+                        </div>
+                    </body>
+                </html>
+                 ]]>
+            </field>
+        </record>
+
+        <record id="mail_template_cuenta_cobrar" model="mail.template">
+            <field name="name">Plantilla Cuenta por cobrar</field>
+            <field name="auto_delete" eval="True"/>
+             <field name="model_id" ref="model_account_move" />
+            <field name="body_html">
+                <![CDATA[
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <meta name="viewport"
+                              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                        <title>Estado de Cuenta</title>
+                        <style>
+                            .center {
+                            padding: 10px 10px 10px 10px;
+                            text-align: center;
+                            }
+                            .styled-table {
+                            border-collapse: collapse;
+                            margin: 25px 0;
+                            font-size: 0.9em;
+                            font-family: sans-serif;
+                            min-width: 400px;
+                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            .styled-table thead tr {
+                            background-color: #009879;
+                            color: #ffffff;
+                            text-align: left;
+                            }
+                            .styled-table th,
+                            .styled-table td {
+                            padding: 12px 15px;
+                            }
+                            .styled-table tbody tr {
+                            border-bottom: 1px solid #dddddd;
+                            }
+                            .styled-table tbody tr:nth-of-type(even) {
+                            background-color: #f3f3f3;
+                            }
+                            .styled-table tbody tr:last-of-type {
+                            border-bottom: 2px solid #009879;
+                            }
+                            .styled-table tbody tr.active-row {
+                            font-weight: bold;
+                            color: #009879;
+                            }
+                            .table_center {
+                            margin-left: auto;
+                            margin-right: auto;
+                            }
+                            .button {
+                            background-color: #CD5C5C; /* Green */
+                            border: none;
+                            color: white;
+                            padding: 8px 8px;
+                            border-radius: 10px;
+                            text-align: center;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: inline-block;
+                            font-size: 14px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            -webkit-transition-duration: 0.4s; /* Safari */
+                            transition-duration: 0.4s;
+                            }
+                            .button2:hover {
+                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="center">
+
+                            <p>Buen dia, Adjuntamos Las cuentas por pagar</p>
+                            <p>Se adjunto 2 archivos los desudores del mes y los porvencer en 7 dias.</p>
+                        </div>
+
+                        <div class="center" style="color: #000;font-weight: bold">
+                            <p>This is an automated message, please do not reply.</p>
+                        </div>
+                    </body>
+                </html>
+                 ]]>
+            </field>
+        </record>
+
     </data>
 </odoo>

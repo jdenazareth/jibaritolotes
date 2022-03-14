@@ -19,7 +19,7 @@ class ResCountry(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-
+    
     def _default_ji_nationality(self):
         return self.env.ref('base.mx').id
 
@@ -35,6 +35,7 @@ class ResPartner(models.Model):
 
     _constraints = [(is_curp, 'Error: Invalid curp', ['curp']), ]
 
+
     ji_name_americ = fields.Char(string="Nombre Americano")
     ji_hijos = fields.Text(string="Hijos")
     ji_civil_status = fields.Char(string="Civil Status")
@@ -46,7 +47,7 @@ class ResPartner(models.Model):
     curp = fields.Char(string="Curp", size=18)
     ji_documents = fields.Boolean(string="Revision de documentacion", compute="get_documents")
     ji_vent = fields.Boolean(string="Revision de documentacion", compute="get_documents")
-    unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', string="Aml no reconciliado")
+    unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', string="Aml no reconciliado", domain="[('reconciled', '=', False)]")
     total_due = fields.Float(string="Adeudo Total", digits="8,2")
 
     def get_ji_date_of_birth(self):
@@ -158,7 +159,7 @@ class ResPartner(models.Model):
 
     def get_number_slow_payer_cronv(self, company, move):
         number_slow_payer = 0
-        today = fields.Date.context_today(company.partner_id)
+        today = fields.Date.context_today(self)
         aml_ids = []
         for aml in self.unreconciled_aml_ids:
 
@@ -169,6 +170,8 @@ class ResPartner(models.Model):
                         number_slow_payer += 1
                         aml_ids.append(aml)
         return number_slow_payer, aml_ids
+
+
 
     def get_number_slow_payer(self):
         number_slow_payer = 0

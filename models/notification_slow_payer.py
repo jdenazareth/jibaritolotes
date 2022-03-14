@@ -11,10 +11,43 @@ class NotificationSlowPayer(models.Model):
     name = fields.Date(string="Date", default=fields.Date.context_today, required=True)
     company_id = fields.Many2one(comodel_name="res.company", string="Company", default=lambda self: self.env.company)
     notification_lines = fields.One2many(comodel_name="ji.notification.slow.payer.line", string="Notification Lines",
-                                         inverse_name="notification_id", required=True)
+                                         inverse_name="notification_id")
     partner_ids = fields.Many2many(comodel_name="res.partner", string="Partners To Notification",
                                    default=lambda self: self.env.company.ji_partner_ids, required=True)
     active = fields.Boolean(string="Active", default=True)
+    object = fields.Char(string="Asunto Correo", required=True)
+    is_mora = fields.Boolean(string="Es Vencido?")
+    is_estado = fields.Boolean(string="Son Estado(Fiscal, Legal, Cuenta)")
+
+
+    recurrencia = fields.Selection([
+
+        ('semana', 'Dia de la semana'),
+        ('mes', 'Un dia de Mes'),
+        ('periodo', 'Periodico en dias'),
+
+    ], string='Recurrencia', required=True,
+        help="Seleciona la recurrencia deceada.")
+
+    type = fields.Selection([
+        ('cliente', 'A Clientes'),
+        ('cxc', 'Cuentas Por Cobrar'),
+        ('cxp', 'Cuentas Por Pagar'),
+        ('ventas', 'Ventas'),
+        ('clien_estado', 'Cliente: Estado de Cuneta'),
+        ('legal', 'Estdo Legal'),
+        ('financiero', 'Estdo finacieros'),
+    ], string='Tipo de correo', required=True
+        )
+
+    ji_models = fields.Selection([
+        ('sale.order', 'Ventas'),
+        ('account.move', 'Facturas'),
+        # ('account.payment', 'Pagos'),
+
+    ], string='Modelos', required=True,
+        help="Seleciona modelo correspondiente.")
+
 
     def get_partner_ids(self):
         return str([partner.id for partner in self.partner_ids]).replace('[', '').replace(']', '')
@@ -60,13 +93,13 @@ class NotificationSlowPayer(models.Model):
         _name = "ji.notification.slow.payer.line"
         _description = "Lines for Notification Slow Payer"
 
-        name = fields.Integer(string="Number Slow Payer")
+        name = fields.Integer(string="Numero en recurrencia")
         notification_id = fields.Many2one(comodel_name="ji.notification.slow.payer", string="Notification",
                                           ondelete="cascade")
         partner_id = fields.Many2one(comodel_name="res.partner", string="Customer")
+        is_mora = fields.Boolean(string="Fecha Posterior?")
         unreconciled_aml_dues = fields.Many2many(comodel_name="account.move.line", string="Unreconciled Dues")
-        text_unreconciled_aml_dues = fields.Text(string="Names Unreconciled Dues",
-                                                 compute="_compute_text_unreconciled_aml_dues")
+        text_unreconciled_aml_dues = fields.Text(string="Names Unreconciled Dues")
 
         def _compute_text_unreconciled_aml_dues(self):
             for line in self:
