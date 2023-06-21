@@ -99,6 +99,8 @@ class SaleOrder(models.Model):
     estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
     x_studio_contrato = fields.Char(string="Contrato" , compute="state_product")
     percent_mora = fields.Float(related="company_id.ji_percent_moratorium", string="Porcentaje Mora")
+    categoria_producto = fields.Many2one(string="Categoria de producto", comodel_name="product.category", related="order_line.product_id.categ_id")
+
 
 
     # x_studio_contrato = fields.Char()
@@ -109,13 +111,13 @@ class SaleOrder(models.Model):
     def state_product(self):
         for line in self:
             cont = ""
-            if line.ant_pay and line.invoice_ids:
+            if line.ant_pay == 0 and line.invoice_ids:
                 for fact in line.invoice_ids:
                     cont = fact.name
 
                     line.estado_producto = line.order_line.product_id.estado_producto
 
-            elif line.state == "sale" or line.state == "done":
+            elif line.state == "sale" or line.state == "done" or line.state == "sent":
                 line.estado_producto = 13
             elif line.state == "cancel":
                 line.estado_producto = 21
@@ -131,6 +133,10 @@ class SaleOrder(models.Model):
                 line.x_studio_lote = line.order_line.product_id.x_studio_lote
                 line.x_studio_calle = line.order_line.product_id.x_studio_calle
                 if line.state == "sale":
+                    line.order_line.product_id.estado_producto = line.estado_producto
+                elif line.state == "send":
+                    line.order_line.product_id.estado_producto = line.estado_producto
+                elif line.state == "done":
                     line.order_line.product_id.estado_producto = line.estado_producto
                 elif line.state == "cancel":
                     line.order_line.product_id.estado_producto = line.estado_producto
@@ -161,6 +167,11 @@ class SaleOrder(models.Model):
         if not self.order_line.ids:
             return ""
         return self.order_line[0].ji_area or ""
+
+    def ji_get_categoria(self):
+        if not self.order_line.ids:
+            return ""
+        return self.order_line[0].product_id.categ_id.name or ""
 
     def ji_get_street_address(self):
         if self.order_line:
@@ -359,11 +370,32 @@ class SaleOrder(models.Model):
                 payment_ids.append(item.payment_id.id)
             pagosa = self.env["account.payment"].search([('id', 'in', payment_ids)], order='payment_date asc')
            
+            # compaRecords = []
+            # compani = res.company_id
+            # tov = res.amount_untaxed
+            # por = res.amount_untaxed * 0.1
+
+            tipo = res.payment_term_id
+            anticipov = 0
+            porc = 0
+            for ant in tipo.line_ids:
+                if ant.value == "fixed" and ant.ji_type == "money_advance":
+                    anticipov += ant.value_amount
+                if ant.value == "percent" and ant.ji_type == "money_advance":
+                    porc += ant.value_amount
+
             compaRecords = []
             compani = res.company_id
             tov = res.amount_untaxed
-            por = res.amount_untaxed * 0.1
+            por = 0
+            if anticipov > 0:
+                por = anticipov
+            else:
+                por = res.amount_untaxed * (porc / 100)
             anticp = por
+
+
+
             sald_ant=0
             cont=0
 

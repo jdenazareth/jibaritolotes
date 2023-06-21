@@ -2,31 +2,53 @@
     <data>
         <template id="fac_report_facturas_finiquito_card">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
+        <!-- <t t-call="web.external_layout"> -->
+            <t t-call="jibaritolotes.internal_layaut_ji">
+                <t t-call-assets="web.report_assets_common" t-js="false" />
+                <t t-call-assets="web.assets_common" t-css="false" />
+                <t t-call-assets="web.report_assets_common" t-css="false" />
+                <div class="page" style="font-family: arial; font-size:14px !important;" >
 
-            <div class="page">
+                <style>
+                    *{
+                        color: black !important;
+                        <!-- font-family: arial !important; -->
+                    }
+                </style>
+
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
-                <h4 style=" font-weight: bold !important; margin-left: 310px !important; color: #8d8d8d !important;">CARTA FINIQUITO</h4>
-                <p align="right"><strong>Tijuana, Baja California; <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></strong></p>
+                <h4 style=" font-weight: bold !important; color: black !important; text-align: center !important; font-size: 50px !important;">CARTA FINIQUITO</h4>
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;"><strong>Los copropietarios CC. ANIBAL ALEJANDRO PEDRERO LOAIZA, HUGO ALBERTO VILLASEÑOR SALA, ADRIANA GUADALUPE MANZUR PEREZ DE VILLASEÑOR representada en este acto por el señor HUGO ALBERTO VILLASEÑOR SALA (otorgando su consentimiento conyugal), JOSE ALEJANDRO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, COSUELO SALA CASAS DE VILLASEÑOR, HUGO IGNACIO VILLASEÑOR CABRERA representado en este acto por su albacea HUGO ALBERTO VILLASEÑOR SALA, IVONNE CONSUELO VILLASEÑOR SALA representada por su albacea CONSUELO DEL CARMEN SALA CASAS DE VILLASEÑOR, los herederos de las sucesiones testamentaria e intestamentaria respectivamente de los señores HUGO IGNACIO VILLASEÑOR CABRERA e IVONNE CONSUELO VILLASEÑOR SALA, los ciudadanos CONSUELO DEL CARMEN SALA CASAS DE VILLASEÑOR, HUGO ALBERTO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, JOSE ALEJANDRO VILLASEÑOR SALA, MAURICIO MARTINEZ VILLASEÑOR Y MARIANA MARTINEZ VILLASEÑOR, así como también los señores MARIA DEL CARMEN ALVAREZ HERNANDEZ, CLAUDIA DEL CARMEN LOAIZA ALVAREZ, MARIA FERNANDA LOAIZA ALVAREZ y REMO LOAIZA ALVAREZ declaramos en este acto que otorgamos el finiquito del ciudadano (a) <span t-field="doc.partner_id.name"/> del inmueble identificado identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <span t-field="p.product_id.x_studio_manzana" /> con superficie de <span t-field="p.product_id.ji_area" /> m² de la colonia denominada VISTA BELLA;</strong> el cual se encuentra dentro del predio ubicado en la Delegación San Antonio de los Buenos  de esta ciudad de Tijuana, Baja, derivado de lo anterior y con capacidad jurídica en cuanto a la propiedad que acreditamos de la colonia VISTA BELLA extendemos la presente <strong>CARTA FINIQUITO</strong> a favor de la Señora <span t-field="doc.partner_id.name"/>, que por sus generales manifiesta ser mexicana, nacida en <span t-field="doc.partner_id.ji_place_of_birth"/> , de fecha <span t-field="doc.partner_id.ji_date_of_birth"/>, de ocupación <span t-field="doc.partner_id.ji_occupation"/>, <span t-field="doc.partner_id.ji_civil_status"/>, con domicilio en Calle <span t-field="doc.partner_id.street"/>, <span t-field="doc.partner_id.street2"/>,<span t-field="doc.partner_id.city"/>, <span t-field="doc.partner_id.state_id"/>, código postal <span t-field="doc.partner_id.zip"/> y con CURP <span t-field="doc.partner_id.curp"/>.</p>
+                <br/>
+                
+                <p align="right">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
+                <br/>
+                <br/>
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;"><strong>Los copropietarios CC. ANIBAL ALEJANDRO PEDRERO LOAIZA, HUGO ALBERTO VILLASEÑOR SALA, ADRIANA GUADALUPE MANZUR PEREZ DE VILLASEÑOR representada en este acto por el señor HUGO ALBERTO VILLASEÑOR SALA (otorgando su consentimiento conyugal), JOSE ALEJANDRO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, CONSUELO SALA CASAS DE VILLASEÑOR, HUGO IGNACIO VILLASEÑOR CABRERA representado en este acto por su albacea HUGO ALBERTO VILLASEÑOR SALA, IVONNE CONSUELO VILLASEÑOR SALA representada por su albacea CONSUELO DEL CARMEN SALA CASAS DE VILLASEÑOR, los herederos de las sucesiones testamentaria e intestamentaria respectivamente de los señores HUGO IGNACIO VILLASEÑOR CABRERA e IVONNE CONSUELO VILLASEÑOR SALA, los ciudadanos CONSUELO DEL CARMEN SALA CASAS DE VILLASEÑOR, HUGO ALBERTO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, JOSE ALEJANDRO VILLASEÑOR SALA, MAURICIO MARTINEZ VILLASEÑOR Y MARIANA MARTINEZ VILLASEÑOR, así como también los señores MARIA DEL CARMEN ALVAREZ HERNANDEZ, CLAUDIA DEL CARMEN LOAIZA ALVAREZ, MARIA FERNANDA LOAIZA ALVAREZ y REMO LOAIZA ALVAREZ declaramos en este acto que otorgamos el finiquito del(la) ciudadano(a) <span style="text-transform: uppercase !important;"><span t-field="doc.partner_id.name"/></span>, del inmueble identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <span t-field="p.product_id.x_studio_manzana" /> con superficie de <t t-esc="doc.ji_get_area()"/>  m² de la colonia denominada VISTA BELLA;</strong> el cual se encuentra dentro del predio ubicado en la Delegación San Antonio de los Buenos  de esta ciudad de Tijuana, Baja California, derivado de lo anterior y con la capacidad jurídica en cuanto a la propiedad que acreditamos de la colonia VISTA BELLA extendemos la presente <strong>CARTA FINIQUITO</strong> a favor del(la) Señor(a) &#160;<span style="text-transform: uppercase !important; font-weight: bold !important;"><span t-field="doc.partner_id.name"/></span>, que por sus generales manifiesta ser de nacionalidad mexicana, nacido(a) en <span t-field="doc.partner_id.ji_place_of_birth"/>, de fecha  &#160;<span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "d "}'/> de <span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "MMMM "}'/> de <span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "y"}'/>, de ocupación <span t-field="doc.partner_id.ji_occupation"/>, <span t-field="doc.partner_id.ji_civil_status"/>, con domicilio en Calle <span t-field="doc.partner_id.street"/>,&#160;<span t-field="doc.partner_id.street2"/>, <span t-field="doc.partner_id.city"/>, <span t-field="doc.partner_id.state_id"/>, código postal&#160; <span t-field="doc.partner_id.zip"/> y con CURP&#160; <span t-field="doc.partner_id.curp"/>, con valor determinado en el contrato de Transacción que se anexa.</p>
+                <br/>
+                
 
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">La presente carta finiquito se extiende derivado de que no existe adeudo alguno, en virtud de que se cubrieron todas y cada una de las prestaciones estipuladas respecto del valor del inmueble antes descrito, sin existir reclamo presente o futuro, <strong>no reservándonos dominio alguno. </strong></p>
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;">La presente carta finiquito se extiende derivado de que no existe adeudo alguno, en virtud de que se cubrieron todas y cada una de las prestaciones estipuladas respecto del valor del inmueble antes descrito, sin existir reclamo presente o futuro, <strong>no reservándonos dominio alguno sobre el inmueble antes señalado. </strong></p>
+                <br/>
+                
 
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;"><strong>Para concluir facultamos al INSTITUTO PARA EL DESARROLLO INMOBILIARIO Y DE LA VIVIENDA PARA EL ESTADO DE BAJA CALIFORNIA (INDIVI) para que, en términos del convenio de regularización celebrado, realice los tramites de titulación a favor del adquirente, y surtan los efectos legales correspondientes.</strong></p>
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;"><strong>Para concluir facultamos al INSTITUTO PARA EL DESARROLLO INMOBILIARIO Y DE LA VIVIENDA PARA EL ESTADO DE BAJA CALIFORNIA (INDIVI) para que, en términos del convenio de regularización celebrado, realice los trámites de titulación a favor del adquirente, y surtan los efectos legales correspondientes.</strong></p>
+                <br/>
+                
 
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">La presente carta finiquito cause sus efectos respecto a las contrataciones de regularización y titulación, no reservándonos dominio alguno. </p>
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;">La presente carta finiquito cause sus efectos respecto a las contrataciones de regularización y titulación, no reservándonos dominio alguno. </p>
                 <br/>
                 <br/>
                 <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <div style="width: 100px; height: 100px;">
+                    <p t-field="doc.qr_finiquito" t-options='{"widget": "image"}' style="border: 1px solid lightgray; border-radius: 5px; padding: 2px; position: relative !important; left: 348px !important;"/>
+                </div>
 
-                <h4 style="font-weight: bold !important; margin-left: 310px !important; color: #8d8d8d !important;">CARTA FINIQUITO</h4>
-                <h4 align="center">Los propietarios</h4>
+
+
+                <h4 style="font-weight: bold !important; text-align: center !important; color: black !important; font-size: 50px !important;">CARTA FINIQUITO</h4>
+                <h4 align="center" style="text-align: center !important;">"Los propietarios"</h4>
+                <br/>
                 <br/>
                 <div class="container">
 
@@ -45,8 +67,8 @@
                         <div class="col-6">
                             <p align="center">_____________________________________________</p>
                         <div style="width: 70% !important; margin-left: 60px !important;">
-                            <p style="font-size: 14px !important;" align="center"><strong>C. CONSUELO DEL CARMEN SALA CASAS DE VILLA SEÑOR</strong></p>
-                            <p style="font-size: 12px !important;" align="center">POR SI Y COMO ALBACEA DE LA SUCESION INTESTAMENTARIA DE 
+                            <p style="font-size: 14px !important;" align="center"><strong>C. CONSUELO DEL CARMEN SALA CASAS DE VILLASEÑOR</strong></p>
+                            <p style="font-size: 14px !important; text-align: justify !important;">POR SI Y COMO ALBACEA DE LA SUCESION INTESTAMENTARIA DE 
                                 LA SEÑORA IVONNE CONSUELO VILLASEÑOR SALA.
                             </p>
                         </div>
@@ -64,8 +86,8 @@
                         <p align="center">_____________________________________________</p>
 
                         <div style="width: 70% !important; margin-left: 60px !important;">
-                            <p style="font-size: 14px !important;" align="center"><strong>C. GUHO ALBERTO VILLASEÑOR SALA</strong></p>
-                            <p style="font-size: 10px !important; text-align: justify !important;" align="center">POR SÍ Y COMO ALBACEA Y HEREDERO DE LA SUCESION TESTAMENTARIA A BIENES DEL SEÑOR HUGO IGNACIO VILLASEÑOR CABRERA Y A SU VEZ, COMO APODERADO GENERAL PARA PLEITOS Y COBRANZAS, ACTOS DE ADMINISTRACION, ACTOS DE DOMINIO, SUSCRIPCION DE TITULOS Y OPERACIONES DE CREDITO DE LOS HEREDEROS DE LA SUCESION TESTAMENTARIA, SEÑORES JOSE ALEJANDRO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, MARIAN MARTINEZ VILLASEÑOR Y MAURICIO MARTINEZ VILLASEÑOR; ASI TAMBIEN COMO REPRESENTANTE LEGAL DE SU CONYUGE POR EL CONSENTIMIENTO CONYUGAL, LA SEÑORA ADRIANA GUADALUPE MANZUR PEREZ DE VILLASEÑOR.
+                            <p style="font-size: 14px !important;" align="center"><strong>C. HUGO ALBERTO VILLASEÑOR SALA</strong></p>
+                            <p style="font-size: 11px !important; text-align: justify !important;" align="center">POR SÍ Y COMO ALBACEA Y HEREDERO DE LA SUCESION TESTAMENTARIA A BIENES DEL SEÑOR HUGO IGNACIO VILLASEÑOR CABRERA Y A SU VEZ, COMO APODERADO GENERAL PARA PLEITOS Y COBRANZAS, ACTOS DE ADMINISTRACION, ACTOS DE DOMINIO, SUSCRIPCION DE TITULOS Y OPERACIONES DE CREDITO DE LOS HEREDEROS DE LA SUCESION TESTAMENTARIA, SEÑORES JOSE ALEJANDRO VILLASEÑOR SALA, HUGO EDUARDO SALA RUIZ, MARIANA MARTINEZ VILLASEÑOR Y MAURICIO MARTINEZ VILLASEÑOR; ASI TAMBIEN COMO REPRESENTANTE LEGAL DE SU CONYUGE POR EL CONSENTIMIENTO CONYUGAL, LA SEÑORA ADRIANA GUADALUPE MANZUR PEREZ DE VILLASEÑOR.
                             </p>
                         </div>
                     </div>
@@ -74,7 +96,7 @@
                     <div class="col-6">
                         <p align="center">_____________________________________________</p>
                     <div style="width: 70% !important; margin-left: 60px !important;">
-                        <p style="font-size: 14px !important;" align="center"><strong>C. GUHO ALBERTO VILLASEÑOR SALA</strong></p>
+                        <p style="font-size: 14px !important;" align="center"><strong>C. HUGO ALBERTO VILLASEÑOR SALA</strong></p>
                         <p style="font-size: 11px !important; text-align: justify !important;" align="center">COMO APODERADO GENERAL PARA PLEITOS Y COBRANZAS, ACTOS DE ADMINISTRACION, ACTOS DE DOMINIO, SUSCRIPCION DE TITULOS Y OPERACIONES DE CREDITO DE LOS HEREDEROS DE LA SUCESION INTESTAMENTARIA A BIENES DE LA SEÑORA IVONNE CONSUELO VILLASEÑOR SALA, LOS SEÑORES MAURICIO MARTINEZ VILLASEÑOR Y MARIANA MARTINEZ
                         </p>
                     </div>
@@ -137,9 +159,9 @@
 
     <h5 align="center">"EL ADQUIRIENTE"</h5>
     <br/>
-    <p style="margin-left: 300px !important;">__________________________________</p>
-    <div style="width: 70% !important; margin-left: 60px !important;">
-        <p style="font-size: 14px !important;" align="center"><strong>C. <span t-field="doc.partner_id.name"/></strong></p>
+    <p style="text-align: center !important;">__________________________________</p>
+    <div style="width: 70% !important; margin: auto !important;">
+        <p style="font-size: 14px !important; text-align: center; text-transform: uppercarse !important;" align="center"><strong>C. <span t-field="doc.partner_id.name"/></strong></p>
     </div>
     <!-- FIN RENGLÓN DE FIRMAS CUATRO -->
 

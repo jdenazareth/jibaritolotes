@@ -2,33 +2,40 @@
     <data>
         <template id="fac_report_facturas_devo_card">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-
-            <div class="page">
-                <h2 aling="center">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;DEVOLUCIÓN DE DINERO DE APARTADO</h2>
+            <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+            <t t-call-assets="web.report_assets_common" t-js="false" />
+            <t t-call-assets="web.assets_common" t-css="false" />
+            <t t-call-assets="web.report_assets_common" t-css="false" />
+            <div class="page" style="font-family: arial; font-size:14px !important;" >
+                <h2 align="center" style="color: black;">DEVOLUCIÓN DE DINERO DE APARTADO</h2>
                 <br/>
                 <br/>
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
-                <p align="right">Tijuana, Baja California; <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></p>
+                    <p align="right">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
                 <br/>
                 <br/>
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Yo: <span t-field="doc.partner_id.name"/>, que por mis generales me identifico ser <span t-field="doc.partner_id.ji_nationality"/>, nacido en <span t-field="doc.partner_id.ji_place_of_birth"/>, el día <span t-field="doc.partner_id.ji_date_of_birth"/>, y señalado como domicilio el ubicado en <span t-field="doc.partner_id.street"/> <span t-field="doc.partner_id.street2"/> <span t-field="doc.partner_id.city"/> <span t-field="doc.partner_id.state_id.name"/> <span t-field="doc.partner_id.zip" />, declaro sin presión que por medio del presente solicito la <strong>devolucion</strong> de la cantidad de ******USD$ <span t-field="doc.porcentaje"/> (<span t-field="doc.porcentaje_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)******.</p>
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;"><span t-field="doc.porcentaje"/> /100 M.A), cantidad que fue destinada para realizar el <strong>Apartado del lote</strong> <span t-field="p.product_id.x_studio_lote"/> <strong> de la manzana <span t-field="p.product_id.x_studio_manzana" /> de la colonia Vista Bella de esta ciudad de Tijuana, Baja California, por así convenir a mis intereses.</strong></p>
+
+                <p style="font-weight: bold !important; line-height: 1.2 !important;">María Fernanda Loaiza Álvarez<br/> Apoderado Legal y Copropietario </p>
+                <br/>
+
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm !important;">Yo <span style="font-weight: bold !important;"><span t-field="doc.partner_id.name"/></span>, que por mis generales me identifico ser&#160; <span t-field="doc.partner_id.x_nacionalidad"/>, nacido en &#160;<span t-field="doc.partner_id.ji_place_of_birth"/>, el día &#160;<span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "d "}'/> de <span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "MMMM "}'/> de <span t-field="doc.partner_id.ji_date_of_birth" t-options='{"format": "y"}'/>, y señalado como domicilio el ubicado en &#160;&#160;<span t-field="doc.partner_id.street"/>, <span t-field="doc.partner_id.street2"/>, <span t-field="doc.partner_id.city"/>, <span t-field="doc.partner_id.state_id.name"/>, C.P. <span t-field="doc.partner_id.zip" />, declaro sin presión que por medio del presente solicito la <strong> devolución</strong> de la cantidad de USD $ <span t-field="doc.porcentaje"/> dólares (<span t-field="doc.porcentaje_letra"/> DÓLARES <span t-field="doc.centavo_porcentaje"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cantidad que fue destinada para realizar el <strong>Apartado del lote <span t-field="p.product_id.x_studio_lote"/> <strong> de la manzana <span t-field="p.product_id.x_studio_manzana" /> de la colonia Vista Bella de esta ciudad de Tijuana, Baja California, por así convenir a mis intereses.</strong></strong></p>
 
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Así mismo, manifiesto que no existe ninguna reclamación en contra de los copropietarios del predio denominado El Jibarito, predio en el cual se localiza la colonia Vista Bella, y en el cual se encuentra inmerso el predio antes señalado.  </p>
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm !important;">Así mismo, manifiesto que no existe ninguna reclamación en contra de los copropietarios del predio denominado El Jibarito, predio en el cual se localiza la colonia Vista Bella, y en el cual se encuentra inmerso el predio antes señalado.  </p>
 
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Por lo cual, estando conforme con lo establecido, se firma la presente Devolución de dinero a fin de darle la validez correspondiente.</p>
+                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm !important;">Por lo cual, estando conforme con lo establecido, se firma la presente Devolución de Dinero a fin de darle la validez correspondiente.</p>
 
                 <br/>
                 <br/>
-                <h2 align="center">ATENTAMENTE</h2>
+                <br/>
+                <h2 align="center" style="text-transform: capitalize !important; color: black !important; font-weight: normal !important; font-size: 14px !important;">Atentamente</h2>
                 <br/>
                 <br/>
                 <p align="center">____________________________</p>
+                <p style=" width: 70% !important; margin: auto !important; text-align: center !important;"><span t-field="doc.partner_id.name"/></p>
                 </t>
             </div>
         </t>

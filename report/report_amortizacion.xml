@@ -21,6 +21,7 @@
 <!--						<t t-call-assets="web.assets_common" t-css="false" />-->
 <!--						<t t-call-assets="web.report_assets_common" t-css="false" />-->
                         <div class="page">
+							<h2 style="text-align:center !important;">Calendario de pagos</h2>
 
 							<style>
 
@@ -32,6 +33,9 @@
 								tr:nth-child(even){
 									background: #ededed !important;
 								}
+								th {
+									color: #f2f2f2 !important;
+								}
 							</style>
 
 							<div class="row">
@@ -42,7 +46,7 @@
 							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<div class="col-sm-12">
 									<table class="table mt16">
-										<thead class="thead-dark">
+										<thead style="background: #eeb72a !important;">
 											<tr>
 												<th>Mensualidad</th>
 												<th>Vencimiento</th>
@@ -85,11 +89,53 @@
 				</div>
 
 			</t>
-			<div class="article o_report_layout_background">
+			<div class="article">
 				<t t-raw="0" />
 			</div>
 			<div class="flooter">
 <!--				<p>Este recibo cancela y sustituye a cualquier recibo provisional de dinero de misma fecha y monto"</p>-->
+			</div>
+		</template>
+
+		<template id="internal_layaut_ji_Logo">
+
+				<div class="header o_boxed_header">
+					<t t-foreach="doc.company_id" t-as="o">
+						<div class="row">
+							<div class="col-3 mb4">
+								<img t-if="o.logo" t-att-src="image_data_uri(o.logo)" style="max-height: 45px;" alt="Logo"/>
+							</div>
+							<div class="col-9 text-right" style="margin-top:12px;" t-field="o.report_header" name="moto"/>
+						</div>
+						<div t-if="o.logo or company.report_header" class="row zero_min_height">
+							<div class="col-12">
+								<div style="border-bottom: 1px solid black;"/>
+							</div>
+						</div>
+					</t>
+				</div>
+
+
+			<div class="article">
+				<t t-raw="0" />
+			</div>
+			<div class="footer o_standard_footer">
+			  <div class="text-center" style="border-top: 1px solid black;">
+  				<t t-foreach="doc.company_id" t-as="o">
+
+
+    					<div class="row">
+    						<div class="col-12 mb4" align="center">
+    							<spam t-esc="o.street"/>, C.P. <spam t-esc="o.zip"/>, <spam t-esc="o.city"/>,  <spam t-esc="o.state_id.name"/>,  <spam t-esc="o.country_id.name"/>.
+    						</div>
+    					</div>
+    					<div class="row">
+    						<div class="col-12 mb4" align="center">
+    							<p>Teléfono(s): <spam t-esc="o.phone"/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Email: <spam t-esc="o.email"/></p>
+    						</div>
+    					</div>
+  				</t>
+  				</div>
 			</div>
 		</template>
 

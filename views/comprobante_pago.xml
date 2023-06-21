@@ -2,56 +2,89 @@
     <data>
         <template id="fac_report_comprobante_pago">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-            <div class="page">
-                <h3 aling="center">Comprobante de Pago Mensualidad</h3>
+            <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+                <t t-call-assets="web.report_assets_common" t-js="false" />
+                <t t-call-assets="web.assets_common" t-css="false" />
+                <t t-call-assets="web.report_assets_common" t-css="false" />
+                <div class="page" style="font-family: arial; font-size:14px !important;" >
+                <h3 align="center">RECIBO MENSUALIDAD</h3>
+                <br/><br/>
+                <style>
+                    .generla *{
 
-                <p align="right">Tijuana, Baja California;<span t-field="doc.payment_date"/> </p>
-                <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.total_amount"/></p>
-                <p align="right" t-if="doc.ji_mesto > doc.ji_mensuaidad"><strong>Mensualidad numero(s): </strong><span t-field="doc.ji_mensuaidad"/> - <span  t-field="doc.ji_mesto"/></p>
-                <p align="right" t-if="doc.ji_mesto == doc.ji_mensuaidad"><strong>Mensualidad numero: </strong><span t-field="doc.ji_mensuaidad"/></p>
+                        text-align: justify !important;
+                        
+                        }
+                    .cabeza *{
+                        line-height:0.5;
+                    }
+
+                    </style>
+            
+            <div class="cabeza">
+                <div class="row">
+                    <div class="col-6">
+                        <img t-if="doc.qr_pagos" t-att-src="image_data_uri(doc.qr_pagos)" style="max-height: 100px; border: 1px solid lightgray; border-radius: 5px; padding: 2px; position: relative !important; top: -38px !important;"/>
+                    </div>
+                    <div class="col-6">
+                        <p align="right">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
+                        <p align="right"><strong>BUENO POR USD: </strong><span t-field="doc.total_amount"/> Dólares</p>
+                        <p align="right" t-if="doc.ji_mesto > doc.ji_mensuaidad"><strong>Mensualidad número(s): </strong><span t-field="doc.ji_mensuaidad"/> - <span  t-field="doc.ji_mesto"/></p>
+                        <p align="right" t-if="doc.ji_mesto == doc.ji_mensuaidad"><strong>Mensualidad número: </strong><span t-field="doc.ji_mensuaidad"/></p>
+                    </div>
+                </div>
+            </div>
+            <br/><br/>
                 <t t-foreach="doc.reconciled_invoice_ids.mapped('invoice_line_ids')" t-as="p">
-                    <br/>
+                
+                    <!--  <br/> -->
 
-                    <p style="text-aling: justify !important;"> Recibí del Señor (a) <span t-field="doc.partner_id.name" />, <span t-field="doc.total_amount"/> (<span t-field="doc.cantidad_letra"/> DÓLARES <span t-field="doc.centa_totla"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
-                        por concepto de pago de la mensualidad del lote de terreno identificado como lote número <span t-field="p.product_id.x_studio_lote"/> de la manzana <spna t-field="p.product_id.x_studio_manzana"/> de la calle <span t-field="p.product_id.x_studio_calle"/>,
-                        que se localiza dentro del Fraccionamiento Vista Bella, localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
+                <div class="generla">
+                    <p style="text-aling: justify !important; text-indent: 1.5cm !important;"> Recibí del(la) Señor(a) <span style="font-weight: bold !important;"><span t-field="doc.partner_id.name" /></span>, la cantidad de USD &#160;<span t-field="doc.total_amount"/> Dólares (<span t-field="doc.cantidad_letra"/> DÓLARES <span t-field="doc.centa_totla"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
+                        por concepto de pago de la mensualidad del lote de terreno identificado con el número <span t-field="p.product_id.x_studio_lote"/> de la manzana&#160; <spna t-field="p.product_id.x_studio_manzana"/> de la calle&#160; <span t-field="p.product_id.x_studio_calle"/>,
+                        de la colonia Vista Bella, de la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
                     </p>
-                    <p>
+                    <p style="text-aling: justify !important; text-indent: 1.5cm !important;" >
                         Este recibo se expide a cuenta de una cantidad mayor, 
-                        que asciende a la cantidad detallada en el ANEXO E del Contrato de Transacción firmado por LAS PARTES de mutuo acuerdo, 
-                        dicho monto asciende a la cantidad de USD <span t-field="doc.total_contrato"/> (<span t-field="doc.total_contrato_letra"/> DÓLARES <span t-field="doc.cent_contrato"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
+                        que asciende a la cantidad detallada en el ANEXO E del Contrato de Transacción firmado por LAS PARTES de mutuo acuerdo,
+                        dicho monto asciende a la cantidad de USD <span t-field="doc.total_contrato"/> Dólares (<span t-field="doc.total_contrato_letra"/> DÓLARES <span t-field="doc.cent_contrato"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.),
                         y se acordó que dicho monto sería pagado en 96 exhibiciones mensuales, 
-                        pagaderas el día (<span t-field="doc.dia_dato_pago"/>) de cada mes, por un monto de USD<span t-field="doc.pagos_mensualidad"/>&#160;(<span t-field="doc.pago_mensualidad_letra"/>
+                        pagaderas el día (<span t-field="doc.dia_dato_pago"/>) de cada mes, por un monto de USD&#160; <span t-field="doc.pagos_mensualidad"/> Dólares&#160;(<span t-field="doc.pago_mensualidad_letra"/>
                         DÓLARES&#160;<span t-field="doc.cent_pago_mesual" />/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), cada una, quedando pendientes
-                        <span t-field="doc.residual"/> &#160;(<span t-field="doc.residual_letra"/> DÓLARES &#160;<span t-field="doc.cent_residual"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
+                        USD <span t-field="doc.residual"/> Dólares&#160;(<span t-field="doc.residual_letra"/> DÓLARES &#160;<span t-field="doc.cent_residual"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
                     </p>                                                                                                
 
-                    <p>
+                    <p style="text-aling: justify !important; text-indent: 1.5cm !important;" >
                         En caso de incumplimiento en el pago puntual de los pagos a que se refiere este recibo o el contrato de transacción y renuncia, 
-                        e causará un 3% (tres por ciento) mensual. Será Juez competente por sumisión de las partes, 
+                        se causará un moratorio del 3% (tres por ciento) mensual. Será Juez competente por sumisión de las partes, 
                         el del partido judicial de la ciudad de Tijuana, 
                         Baja California o el del partido judicial de la ciudad de Villahermosa, Tabasco, a elección de la parte actora.
 
                     </p>
-                    <p>
+                    <p style="text-aling: justify !important; text-indent: 1.5cm !important;" >
                         Se señala como lugar de pago de las obligaciones el ubicado en Paseo de la Sierra número 231 Colonia Reforma de la ciudad de Villahermosa Tabasco y/o Avenida Paseo de los Héroes número 10289, 
-                        Primer Piso Interior, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
+                        Primer Piso, de la Zona Río y/o Lote 6, Manzana 2, calle Primera, colonia Vista Bella, de Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o depósito, que se señalará en su oportunidad.
                     </p>
-                    <br/>
+                </div>
+                   <!-- <br/> -->
+                   <br/>
                     <p align="center"><strong>R E C I B Í</strong></p>
-                            <img style="width: 30%; margin-left: 300px;" src="jibaritolotes/static/img/Firma_Jibarito.png"/>
-                            <p align="center"><strong>María Fernanda Loaiza Alvarez</strong></p>
-                            <p align="center"><srong>Apoderado Legal y Copropietario</srong></p>
-                            <p align="right"><strong>Interés <span t-field="doc.ji_moratorio"/></strong></p>
-                            <p align="right"><strong>Capital <span t-field="doc.amount"/></strong></p>
-                            <p align="right" t-if="doc.ji_mes_nuevo > 0 "><strong>(Del mes <span t-field="doc.ji_mensuaidad"/> son <span t-field="doc.ji_restante"/> y los
-                                <span t-field="doc.ji_mes_nuevo"/>
-                                abarco hasta el mes <span  t-field="doc.ji_mesto"/>)</strong></p>
-                            <p align="right"><strong>Total <span t-field="doc.total_amount"/></strong></p>
+                            <img style="width: 30%; margin-left: 270px;" src="jibaritolotes/static/img/Firma_Jibarito.png"/>
+                            <div style="line-height: 0.5 !important;">
+                                <p align="center"><strong>María Fernanda Loaiza Alvarez</strong></p>
+                                <p align="center" style="font-weight: bold !important;"><srong>Apoderado Legal y Copropietario</srong></p>
+                            </div>
+                            <p align="right"><strong>Interés USD <span t-field="doc.ji_moratorio"/> Dólares</strong></p>
+                            <p align="right"><strong>Capital USD <span t-field="doc.amount"/> Dólares</strong></p>
+                            <!-- <p align="right" t-if="doc.ji_mesto > doc.ji_mensuaidad"><strong>(Del mes <span t-field="doc.ji_mensuaidad"/> son <span t-field="doc.ji_restante"/> y los <span t-field="doc.ji_mes_nuevo"/> abarco hasta el mes <span  t-field="doc.ji_mesto"/>)</strong></p> -->
+                            <p align="right" t-if="doc.ji_mesto > doc.ji_mensuaidad"><span t-field="doc.ji_mesnuevo_let"/></p>
+                            <p align="right"><strong>Total USD <span t-field="doc.total_amount"/> Dólares</strong></p>
                             <p><strong>FIRMA DE CONFORMIDAD: </strong> _______________________________________</p>
 
+
+
                     </t>
+
             </div>
         </t>
         </t>

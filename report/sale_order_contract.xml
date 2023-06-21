@@ -53,7 +53,7 @@
     </record>
     <report
             id="action_report_sale_order_contract"
-            string="Contract"
+            string="Contrato"
             model="account.move"
             report_type="qweb-html"
             file="jibaritolotes.report_sale_order_contract"

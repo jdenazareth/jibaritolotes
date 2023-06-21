@@ -51,6 +51,57 @@
               parent="account.menu_finance_reports"
               action="Moraasiento_act_window"/>
 
+    <record id="mora_tranf_form_view" model="ir.ui.view">
+            <field name="name">ji.mora.tranfer.form</field>
+            <field name="model">ji.mora.tranfer</field>
+            <field name="arch" type="xml">
+                <form string="Generar Moratorios">
+
+                    <p class="oe_grey">
+                        Seleccione Las Fechas a Generar el Reporte
+                    </p>
+                    <group>
+                        <group>
+                            <field name="diario"/>
+                            <field name="diario_des"/>
+                            <field name="date_i"/>
+                            <field name="date_f"/>
+
+                        </group>
+                        <group>
+                            <field name="name"/>
+                            <field name="mora"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button
+                            name="create_data"
+                            string="Tranferir"
+                            type="object"
+                            class="oe_highlight"
+                        />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                </form>
+            </field>
+        </record>
+
+    <record id="mora_tranf_act_window" model="ir.actions.act_window">
+        <field name="name">Tranferencia de Moratorios y Efectivo</field>
+        <field name="res_model">ji.mora.tranfer</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="mora_tranf_form_view" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="ji_mora_tranf_menu"
+              sequence="6"
+              groups="jibaritolotes.group_ji_apply_developments"
+              name="Tranferencia de Moratorios y Efectivo"
+              parent="account.menu_finance_reports"
+              action="mora_tranf_act_window"/>
+
 
 
 </odoo>

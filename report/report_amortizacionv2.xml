@@ -30,46 +30,53 @@
 <!--						<t t-call-assets="web.report_assets_common" t-js="false" />-->
 <!--						<t t-call-assets="web.assets_common" t-css="false" />-->
 <!--						<t t-call-assets="web.report_assets_common" t-css="false" />-->
-                        <div class="page">
+                        <div class="page" style="width: 100% !important; padding: 0px !important;">
+							<style>
+								table tr:nth-child(even) {
+									background-color: #eee;
+								}
+							</style>
 							<div class="row">
 
 							</div>
-							<div class="row" style="width: 80% !important; margin: auto !important;">
-								<div class="col-sm-4" aling="center">
-									<h3>Tabla de amortización</h3>
+							<div class="row" style="width: 100% !important; margin: auto !important;">
+								<div class="col-sm-4" aling="center" style="width: 80% !important; margin: auto !important;">
+									<h3 align="center" style="width: 100% !important; margin: auto !important; font-family: monospace !important;">Tabla de amortización</h3>
+									<hr/>
+									<br/>
 								</div>
 							</div>
-							<div class="row" style="width: 80% !important; margin: auto !important;">
+							<div class="row" style="width: 80% !important; margin: auto !important; margin-bottom: 10px !important;">
 								<div class="col-sm-6">
-									<p>Contrato: <t t-esc="contrato" /></p>
-									<p>Cliente: <t t-esc="client" /></p>
-									<p><t t-esc="produc" /></p>
-									<p><t t-esc="date" /></p>
+									<p style="padding: 5px !important; color: #2f2f2f !important; font-family: monospace !important; font-weight: bold !important;">Contrato: <t t-esc="contrato" /></p>
+									<p style="padding: 5px !important; color: #2f2f2f !important; font-family: monospace !important; font-weight: bold !important;">Cliente: <t t-esc="client" /></p>
+									<p style="padding: 5px !important; color: #2f2f2f !important; font-family: monospace !important;"><t t-esc="produc" /></p>
+									<p style="padding: 5px !important; color: #2f2f2f !important; font-family: monospace !important;"><t t-esc="date" /></p>
 								</div>
 							</div>
 
 							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<div class="col-sm-12">
 									<table class="table mt16">
-										<thead class="thead-dark">
+										<thead style="background: #eeb72a !important;">
 											<tr>
-												<th>Anticipos</th>
-												<th>Pago</th>
-												<th>Interes</th>
-												<th>Pago a Capital</th>
-												<th>Pago real</th>
-												<th>Saldo</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Anticipos</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Pago</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Interes</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Pago a Capital</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Pago real</th>
+												<th style="color: #f2f2f2 !important; font-weight: normal !important;">Saldo</th>
 											</tr>
 										</thead>
 										<tbody>
 											<t t-foreach="anti" t-as="ac">
 												<tr>
-													<td> <t t-esc="ac['number']" /> </td>
-													<td> <t t-esc="ac['date_f']" /></td>
-													<td> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-													<td> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-													<td> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-													<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="ac['number']" /> </td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="ac['date_f']" /></td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+													<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 												</tr>
 											</t>
 										</tbody>
@@ -79,30 +86,30 @@
 							<div class="row" style="width: 80% !important; margin: auto !important;">
 								<t t-if="anti" t-as="acco">
 									<div class="col-sm-12">
-										<table class="table mt16">
-											<thead class="thead-dark">
+										<table style="width: 100% !important;" class="table mt16">
+											<thead style="background: #eeb72a !important;">
 												<tr>
-													<th>Mensualidad</th>
-													<th>Vencimiento</th>
-													<th>Fecha de pago</th>
-													<th>Interes</th>
-													<th>Proximo pago</th>
-													<th>Pago a Capital</th>
-													<th>Pago real</th>
-													<th>Saldo Insoluto</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Mensualidad</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Vencimiento</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Fecha de pago</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Interes</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Proximo pago</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Pago a Capital</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Pago real</th>
+													<th style="padding: 4px !important; color: #f2f2f2 !important; font-weight: normal !important; font-size: 12px !important;">Saldo Insoluto</th>
 												</tr>
 											</thead>
 											<tbody>
 												<t t-foreach="acco" t-as="ac">
 													<tr>
-														<td> <t t-esc="ac['number']" /><t t-esc="ofpay" /> </td>
-														<td> <t t-esc="ac['date_f']" /></td>
-														<td> <t t-esc="ac['date_p']" /></td>
-														<td> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-														<td> <t t-esc="'{0:,.2f}'.format(ac['prox_sal'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-														<td> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-														<td> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
-														<td> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+														<td style="color: #2f2f2f !important; margin: 1px !important;"> <t t-esc="ac['number']" /><t t-esc="ofpay" /> </td>
+														<td style="color: #2f2f2f !important; font-size: 12px !important;"> <t t-esc="ac['date_f']" /></td>
+														<td style="color: #2f2f2f !important; font-size: 12px !important;"> <t t-esc="ac['date_p']" /></td>
+														<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['mora'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+														<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['prox_sal'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+														<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['impo'])"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+														<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['real'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
+														<td style="color: #2f2f2f !important;"> <t t-esc="'{0:,.2f}'.format(ac['total'])" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/></td>
 													</tr>
 												</t>
 											</tbody>

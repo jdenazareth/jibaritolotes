@@ -22,4 +22,3 @@ class Calleji(models.Model):
     _inherit = ['mail.thread']
 
     name = fields.Char(string = "Tipo Calle", track_visibility='onchange')
-

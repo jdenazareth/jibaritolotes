@@ -2,9 +2,12 @@
     <data>
         <template id="fac_report_facturas_entrega">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
+            <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+            <t t-call-assets="web.report_assets_common" t-js="false" />
+            <t t-call-assets="web.assets_common" t-css="false" />
+            <t t-call-assets="web.report_assets_common" t-css="false" />
 
-            <div class="page" style="padding: 60px !important;">
+            <div class="page" style="font-family:arial; font-size:18px; text-align: justify !important">
                 <!-- Llamado de Datos -->
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
                     <!-- Título -->
@@ -15,18 +18,18 @@
 
                     <!-- Datos -->
                     <!-- strftime('%Y') -->
-                    <p align="right">Siendo las __________ Horas</p>
+                    <p align="right">Siendo las __________ horas</p>
                     <p align="right">Del día __________</p>
                     <p align="right">Del mes __________</p>
                     <p align="right">Del año __________</p>
-                    <p align="right"><strong>Se hace POSESIÓN del lote número</strong> <span t-field="p.product_id.x_studio_lote"/></p>
-                    <p align="right"><strong>De la manzana</strong> <span t-field="p.product_id.x_studio_manzana" /></p>
-                    <p align="right"><strong>En la calle</strong> <span t-field="p.product_id.x_studio_calle" /></p>
-                    <p align="right">De la colonia Vista Bella.</p>
+                    <p align="right">Se entrega la POSESIÓN del lote número &#160;<strong><span t-field="p.product_id.x_studio_lote"/></strong></p>
+                    <p align="right">De la manzana &#160;<strong><span t-field="p.product_id.x_studio_manzana" /></strong></p>
+                    <p align="right">En la calle &#160;<strong><span t-field="p.product_id.x_studio_calle" /></strong></p>
+                    <p align="right">De la colonia &#160;<strong><span t-field="doc.categoria_producto"/>.</strong></p>
                     <br/>
 
                     <!-- Contenido -->
-                    <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">En la cual se le hace entrega de los puntos topográficos que limitan el inmueble materia de la presente acta, quedando a partir de este acto la guarda, custodia y protección total de dicho lote, sin responsabilidad futura para los copropietarios.</p>
+                    <p style="text-indent: 1.5cm; line-height: 1.5 !important;">En la cual se le hace entrega de los puntos topográficos que limitan el inmueble materia de la presente acta, quedando bajo su responsabilidad a partir de este acto la guarda, custodia y protección total de dicho lote, sin responsabilidad futura para los copropietarios.</p>
                     <br/>
                     <p align="center">Firmas</p>
                     <br/>
@@ -35,22 +38,27 @@
                     <!-- Firmas -->
                     <div class="container">
                         <div class="row">
-                            <div class="col-6">
-                                <p align="center">_______________________</p>
-                                <p align="center">Por la copropiedad</p>
+                            <div class="col-6" style="text-align: center !important; position: relative !important; top: 6px !important;">
+                                <img style="width: 50%; margin-left: 100px !important; position: relative !important; top: -25px !important;" src="jibaritolotes/static/img/Firma_Jibarito.png"/>
+                                <p align="center" style="font-size: 14px !important; text-align: center !important; margin-left: 30px !important; position: relative !important; top: -32px !important;">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Por la copropiedad<br/>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span style="text-transform: uppercase !important; text-align: center !important; font-size: 12px !important;">María Fernanda Loaiza Alvarez</span></p>
                                 <div style="width: 80% !important; margin-left: 90px;">
-                                    <p>Entrega:________________________</p>
+                                   
                                 </div>
                             </div>
 
                             <div class="col-6">
                                 <p align="center">_______________________</p>
-                                <p align="center">Titular</p>
+                                <p align="center" style="font-size: 14px !important; position: relative !important; top: -16px !important; ">Posesionario(a)<br/><span style="font-size: 12px !important;"><span t-field="doc.partner_id"/></span></p>
                                 <div style="width: 80% !important; margin-left: 90px;">
-                                    <p>Recibe: <span t-field="doc.partner_id"/></p>
+                                
                                 </div>
                             </div>
                         </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p style="text-align: left;">Entrega:_________________________________________________________</p>
                     </div>
                     
             

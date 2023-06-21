@@ -28,7 +28,7 @@
                             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
                             }
                             .styled-table thead tr {
-                            background-color: #009879;
+                            background-color: #eeb72a;
                             color: #ffffff;
                             text-align: left;
                             }
@@ -43,7 +43,7 @@
                             background-color: #f3f3f3;
                             }
                             .styled-table tbody tr:last-of-type {
-                            border-bottom: 2px solid #009879;
+                            border-bottom: 2px solid #eeb72a;
                             }
                             .styled-table tbody tr.active-row {
                             font-weight: bold;
@@ -76,10 +76,11 @@
                     </head>
                     <body>
                         <div class="center">
-                            <h2>Report</h2>
+                            <h2>Reporte</h2>
+                            <hr/>
                             <p>New delinquent clients.</p>
                         </div>
-                        <div style="padding-left: 50px;padding-right: 50px">
+                        <div style="width: 80%; margin: auto; padding-left: 50px;padding-right: 50px">
                             <table class="styled-table table_center">
                                 <thead>
                                     <tr>
@@ -106,7 +107,7 @@
                             </table>
                         </div>
                         <div class="center" style="color: #000;font-weight: bold">
-                            <p>This is an automated message, please do not reply.</p>
+                            <p>*This is an automated message, please do not reply.*</p>
                         </div>
                     </body>
                 </html>
@@ -281,6 +282,184 @@
 
                             <p>Buen dia, Adjuntamos Las cuentas por pagar</p>
                             <p>Se adjunto 2 archivos los desudores del mes y los porvencer en 7 dias.</p>
+                        </div>
+
+                        <div class="center" style="color: #000;font-weight: bold">
+                            <p>This is an automated message, please do not reply.</p>
+                        </div>
+                    </body>
+                </html>
+                 ]]>
+            </field>
+        </record>
+
+        <record id="mail_template_Docenal" model="mail.template">
+            <field name="name">Plantilla Decenal</field>
+            <field name="auto_delete" eval="True"/>
+             <field name="model_id" ref="model_account_move" />
+            <field name="body_html">
+                <![CDATA[
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <meta name="viewport"
+                              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                        <title>Estado de Cuenta</title>
+                        <style>
+                            .center {
+                            padding: 10px 10px 10px 10px;
+                            text-align: center;
+                            }
+                            .styled-table {
+                            border-collapse: collapse;
+                            margin: 25px 0;
+                            font-size: 0.9em;
+                            font-family: sans-serif;
+                            min-width: 400px;
+                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            .styled-table thead tr {
+                            background-color: #009879;
+                            color: #ffffff;
+                            text-align: left;
+                            }
+                            .styled-table th,
+                            .styled-table td {
+                            padding: 12px 15px;
+                            }
+                            .styled-table tbody tr {
+                            border-bottom: 1px solid #dddddd;
+                            }
+                            .styled-table tbody tr:nth-of-type(even) {
+                            background-color: #f3f3f3;
+                            }
+                            .styled-table tbody tr:last-of-type {
+                            border-bottom: 2px solid #009879;
+                            }
+                            .styled-table tbody tr.active-row {
+                            font-weight: bold;
+                            color: #009879;
+                            }
+                            .table_center {
+                            margin-left: auto;
+                            margin-right: auto;
+                            }
+                            .button {
+                            background-color: #CD5C5C; /* Green */
+                            border: none;
+                            color: white;
+                            padding: 8px 8px;
+                            border-radius: 10px;
+                            text-align: center;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: inline-block;
+                            font-size: 14px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            -webkit-transition-duration: 0.4s; /* Safari */
+                            transition-duration: 0.4s;
+                            }
+                            .button2:hover {
+                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="center">
+
+                            <p>Buen dia, Adjuntamos Las cuentas por pagar</p>
+                            <p>Se adjunto 2 archivos los desudores del mes y los porvencer en 7 dias.</p>
+                        </div>
+
+                        <div class="center" style="color: #000;font-weight: bold">
+                            <p>This is an automated message, please do not reply.</p>
+                        </div>
+                    </body>
+                </html>
+                 ]]>
+            </field>
+        </record>
+
+        <record id="mail_template_reporte_gastos" model="mail.template">
+            <field name="name">Plantilla Reportes de gastos</field>
+            <field name="auto_delete" eval="True"/>
+             <field name="model_id" ref="model_account_move" />
+            <field name="body_html">
+                <![CDATA[
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <meta name="viewport"
+                              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+                        <title>Reporte de Gastos</title>
+                        <style>
+                            .center {
+                            padding: 10px 10px 10px 10px;
+                            text-align: center;
+                            }
+                            .styled-table {
+                            border-collapse: collapse;
+                            margin: 25px 0;
+                            font-size: 0.9em;
+                            font-family: sans-serif;
+                            min-width: 400px;
+                            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            .styled-table thead tr {
+                            background-color: #009879;
+                            color: #ffffff;
+                            text-align: left;
+                            }
+                            .styled-table th,
+                            .styled-table td {
+                            padding: 12px 15px;
+                            }
+                            .styled-table tbody tr {
+                            border-bottom: 1px solid #dddddd;
+                            }
+                            .styled-table tbody tr:nth-of-type(even) {
+                            background-color: #f3f3f3;
+                            }
+                            .styled-table tbody tr:last-of-type {
+                            border-bottom: 2px solid #009879;
+                            }
+                            .styled-table tbody tr.active-row {
+                            font-weight: bold;
+                            color: #009879;
+                            }
+                            .table_center {
+                            margin-left: auto;
+                            margin-right: auto;
+                            }
+                            .button {
+                            background-color: #CD5C5C; /* Green */
+                            border: none;
+                            color: white;
+                            padding: 8px 8px;
+                            border-radius: 10px;
+                            text-align: center;
+                            text-decoration: none;
+                            font-weight: bold;
+                            display: inline-block;
+                            font-size: 14px;
+                            margin: 4px 2px;
+                            cursor: pointer;
+                            -webkit-transition-duration: 0.4s; /* Safari */
+                            transition-duration: 0.4s;
+                            }
+                            .button2:hover {
+                            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="center">
+
+                            <p>Buen dia</p>
+                            <p>Adjuntamos reporte de gastos.</p>
                         </div>
 
                         <div class="center" style="color: #000;font-weight: bold">

@@ -2,52 +2,70 @@
     <data>
         <template id="fac_report_facturas_carta_invacion">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-
-            <div class="page">
-                <t t-foreach="doc.invoice_line_ids" t-as="p">
+            <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+            <t t-call-assets="web.report_assets_common" t-js="false" />
+               <t t-call-assets="web.assets_common" t-css="false" />
+               <t t-call-assets="web.report_assets_common" t-css="false" />
+                <div class="page" style="font-family: arial; font-size:14px;" >
                 <!-- <p align="center"><img style="width: 40%; margin-top: -10px !important;" src="jibaritolotes/static/img/logotipo.png"/></p> -->
-                <h3 align="center">CARTA DE COBRO PREJURÍDICO</h3>
-                <p align="right">Tijuana, B.C. <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></p>
+                <t t-if="doc.estado_producto.name == 'Invadido'">
                 <br/>
-                <p>Aquien conrresponda</p>
-                <p style="font-size: 14px !important;">P r e s e n t e .</p>
+                <h3 align="center" style="font-size: 28px !important;">CARTA DE COBRO PREJURÍDICO</h3>
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Reciba un cordial saludo en nombre de la Oficina de Gestión de la Col. Vista Bella, por este medio nos permitimos recordarle que, de acuerdo al registro de cartera de colonos, se tiene:</p>
-
-                <table style="border: 1px solid #dee2e6 !important" class="table table-striped">
+                <br/>
+                <br/>
+                <!-- Fecha -->
+                <p align="right" style="font-size: 20px !important;">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
+                <br/>
+                <br/>
+                <p style="font-size: 25px !important;"><span style="font-size: 25px; line-height: 0.8 ;">A quien conrresponda</span><br/><span style="font-size: 25px !mportant;">P r e s e n t e .</span></p>
+                
+                <br/>
+                <p style="font:arial; font-size:20px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm">Reciba un cordial saludo en nombre de la Oficina de Gestión de la Col. Vista Bella, por este medio nos permitimos informarle que, de acuerdo al registro de cartera de colonos, se tiene:</p>
+                    <br/>
+                <table style="border: 1px solid #dee2e6 !important; text-align: center !important;" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Manzana</th>
-                            <th>Lote</th>
-                            <th>Calle</th>
-                            <th>Situación</th>
-                            <th>Acciones</th>
+                            <th style="background: #eeb72a !important; color: #f2f2f2 !important; font-size:20px !important;">Manzana</th>
+                            <th style="background: #eeb72a !important; color: #f2f2f2 !important; font-size:20px !important;">Lote</th>
+                            <th style="background: #eeb72a !important; color: #f2f2f2 !important; font-size:20px !important;">Calle</th>
+                            <th style="background: #eeb72a !important; color: #f2f2f2 !important; font-size:20px !important;">Situación</th>
+                            <th style="background: #eeb72a !important; color: #f2f2f2 !important; font-size:20px !important;">Acciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
+                    
                         <tr>
-                            <td align="center"><span t-field="p.product_id.x_studio_manzana" /></td>
-                            <td align="center"><span t-field="p.product_id.x_studio_lote" /></td>
-                            <td align="center"><span t-field="p.product_id.x_studio_calle" /></td>
-                            <td>      </td>
-                            <td>      </td>
+                            <td style="font-size: 20px !important; border-right: 1px solid #e5e5e5 !important; width: 10% !important;" align="center"><span t-field="doc.x_studio_manzana" /></td>
+                            <td style="font-size: 20px !important; border-right: 1px solid #e5e5e5 !important; width: 10% !important;" align="center"><span t-field="doc.x_studio_lote" /></td>
+                            <td style="font-size: 20px !important; border-right: 1px solid #e5e5e5 !important; width: 10% !important;" align="center"><span t-field="doc.x_studio_calle" /></td>
+                            <td style="font-size: 20px !important; border-right: 1px solid #e5e5e5 !important; width: 10% !important;" align="center" >  <san t-field="doc.situacion_texto" /></td>
+                            <td style="font-size: 20px !important; border-right: 1px solid #e5e5e5 !important; width: 10% !important;" align="center" >  <san t-field="doc.acciones_texto" /></td>
                         </tr>
+                    
                     </tbody>
                 </table>
+                <br/>
 
                 <br/>
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">Por lo anterior expuesto, es importante mencionarle que se presente a la mayor brevedad posible a nuestra oficina sita en la calle Primera lote 6 manzana 2 de la citada colonia, para llegar a un acuerdo de pago y de esta manera solventar su situación.</p>
-                <p>Agradeciendo la atención prestada y sin otro particular nos suscribimos.</p>
+                <p style="font:arial; font-size:20px !important; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm">Por lo anterior expuesto, es importante mencionarle que se presente a la mayor brevedad posible a nuestra oficina sita en la calle Primera lote 6 manzana 2 de la citada colonia, para llegar a un acuerdo de pago y de esta manera solventar su situación.</p>
+                <br/>
+                <p style="text-indent: 1.5cm; font-size:20px !important;">Agradeciendo la atención prestada y sin otro particular nos suscribimos.</p>
                 <br/>
                 <br/>
                 <br/>
- <!--                <p>Atentamente,</p>
-                <strong>Administración Col. Vista Bella de El Jibarito</strong>
+                <p style="font-size: 20px !important;">Atentamente.</p>
                 <br/>
+                <!-- <img style="width: 200px; position: relative; top: -20px !important;" src="jibaritolotes/static/img/Firma_Jibarito.png"/> -->
                 <br/>
+                <strong style="font-size: 20px !important;">Administración Col. Vista Bella El Jibarito</strong>
+                <br/>
+                <!-- <br/>
                 <h4 align="center">Col. Vista Bella, Deleg. San Francisco de los Buenos, Tijuana, B.C.</h4> -->
+            </t>
+            <t t-if="doc.estado_producto.name != 'Invadido'">
+                <h1>ESTA CARTA SOLO SE PUEDE GENERAR SI EL PRODUCTO ESTÁ EN ESTADO INVADIDO</h1>
             </t>
             </div>
         </t>

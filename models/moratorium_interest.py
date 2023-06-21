@@ -212,7 +212,14 @@ class JiMoratoriumInterestLine(models.Model):
     def _compute_month_number(self):
         for line in self:
             r = relativedelta.relativedelta(line.at_date, line.date_maturity)
-            line.month_number = r.months + 1
+            num = 0
+            if r.months < 0:
+                num = r.months * -1
+            else:
+                num = r.months
+            line.month_number = num
+
+
 
     @api.depends("amount_residual", "moratorium_id")
     def _compute_amount_unit_moratorium(self):

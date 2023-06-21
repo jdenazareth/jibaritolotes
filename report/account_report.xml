@@ -1,13 +1,28 @@
 <odoo>
   <data>
+      <record id="paperformat_hist" model="report.paperformat">
+            <field name="name">Reportehistorico</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">23</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">25</field>
+            <field name="margin_right">25</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">20</field>
+            <field name="dpi">100</field>
+        </record>
     <report
       id="report_factura_apartado"
       model="account.move"
-      string="Recibo de pago apartado"
+      string="Recibo de enganche"
       report_type="qweb-pdf"
+      menu="False"
       name="jibaritolotes.report_facturas_apartado_card"
       file="jibaritolotes.report_facturas_apartado_card"
-      print_report_name="'Factura - %s' % (object.name).replace('/','')"/>
+      print_report_name="'Recibo de enganche - %s' % (object.name).replace('/','')"
+      paperformat="jibaritolotes.paperformat_hist"/>
 
       <template id="report_facturas_apartado_card">
         <t t-call="web.html_container">
@@ -21,11 +36,12 @@
       <report
       id="report_factura_devo"
       model="account.move"
-      string="Recbio devolucion"
+      string="Devolucion"
       report_type="qweb-pdf"
       name="jibaritolotes.report_facturas_devo_card"
       file="jibaritolotes.report_facturas_devo_card"
-      print_report_name="'Devolucion - %s' % (object.name).replace('/','')"/>
+      print_report_name="'Devolucion - %s' % (object.name).replace('/','')"
+      paperformat="jibaritolotes.paperformat_hist"/>
 
       <template id="report_facturas_devo_card">
         <t t-call="web.html_container">
@@ -43,7 +59,8 @@
       report_type="qweb-pdf"
       name="jibaritolotes.report_facturas_finiquito_card"
       file="jibaritolotes.report_facturas_finiquito_card"
-      print_report_name="'Carta Finiquito - %s' % (object.name).replace('/','')"/>
+      print_report_name="'Carta Finiquito - %s' % (object.name).replace('/','')"
+      paperformat="jibaritolotes.paperformat_hist"/>
 
       <template id="report_facturas_finiquito_card">
         <t t-call="web.html_container">
@@ -61,7 +78,8 @@
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_entrega"
        file="jibaritolotes.report_facturas_entrega"
-       print_report_name="'Acta de Entrega-Recepción de inmueble - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Acta de Entrega-Recepción de inmueble - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_entrega">
          <t t-call="web.html_container">
@@ -80,7 +98,8 @@
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_acuse_entrega"
        file="jibaritolotes.report_facturas_acuse_entrega"
-       print_report_name="'Acuse de entrega - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Acuse de entrega - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_acuse_entrega">
          <t t-call="web.html_container">
@@ -98,7 +117,8 @@
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_cartera_cartera"
        file="jibaritolotes.report_facturas_cartera_cartera"
-       print_report_name="'Carta de cobro Prejuridico cartera - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Carta de cobro Prejuridico  - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_cartera_cartera">
          <t t-call="web.html_container">
@@ -108,15 +128,16 @@
          </t>
        </template>
 
-      <!-- Inicio de CARTA DE COBRO PREJURIDICO Invacion -->
+      <!-- Inicio de CARTA DE COBRO PREJURIDICO Invasión En PRODUCTO TAMPLE -->
        <report
        id="report_factura_carta_invacion"
-       model="account.move"
-       string="Carta de cobro Prejuridico invacion"
+       model="product.template"
+       string="Carta de cobro Prejuridico invasión"
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_carta_invacion"
        file="jibaritolotes.report_facturas_carta_invacion"
-       print_report_name="'Carta de cobro Prejuridico Invacion - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Carta de cobro Prejuridico Invasión - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_carta_invacion">
          <t t-call="web.html_container">
@@ -134,7 +155,8 @@
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_cesion_derechos"
        file="jibaritolotes.report_facturas_cesion_derechos"
-       print_report_name="'Cesión de derechos - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Cesión de derechos - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_cesion_derechos">
          <t t-call="web.html_container">
@@ -152,7 +174,8 @@
        report_type="qweb-pdf"
        name="jibaritolotes.report_facturas_contrato_transaccion"
        file="jibaritolotes.report_facturas_contrato_transaccion"
-       print_report_name="'Terminacion del contrato de Transaccion - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Terminacion del contrato de Transaccion - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_facturas_contrato_transaccion">
          <t t-call="web.html_container">
@@ -167,11 +190,12 @@
        <report
        id="report_comprobante_pago"
        model="account.payment"
-       string="Comprobante de pago Mesualidad"
-       report_type="qweb-html"
+       string="Recibo Mensualidad"
+       report_type="qweb-pdf"
        name="jibaritolotes.report_comprobante_pago"
        file="jibaritolotes.report_comprobante_pago"
-       print_report_name="'Comprobante de pago Mensualidad - %s' % (object.name).replace('/','')"/>
+       print_report_name="'Recibo Mensualidad - %s' % (object.name).replace('/','')"
+       paperformat="jibaritolotes.paperformat_hist"/>
  
        <template id="report_comprobante_pago">
          <t t-call="web.html_container">

@@ -2,24 +2,28 @@
     <data>
         <template id="fac_report_facturas_apartado_card">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-            <div class="page">
+            <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+            <t t-call-assets="web.report_assets_common" t-js="false" />
+            <t t-call-assets="web.assets_common" t-css="false" />
+            <t t-call-assets="web.report_assets_common" t-css="false" />
+            <div class="page" style="font-family: arial; font-size:14px !important;" >
+
                 <t t-set="porcentaje" t-value="doc.invoice_payment_term_id.ji_advance_payment/100"/>
                 <t t-set="porcentaje" t-value="porcentaje*doc.amount_total"/>
                 <t t-set="resta" t-value="doc.amount_total-porcentaje"/>
                 <t t-set="cantidad" t-value="porcentaje/doc.invoice_payment_term_id.ji_number_quotation"/>
-                <h2 align="center">VISTA BELLA</h2>
-
+                <h2 align="center" style="color: black !important;">RECIBO ENGANCHE</h2>
+                <br/>
                 <!---Tabla de cabecera-->
                 <table style="border-collapse: collapse; width: 100%; height: 54px;" border="0">
                 <tbody>
                     <tr style="height: 18px;">
                         <td style="width: 38.9256%; height: 18px;">&#160;</td>
-                        <td style="width: 61.0744%; height: 18px; text-align: right;">Tijuana, Baja California, Fecha: <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></td>
+                        <td style="width: 61.0744%; height: 18px; text-align: right;">Tijuana, Baja California; a <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> de <span t-field="doc.invoice_date" t-options='{"format": "y"}'/>.</td>
                     </tr>
                     <tr style="height: 18px;">
                         <td style="width: 38.9256%; height: 18px;">&#160;</td>
-                        <td style="width: 61.0744%; height: 18px; text-align: right;"><strong>BUENO POR USD: $<span t-field="doc.porcentaje"/></strong></td>
+                        <td style="width: 61.0744%; height: 18px; text-align: right;"><strong>BUENO POR USD: $ <span t-field="doc.porcentaje"/> DLLS</strong></td>
                     </tr>
                     <tr style="height: 18px;">
                         <td style="width: 38.9256%; height: 18px;">&#160;</td>
@@ -30,46 +34,48 @@
                 <!-- Fin tabkle de cabecera -->
 
                 <br/>
-                <br/>
 
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
+                <div style="text-align: justify !important;">
                 <p sstyle="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
-                    Recibí del Señor (a) <span t-field="doc.partner_id.name"/> la cantidad de USD $<span t-field="doc.porcentaje"/> (<span t-field="doc.porcentaje_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.)
-                    por concepto de apartado del lote de terreno identificado como lote numero <span t-field="p.product_id.x_studio_lote"/> de la manza <span t-field="p.product_id.x_studio_manzana" /> de la calle <span t-field="p.product_id.x_studio_calle"/>., que se localiza dentro del la Colonia Vista Bella,
-                    localizado en la parte sur del predio denominado El Jibarito, que se ubica en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
+                    Recibí del Señor (a) <span t-field="doc.partner_id.name"/> la cantidad de USD $ <span t-field="doc.porcentaje"/> Dólares (<span t-field="doc.porcentaje_letra"/> DÓLARES <span t-field="doc.centavo_porcentaje"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.) 
+                    por concepto de enganche del lote de terreno identificado como lote numero <span t-field="p.product_id.x_studio_lote"/> de la manzana <span t-field="p.product_id.x_studio_manzana" /> de la calle &#160;<span t-field="p.product_id.x_studio_calle"/>, que se localiza dentro de la Colonia Vista Bella,
+                    ubicado en la parte sur del predio denominado El Jibarito en la Delegación San Antonio de los Buenos de la ciudad de Tijuana, Baja California.
                 </p>
+                </div>
 
                 <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     Este recibo se expide a cuenta de una cantidad mayor, y no constituye derecho de adquisición de lote alguno,
-                    toda vez que completando el monto del apartado del lote que asciende a la cantidad de USD $ <span t-field="doc.porcentaje"/> (<span t-field="doc.porcentaje_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), (monto total del apartado del LOTE)
+                    toda vez que completando el monto del apartado del lote que asciende a la cantidad de USD $ <span t-field="doc.porcentaje"/> Dólares (<span t-field="doc.porcentaje_letra"/> DÓLARES <span t-field="doc.centavo_porcentaje"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), (monto total del apartado del LOTE)
                     se celebrará contrato de promesa de cesión de derechos sobre el LOTE de que se trata, y se acordó que dicho apartado sería pagado en <span t-field="doc.invoice_payment_term_id.ji_number_quotation"/> exhibiciones cada quince días, 
-                    por un monto de USD $<span t-field="doc.cantidad"/> (<span t-field="doc.cantidad_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.) cada una, quedando pendientes $<span t-field="doc.resta"/> (<span t-field="doc.resta_letra"/> DÓLARES 00/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA).
+                    por un monto de USD $ <span t-field="doc.cantidad"/> Dólares (<span t-field="doc.cantidad_letra"/> DÓLARES <span t-field="doc.centavo_cantidad" />/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.) cada una, quedando pendientes USD $ <span t-field="doc.resta"/> Dólares (<span t-field="doc.resta_letra"/> DÓLARES <span t-field="doc.centavo_resta" />/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA).
                 </p>
                 <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
-                    El importe total del lote de la cesión de derechos será pagado a razón de USD <span t-field="doc.amount_total"/> <span t-field="doc.total_letra"/>,Moneda de los Estados Unidos de América, 
-                    por metro cuadrado, del lote objeto de la cesión de derechos, en un pazo no mayor a 96, meses, consecutivos e iguales, 
-                    prorrateado el saldo restante una vez descontado el monto de apartado a que se refiere el párrafo anterior.
+                    El importe total del lote de la cesión de derechos será pagado a razón de USD $ <span t-field="doc.precio_unitario"/> Dólares (<span t-field="doc.precio_unitario_en_letra"/> DÓLARES <span t-field="doc.precio_unitario_centavo"/>/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA.), 
+                    por metro cuadrado, del lote objeto de la cesión de derechos, en un plazo no mayor a <span t-field="doc.invoice_payment_term_id.ji_numbers_monthly"/> meses, consecutivos e iguales, 
+                    prorrateado el saldo restante una vez descontado el monto de enganche a que se refiere el párrafo anterior.
                 </p>
                 <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     El plazo para iniciar los <strong>96 pagos iguales (mensualidades)</strong>, es a los 30 días naturales contados a partir de la fecha de liquidación del apartado del LOTE. 
                     Así mismo, una vez liquidado el aparatado se realizará la firma del contrato de cesión derechos del LOTE referido.
                 </p>
                 <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
-                    En caso de incumplimiento en el pago puntual de los pagos a que se refiere este recibo o el contrato de cesión de derechos, se causará un 3% (tres por ciento) mensual.
-                    Será Juez competente por sumisión de las partes,el del partido judicial de la ciudad de Tijuana, Baja California o el del partido judicial de la ciudad de Villahermosa
-                    abasco, a elección de la parte actora. Y en caso de que, por causas ajenas al cedente,el cesionario deje el inmueble materia de este recibo pasados 30 días naturales contados,
+                    En caso de incumplimiento en el pago puntual de los pagos a que se refiere este recibo o el contrato de cesión de derechos, se causará un 3% (tres por ciento) de moratorio por mensualidad.
+                    Será Juez competente por sumisión de las partes, el del partido judicial de la ciudad de Tijuana, Baja California o el del partido judicial de la ciudad de Villahermosa
+                    Tabasco, a elección de la parte actora. Y en caso de que, por causas ajenas al cedente,el cesionario deje el inmueble materia de este recibo pasados 30 días naturales contados,
                     a partir del pago inicial no se devolverá el dinero dado como pago del apartado, además de que no podrá pasar dos semanas sin pago del apartado.
                 </p>
                 <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 1.5 !important;">
                     Se señala como lugar de pago de las obligaciones el ubicado en Paseo de la Sierra número 231 Colonia Reforma de la ciudad de Villahermosa Tabasco y/o Avenida Paseo de los Héroes número 10289, 
-                    Primer Piso Interior, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
+                    Primer Piso, de la Zona Río, Tijuana, B.C., sin perjuicio de que se pueda pagar por transferencia o deposito, que se señalará en su oportunidad.
                 </p>
                 <p align="center"><strong>R E C I B Í </strong></p>
                 <img style="width: 30%; margin-left: 300px;" src="jibaritolotes/static/img/Firma_Jibarito.png"/> 
                 <p align="center"><strong>María Fernanda Loaiza Alvarez</strong></p>
-                <p align="center" style="font:arial; font-size:14px;"><strong>Copropietario</strong></p>
+                <p align="center" style="font:arial; font-size:14px;"><strong>Apoderada Legal y Copropietaria</strong></p>
 
-                
+                <br/>
+                <br/>
                 <p><strong>FIRMA DE CONFORMIDAD: </strong>_______________________________________</p>
                 </t>
 

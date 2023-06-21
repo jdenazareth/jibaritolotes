@@ -2,26 +2,41 @@
     <data>
         <template id="fac_report_facturas_cesion_derechos">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
+        <!-- <t t-call="web.external_layout"> -->
+            <t t-call="jibaritolotes.internal_layaut_ji">
+                <t t-call-assets="web.report_assets_common" t-js="false" />
+                <t t-call-assets="web.assets_common" t-css="false" />
+                <t t-call-assets="web.report_assets_common" t-css="false" />
 
-            <div class="page">
+            <div class="page" style="font-family: arial; font-size: 14px !important;">
+                <style>
+                    * {
+                        color: black !important;
+                    }
+                </style> 
                 <t t-foreach="doc.invoice_line_ids" t-as="p">
-                <h4 style=" font-weight: bold !important; margin-left: 200px !important; color: #8d8d8d !important;">CESIÓN DE DERECHOS DE INMUEBLE</h4>
-                <p align="right"><strong>Tijuana, Baja California; <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/></strong></p>
+                <h3 style="width: 60% !important; text-align: center !important; font-weight: bold !important; margin: auto !important; color: black !important;">CESIÓN DE DERECHOS</h3>
+                <br/>
+                <br/>
+                <br/>
+                <p align="right">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
                 <br/>
                 
 
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 250% !important;">
-                    Yo <span t-field="doc.cliente_anterior"/>, manifiesto sin presión alguna que por medio del presente hago <strong> CESION DE DERECHOS GRATUITA</strong> respecto del inmueble identificado como <strong>LOTE <span t-field="p.product_id.x_studio_lote"/> DE LA MANZANA  <span t-field="p.product_id.x_studio_manzana"/> CON SUPERFICIE DE <span t-field="p.product_id.ji_area"/> METROS CUADRADOS, DE LA CALLE <span style="text-transform: uppercase !important;" t-field="p.product_id.x_studio_calle"/>, DE LA COLONIA VISTA BELLA, DE ESTA CIUDAD DE TIJUANA BAJA CALIFORNIA</strong>, a favor de la señor (a) <span t-field="doc.partner_id.name"/></p>
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;">
+                    Yo <span style="font-weight: bold !important;"><span t-field="doc.cliente_anterior"/></span>, manifiesto sin presión alguna que por medio del presente hago &#160;<strong> CESION DE DERECHOS GRATUITA</strong> respecto del inmueble identificado como &#160;<strong> LOTE <span t-field="p.product_id.x_studio_lote"/> DE LA MANZANA  <span t-field="p.product_id.x_studio_manzana"/> CON SUPERFICIE DE <t t-esc="doc.ji_get_area()"/> METROS CUADRADOS, DE LA CALLE <span style="text-transform: uppercase !important;" t-field="p.product_id.x_studio_calle"/>, DE LA COLONIA VISTA BELLA, DE ESTA CIUDAD DE TIJUANA, BAJA CALIFORNIA</strong>, a favor del(la) señor(a) &#160;<span style="font-weight: bold !important;"><span t-field="doc.partner_id.name"/></span>.</p>
+                <br/>
                 
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 250% !important;">
-                    Así mismo, manifiesta renunciar expresamente a cualquier reclamación en contra de los copropietarios del predio denominado El Jibarito, predio en el cual se localiza la colonia Vista Bella, colonia en la cual se encuentra inmerso el predio antes señalado, lo anterior por así convenir a mis intereses.
-                </p>
-
-                <p style="font:arial; font-size:14px; text-align: justify !important; line-height: 250% !important;">
-                    Por lo que desde este momento el(a) responsable de realizar cualquier trámite y pagos correspondientes sobre el inmueble antes descrito, será el señor (a) <span t-field="doc.partner_id.name"/>.<strong> Manifestando en este acto por su propio derecho y libre de toda presión, acepta la cesión de derechos del inmueble en referido, quedando bajo su responsabilidad el realizar los pagos correspondientes por la cesión de dicho predio; así como tramitar cualquier documentación referente al citado inmueble, adquiriendo todos los derechos y obligaciones que contenga el inmueble en comento.</strong> 
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;">
+                    Así mismo, manifiesto renunciar expresamente a cualquier reclamación en contra de los copropietarios del predio denominado El Jibarito, predio en el cual se localiza la colonia Vista Bella, colonia en la cual se encuentra inmerso el predio antes señalado, lo anterior por así convenir a mis intereses.
                 </p>
                 <br/>
+
+                <p style="font-size:14px; text-align: justify !important; line-height: 1.5 !important; text-indent: 1.5cm;">
+                    Por lo que desde este momento el(a) responsable de realizar cualquier trámite y pagos correspondientes sobre el inmueble antes descrito, será el señor(a) <span style="font-weight: bold !important;"><span t-field="doc.partner_id.name"/></span>. Manifestando en este acto por su propio derecho y libre de toda presión que, acepta la cesión de derechos del inmueble en referido, quedando bajo su responsabilidad el realizar los pagos correspondientes por la cesión de dicho predio; así como tramitar cualquier documentación referente al citado inmueble, adquiriendo todos los derechos y obligaciones que contenga el inmueble en comento.
+                </p>
+                <br/>
+                <br/><br/>
                 <p>
                     
                 </p>
@@ -33,7 +48,7 @@
         <div class="row">
             <!-- FIRMA UNO -->
             <div class="col-6">
-                <p style="font-size: 14px !important;" align="center"><strong>CESIONARIA: </strong></p>
+                <p style="font-size: 14px !important;" align="center"><strong>CEDENTE: </strong></p>
 
                 <p align="center">_____________________________________________</p>
 
@@ -44,7 +59,7 @@
 
             <!-- FIRMA DOS -->
             <div class="col-6">
-                <p style="font-size: 14px !important;" align="center"><strong>CEDENTE: </strong></p>
+                <p style="font-size: 14px !important;" align="center"><strong>CESIONARIO(A): </strong></p>
                 <p align="center">_____________________________________________</p>
             <div style="width: 70% !important; margin-left: 60px !important;">
                 <p style="font-size: 14px !important;" align="center"><strong><span t-field="doc.partner_id.name"/></strong></p>

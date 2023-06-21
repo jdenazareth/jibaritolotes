@@ -134,6 +134,7 @@ class AccountPaymentTerm(models.Model):
             currency = self.env.company.currency_id
         next_date = fields.Date.from_string(date_ref)  # 08/04/2020
         day_act = 0
+        days = 0
         for line in self.line_ids:
 
             day = line.days - day_act
@@ -146,8 +147,10 @@ class AccountPaymentTerm(models.Model):
                 amt = currency.round(amount)
 
             if line.option == 'day_after_invoice_date':
+                if days == 0:
+                    days = int(next_date.strftime('%d'))
                 if(day == 30):
-                    next_date += relativedelta(months=1)#04/02/19
+                    next_date += relativedelta(months=1,day=days)#04/02/19
                 else:
                     next_date += relativedelta(days=day)
                 if line.day_of_the_month > 0:

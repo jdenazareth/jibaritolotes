@@ -13,6 +13,7 @@
     "depends": [
         'base',
         "base_setup",
+        "deltatech_sale_payment",
        # "account_followup",
         "sale",
         "hr",
@@ -36,7 +37,7 @@
         #"views/account_followup_views.xml",
         "views/res_partner.xml",
         "views/res_company.xml",
-
+        "views/account_journal_dashboard_view.xml",
         "views/sale_order.xml",
         "views/product_product.xml",
         "views/product_template.xml",
@@ -63,6 +64,7 @@
         "report/report_gastos.xml",
         "views/hr_employee.xml",
         "wizard/asiento_mora.xml",
+
 
 
     ],

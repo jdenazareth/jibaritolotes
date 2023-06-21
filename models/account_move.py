@@ -5,7 +5,7 @@ import copy
 import logging
 _logger = logging.getLogger(__name__)
 from odoo import _, api, fields, models, tools
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError, except_orm
 
 from collections import defaultdict
 MAP_INVOICE_TYPE_PARTNER_TYPE = {
@@ -21,6 +21,11 @@ import dateutil.relativedelta as relativedelta
 from werkzeug import urls
 from num2words import num2words
 import json
+import qrcode
+import base64
+from io import BytesIO
+from odoo.http import request
+
 
 try:
     # We use a jinja2 sandboxed environment to render mako templates.
@@ -98,8 +103,26 @@ def month_name(number):
     elif number == 12:
         return _('December')
 
+def generate_qr_code(value):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=20,
+            border=4,
+        )
+        qr.add_data(value)
+        qr.make(fit=True)
+        img = qr.make_image()
+        temp = BytesIO()
+        img.save(temp, format="PNG")
+        qr_img = base64.b64encode(temp.getvalue())
+        return qr_img
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    invoice_payment_term_id = fields.Many2one('account.payment.term', string='Payment Terms',
+                                              domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+                                              readonly=True, states={'draft': [('readonly', False)]}, track_visibility='onchange')
     fecha_fact = fields.Date(string="Fecha de Factura")
     ji_partner_contract = fields.Many2one(comodel_name="res.partner", string="Commission Agent")
     ji_order_contract = fields.Many2one(comodel_name="sale.order", string="Order Contract")
@@ -107,7 +130,7 @@ class AccountMove(models.Model):
     ji_json_numbers = fields.Text(string="Json Number", store=True, compute="_compute_ji_json_numbers")
     ji_json_sequences = fields.Text(string="Json Sequences", store=True, compute="_compute_ji_json_numbers")
     x_studio_contrato = fields.Char(string="Contrato", compute="contrato")
-    x_studio_vendedor = fields.Many2one(comodel_name="hr.employee", related="partner_id.sale_order_ids.x_studio_vendedor", string="Vendedor")
+    x_studio_vendedor = fields.Many2one(comodel_name="hr.employee",store=True, related="partner_id.sale_order_ids.x_studio_vendedor", string="Vendedor")
     cliente_anterior = fields.Many2one(comodel_name="res.partner", string="Cliente anterior")
     fecha_entrega = fields.Datetime(string="Fecha de entrega")
     mes_entrega = fields.Char(string="Mes")
@@ -119,16 +142,86 @@ class AccountMove(models.Model):
     estado_producto = fields.Many2one('estados.g', string='Estado de Producto', compute="state_product")
     ji_documents = fields.Boolean(string="Revision de documentacion", compute="get_documents")
     ji_textalert = fields.Char(string="mjs")
-    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", related="invoice_line_ids.product_id.x_studio_manzana")
-    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", related="invoice_line_ids.product_id.x_studio_lote")
-    x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", related="invoice_line_ids.product_id.x_studio_calle")
-    categoria_producto = fields.Many2one(string="Categoria de producto", comodel_name="product.category", related="invoice_line_ids.product_id.categ_id")
+    x_studio_manzana = fields.Many2one(string="Manzana", comodel_name="manzana.ji", store=True, related="invoice_line_ids.product_id.x_studio_manzana")
+    x_studio_lote = fields.Many2one(string="Lote", comodel_name="lotes.ji", store=True, related="invoice_line_ids.product_id.x_studio_lote")
+    x_studio_calle = fields.Many2one(string="Calle", comodel_name="calle.ji", store=True, related="invoice_line_ids.product_id.x_studio_calle")
+    categoria_producto = fields.Many2one(string="Categoria de producto", comodel_name="product.category")
+    codigo_prod = fields.Many2one(string="Codigo de producto", comodel_name="account.account")
     dia_dato_pago = fields.Integer(string="Pago dia de cada mes", compute="get_origin")
     dia_letra_pago = fields.Char(string="Pago dia Letra", compute="get_origin")
+    mensaualidad_pago = fields.Float(string="pago mensual", compute="get_page_mensual")
+    precio_unitario = fields.Float(string="Precio unitario",related="invoice_line_ids.product_id.list_price")
+    anticipo_total = fields.Float(string="Totla anticipo", compute="get_anticipo")
+    total_menos_anticipo = fields.Float(string="Total sin anticipo", compute="get_anticipo")
+    mensualidades_atra = fields.Float(string="mensaulidades vencidad", compute="get_anticipo")
+    
+
+    qr_finiquito = fields.Binary("QR Code", compute='_generate_qr_code')
+
+    def _generate_qr_code(self):
+        service = "Fecha de expedición: " + str( fields.Date.context_today(self).strftime('%d-%m-%Y'))
+        # Check if BIC exists: version 001 = BIC, 002 = no BIC
+        version = 'Convenio INDIVI : 102799 - 102800'
+        code = self.partner_id.name
+        function = "Manzana " + self.x_studio_manzana.name + ", Lote " + self.x_studio_lote.name + ", Colonia " + self.categoria_producto.name + ", C.P. 22010, Tijuana, B.C."
+        bic = str(self.ji_get_area()) + " M2"
+
+        reference = "Contrato : " + self.name
+        lf = '\n'
+        ibanqr = lf.join([service, version, code, function, bic, reference])
+        if len(ibanqr) > 331:
+            raise except_orm(_('Error'),
+                                        _('IBAN QR code "%s" length %s exceeds 331 bytes') % (ibanqr, len(ibanqr)))
+        self.qr_finiquito = generate_qr_code(ibanqr)
+
+    @api.depends("type","line_ids","name")
+    def get_anticipo(self):
+        sin_anticipo = 0
+        mensua_ven = 0
+        for res in self:
+            if res.type == "out_invoice":
+                venta=self.env['sale.order'].search([('name','=',self.invoice_origin)])
+                res.anticipo_total = 0
+                mensua_ven = res.saldo_pend - res.total_moratorium
+                res.mensualidades_atra = mensua_ven
+                res.total_menos_anticipo = venta.total_adeudo
+
+                if res.invoice_line_ids:
+                    for il in res.invoice_line_ids:
+                        if il.product_id:
+                            res.categoria_producto= il.product_id.categ_id
+                        if il.account_id:
+                            res.codigo_prod = il.account_id
+            else:
+                res.mensualidades_atra = 0
+                res.anticipo_total = 0
+                res.total_menos_anticipo = 0
+                res.invoice_payment_ref = res.name
+
+                if res.invoice_line_ids:
+                    for il in res.invoice_line_ids:
+                        if il.product_id:
+                            res.categoria_producto= il.product_id.categ_id
+                        if il.account_id:
+                            res.codigo_prod = il.account_id
+
+    @api.depends("line_ids")
+    def get_page_mensual(self):
+        for res in self:
+            mensual = 0.0
+            for lin in res.line_ids:
+                if lin.ji_number.find('A') != 0 and lin.debit >= 1:
+                    mensual = lin.debit
+                    break
+
+            res.mensaualidad_pago = mensual
+    
 
     def action_conf(self):
         for res in self:
             res.button_draft()
+            # res.invoice_payment_term_id = 385
+            # res.action_post()
             res.button_cancel()
     def action_confirm(self):
         for res in self:
@@ -140,7 +233,7 @@ class AccountMove(models.Model):
             flag = self.env['res.users'].has_group('deltatech_sale_payment.group_caja_pagos')
             if not flag:
                 raise UserError(_("No tienes Permiso Para realizar el pago"))
-            if not res.ji_documents:
+            if not res.ji_documents and self.type == "out_invoice":
                 raise UserError(_("Completar la Documentacion Faltante"))
             return self.env['account.payment'] \
                 .with_context(active_ids=self.ids, active_model='account.move', active_id=self.id) \
@@ -192,11 +285,35 @@ class AccountMove(models.Model):
                 mov.ji_documents = aprov
                 # mov.noti_docs("", "")
 
-
+    def change_payments(self):
+        for res in self:
+            pagos = self.env["account.payment"].search(
+                [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '!=', 'Anticipo'),
+                 ('state', '=', 'posted')], order='payment_date,id asc')
+            for pa in pagos:
+                pa.action_draft()
+                pa.partner_id = res.partner_id
+                pa.post()
+            pagosa = self.env["account.payment"].search(
+                [('communication', '=', res.invoice_payment_ref), ('x_studio_tipo_de_pago', '=', 'Anticipo'),
+                 ('state', '=', 'posted')], order='id asc')
+            if (len(pagosa) == 0):
+                sale = self.env["sale.order"].search([('name', '=', res.invoice_payment_ref)])
+                payment_ids = []
+                for order in sale:
+                    transactions = order.sudo().transaction_ids.filtered(lambda a: a.state == "done")
+                    for item in transactions:
+                        payment_ids.append(item.payment_id.id)
+                pagosa = self.env["account.payment"].search([('id', 'in', payment_ids), ('state', '=', 'posted')],
+                                                            order='payment_date asc')
+            for pa in pagosa:
+                pa.action_draft()
+                pa.partner_id = res.partner_id
+                pa.post()
 
     def printcontratoaction(self):
         for res in self:
-            if not res.ji_documents:
+            if not res.ji_documents and self.type == "out_invoice":
                 raise UserError(_("Completar la Documentacion Faltante"))
             if not res.partner_id.street or not res.partner_id.city or not res.partner_id.street or not res.partner_id.state_id or not res.partner_id.zip or not res.partner_id.country_id:
                 raise UserError(_("El cliente no cuenta con su dirección completa, favor de completar su dirección!"))
@@ -252,13 +369,29 @@ class AccountMove(models.Model):
         # import locale
         # locale.setlocale(locale.LC_ALL, self.env.user.lang)
         # amount_string = locale.format_string("%d", self.amount_total, grouping=True)
-        amount_string = '{:,.2f}'.format(self.amount_total)
+        amount_string = '{:,.2f}'.format(self.total_menos_anticipo)
         return amount_string
+        
+    def get_amount_with_separators_total(self):
+        # import locale
+        # locale.setlocale(locale.LC_ALL, self.env.user.lang)
+        # amount_string = locale.format_string("%d", self.amount_total, grouping=True)
+        amount_string_total = '{:,.2f}'.format(self.amount_total)
+        return amount_string_total
 
-    def get_amount_total_text(self):    
+    def get_amount_total_text_total(self):    
         _amount = num2words(self.amount_total, lang='es').upper()
         _amount = _amount.split(" PUNTO ")[0]
         _centa_total = str(round(self.amount_total, 2)).split(".")[1]
+        centavo = _centa_total  if len ( _centa_total) > 1 else  _centa_total +'0'
+        _amount_text_total = "SON: " + (_amount or '') + " DÓLARES " + (centavo or '') + "/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA"
+        return _amount_text_total
+
+
+    def get_amount_total_text(self):    
+        _amount = num2words(self.total_menos_anticipo, lang='es').upper()
+        _amount = _amount.split(" PUNTO ")[0]
+        _centa_total = str(round(self.total_menos_anticipo, 2)).split(".")[1]
         centavo = _centa_total  if len ( _centa_total) > 1 else  _centa_total +'0'
         _amount_text = "SON: " + (_amount or '') + " DÓLARES " + (centavo or '') + "/100 MONEDA DE LOS ESTADOS UNIDOS DE AMÉRICA"
         return _amount_text
@@ -308,7 +441,7 @@ class AccountMove(models.Model):
         dat = ""
         for line in self:
             dat = " METROS CUADRADOS, DE LA CALLE, " + line.x_studio_calle.name
-        return self.invoice_line_ids[0].quantity
+        return f' {self.invoice_line_ids[0].quantity:.3f}'
 
     def ji_get_street(self):
         for line in self:
@@ -338,7 +471,7 @@ class AccountMove(models.Model):
             apar = line.amount_total - round(line.amount_total * 0.10,2)
             # raise UserError(_( str(line.amount_residual)+ " " +str(apar)))
             # 10000 <= 12056,18
-            if line.amount_residual <= apar:
+            if line.state == "posted":
                 # raise UserError(_(pagos))
                 line.estado_producto = 12
                 for pay in pagos:
@@ -399,7 +532,8 @@ class AccountMove(models.Model):
 
     def _compute_paymentlast(self):
         for res in self:
-            pagos = self.env["account.payment"].search([('payment_reference', '=', res.invoice_payment_ref)])
+            #pagos = self.env["account.payment"].search([('payment_reference', '=', res.invoice_payment_ref)])
+            pagos = self.env["account.payment"].search([('communication', '=', res.invoice_payment_ref),('state', '=', 'posted')])
             date = fields.Date.today()
             name = ""
             pay = 0.0
@@ -437,7 +571,7 @@ class AccountMove(models.Model):
     @api.depends("line_ids")
     def get_reporte_amoritizacion(self):
         for res in self:
-            if not res.ji_documents:
+            if not res.ji_documents and self.type == "out_invoice":
                 raise UserError(_("Completar la Documentacion Faltante"))
             move = []
             account = []
@@ -521,10 +655,23 @@ class AccountMove(models.Model):
                         payment_ids.append(item.payment_id.id)
                 pagosa = self.env["account.payment"].search([('id', 'in', payment_ids), ('state', '=', 'posted')],
                                                             order='payment_date asc')
+            tipo = res.invoice_payment_term_id
+            anticipov = 0
+            porc = 0
+            for ant in tipo.line_ids:
+                if ant.value == "fixed" and ant.ji_type == "money_advance":
+                    anticipov += ant.value_amount
+                if ant.value == "percent" and ant.ji_type == "money_advance":
+                    porc += ant.value_amount
+
             compaRecords = []
             compani = res.company_id
             tov = res.amount_untaxed
-            por = res.amount_untaxed * 0.1
+            por = 0
+            if anticipov > 0:
+                por = anticipov
+            else:
+                por = res.amount_untaxed * (porc/100)
             anticp = por
 
 
@@ -638,7 +785,7 @@ class AccountMove(models.Model):
                     else:
                         prox_sal = 0
 
-                    prox_pay = json.loads(res.action_moratorio_json())
+                    prox_pay = json.loads(res.moratex)
                     # raise UserError(_(prox_pay))
                     mora_prox = 0.0
                     for px_py in prox_pay:
@@ -675,7 +822,9 @@ class AccountMove(models.Model):
                         fecpag = ""
                         sald_ant = 0
                     # mora + round(mora_prox, 2)
-                    if mora <= 0:
+                    if mora_prox > 0:
+                        mora = mora_prox - mora
+                    elif mora <= 0:
                         mora = mora_prox
 
 
@@ -696,11 +845,16 @@ class AccountMove(models.Model):
 
                     ofpa = " de " + str(pagov)
                     pagov = pagov + 1
+            prod = "Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name
+            if res.x_studio_calle:
+                prod += ", Calle " + res.x_studio_calle.name
+            else:
+                raise UserError(_("Error no se encontro la calle"))
 
             data = {
                 'client': res.partner_id.name,
                 'contrato': res.name,
-                'produc': "Manzana " + res.x_studio_manzana.name + ", Lote " + res.x_studio_lote.name + ", Calle " + res.x_studio_calle.name,
+                'produc': prod,
                 'date': str(today.day) + " de " + str(month_name(today.month)) + " del " + str(today.year),
 
                 'move_id': move,
@@ -711,8 +865,8 @@ class AccountMove(models.Model):
             }
             return self.env.ref('jibaritolotes.report_amortizacionv2').report_action(self, data=data)
 
-    def get_reporte_amoritizacionv2_pdf(self):
-        for res in self:
+    def get_reporte_amoritizacionv2_pdf(self,acount):
+        for res in acount:
             move = []
             account = []
             today = fields.Date.today()
@@ -735,10 +889,23 @@ class AccountMove(models.Model):
                         payment_ids.append(item.payment_id.id)
                 pagosa = self.env["account.payment"].search([('id', 'in', payment_ids), ('state', '=', 'posted')],
                                                             order='payment_date asc')
+            tipo = res.invoice_payment_term_id
+            anticipov = 0
+            porc = 0
+            for ant in tipo.line_ids:
+                if ant.value == "fixed" and ant.ji_type == "money_advance":
+                    anticipov += ant.value_amount
+                if ant.value == "percent" and ant.ji_type == "money_advance":
+                    porc += ant.value_amount
+
             compaRecords = []
             compani = res.company_id
             tov = res.amount_untaxed
-            por = res.amount_untaxed * 0.1
+            por = 0
+            if anticipov > 0:
+                por = anticipov
+            else:
+                por = res.amount_untaxed * (porc / 100)
             anticp = por
 
             anticipo.append({
@@ -888,8 +1055,8 @@ class AccountMove(models.Model):
                         fecpag = ""
                         sald_ant = 0
                     # mora + round(mora_prox, 2)
-                    if mora <= 0:
-                        mora = mora_prox
+                    if mora < 0:
+                        mora = mora_prox * -1
 
                     account.append({
                         "number": pagov,
@@ -1278,6 +1445,7 @@ class AccountMoveLine(models.Model):
             json_numbers = json.loads(line.move_id.ji_json_numbers)
             line.ji_number = json_numbers.get(str(line.id), "")
 
+    @api.model
     @api.depends("ref","move_id")
     def categoria_venta(self):
         for line in self:
@@ -1310,7 +1478,7 @@ class AccountMoveLine(models.Model):
             line.ji_categoria = catego
             line.jicategoria = catego
 
-
+   
 
 
 
@@ -1324,6 +1492,7 @@ class AccountFollowupReport(models.AbstractModel):
     ji_restante = fields.Float(string="Saldo restante de mes")
     ji_mensuaidad = fields.Integer(string="Mes Pagado")
     ji_moratorio_total = fields.Float(string="Total Moratorios in invoice")
+    ji_total_factura = fields.Float(string="Total Factura")
     ji_moratorio_date = fields.Date(string="Fecha Moratorio Vencido")
 
 
@@ -1377,6 +1546,7 @@ class AccountFollowupReport(models.AbstractModel):
             'ji_mensuaidad': invoices[0].ji_plazo_actual + 1,
             'ji_moratorio_total': invoices[0].total_moratorium,
             'amount': amount,
+            'ji_total_factura': amount,
             'payment_type': 'inbound' if amount > 0 else 'outbound',
             'partner_id': invoices[0].commercial_partner_id.id,
             'partner_type': MAP_INVOICE_TYPE_PARTNER_TYPE[invoices[0].type],
@@ -1403,8 +1573,8 @@ class AccountFollowupReport(models.AbstractModel):
         """
         AccountMove = self.env['account.move'].with_context(default_type='entry')
         for rec in self:
-            if rec.ji_moratorio_total > 0 and rec.ji_moratorio == 0:
-                raise UserError(_("El contrato contiene moratorio, pagar moratorios."))
+            # if rec.ji_moratorio_total > 0 and rec.ji_moratorio == 0:
+            #     raise UserError(_("El contrato contiene moratorio, pagar moratorios."))
             if rec.state != 'draft':
                 raise UserError(_("Only a draft payment can be posted."))
 

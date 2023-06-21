@@ -2,75 +2,81 @@
     <data>
         <template id="fac_report_facturas_acuse_entrega">
         <t t-call="web.html_container">
-        <t t-call="web.external_layout">
-
-            <div class="page" style="padding: 60px !important;">
+        <t t-call="jibaritolotes.internal_layaut_ji_Logo">
+             <t t-call-assets="web.report_assets_common" t-js="false" />
+            <t t-call-assets="web.assets_common" t-css="false" />
+            <t t-call-assets="web.report_assets_common" t-css="false" />
+            <div class="page" style="font-family: arial; font-size:14px;" >
             <t t-foreach="doc.invoice_line_ids" t-as="p">
               <!--LOGO <p align="center"><img style="width: 40%; margin-top: -70px !important;" src="jibaritolotes/static/img/logotipo.png"/></p> -->
-
+<br/>
                 <!-- Título -->
-               <h4 align="center" style="font-size: 12;">Acuse entrega</h4>
-
+               <h4 align="center" style="font-size: 12; color: black !important;">ACUSE ENTREGA</h4>
+                <br/>
+                <br/>
                <!-- Fecha -->
-               <p align="right">Tijuana, B.C.  <span t-field="doc.invoice_date" t-options='{"format": "d "}'/> de  <span t-field="doc.invoice_date" t-options='{"format": "MMMM "}'/> del año <span t-field="doc.invoice_date" t-options='{"format": "y"}'/> </p>
-
+               <p align="right">Tijuana, Baja California a <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> de <span style="text-transform: lowercase !important;"><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B')"/></span> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.</p>
+                <br/>
                <!-- Estimado(a) -->
-               <p>Estimado señor(a):<span>&#160;</span> <span t-field="doc.partner_id.name"/></p>
-               <p style="font-size: 14px !important;">P r e s e n t e .</p>
-               <br/>
-
+               <p style=" ">Estimado(a) señor(a):<span> </span> <span t-field="doc.partner_id.name"/> <br/> P r e s e n t e </p>
+                <br/>
                <!-- Texto -->
-               <p style="font:arial; font-size:14px; text-align justify: !important; line-height: 1.5 !important;">Sirva el presente como constancia de entrega del Contrato de Transacción y Renuncia con los siguientes datos importantes:</p>
+               <p style=" text-align justify !important; line-height: 1.5 !important;">Sirva el presente como constancia de entrega del Contrato de Transacción y Renuncia con los siguientes datos importantes:</p>
                <br/>
+               <br/>
+               
 
                <!-- Tabla -->
+
                <table class="table table-striped table-sm ">
                    
                    <tbody>
                     <tr>
-                        <td class="border-warning" align="right">Titular</td>
+                        <td style="background: #eeb72a !important; color: #f2f2f2 !important;" class="border-warning" align="right">Posesionaria</td>
                         <td> <span t-field="doc.partner_id.name"/></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Manzana</td>
+                        <td style="border-right: 2px solid #dee2e6 !important;" class="border-warning" align="right">Manzana</td>
                         <td> <span t-field="p.product_id.x_studio_manzana" /></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Lote</td>
+                        <td style="background: #eeb72a !important; color: #f2f2f2 !important;" class="border-warning" align="right">Lote</td>
                         <td> <span t-field="p.product_id.x_studio_lote"/></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Calle</td>
+                        <td style="border-right: 2px solid #dee2e6 !important;" class="border-warning" align="right">Calle</td>
                         <td> <span t-field="p.product_id.x_studio_calle" /></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Fecha de contrato</td>
+                        <td style="background: #eeb72a !important; color: #f2f2f2 !important;" class="border-warning" align="right">Fecha de contrato</td>
                         <td> <span t-field="doc.invoice_date"/></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Plazo</td>
-                        <td> <span t-field="doc.invoice_payment_term_id.name"/></td>
+                        <td style="border-right: 2px solid #dee2e6 !important;" class="border-warning" align="right">Plazo</td>
+                        <td><span t-field="doc.invoice_payment_term_id.ji_numbers_monthly"/> Mensualidades</td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Día de pago</td>
-                        <td><span t-field="doc.invoice_payment_term_id.dia_dato"/></td>
+                        <td style="background: #eeb72a !important; color: #f2f2f2 !important;" class="border-warning" align="right">Día de pago</td>
+                        <td><span t-field="doc.dia_dato_pago"/></td>
                     </tr>
                     <tr>
-                        <td class="border-warning" align="right">Mensualidad</td>
-                        <td> <span t-field="doc.invoice_payment_term_id.ji_numbers_monthly"/></td>
+                        <td style="border-right: 2px solid #dee2e6 !important;" class="border-warning" align="right">Mensualidad</td>
+                        <td>USD $ <t t-esc="'{0:,.2f}'.format(doc.mensaualidad_pago)"/></td>
+                    </tr>
+                    <tr> 
+                        <td style="background: #eeb72a !important; color: #f2f2f2 !important;" class="tborderwarning" align="right">Cargo por mora</td>
+                        <td>3% mensual</td>
                     </tr>
                     <tr>
-                        <td class="tborderwarning" align="right">Cargo por mora</td>
-                        <td>3%</td>
-                    </tr>
-                    <tr>
-                        <td class="border-warning" align="right">Número de control</td>
+                        <td style="border-right: 2px solid #dee2e6 !important;" class="border-warning" align="right">Número de control</td>
                         <td> <span t-field="doc.name"/></td>
                     </tr>
                    </tbody>
                </table>
 
-
+                 <br/>
+                 <br/>
+                 <br/>
                <!-- Texto Final -->
                <p>Sin más, le agradecemos su amable atención.</p>
                <br/>
